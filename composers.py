@@ -47,10 +47,9 @@ class RandomMemory(Composer):
 
     def generate_comp(self, outport):
         if len(self.player_notes):
-            newmsg = self.player_notes[random.randint(0, len(self.player_notes)-1)]
-            newmsg = newmsg.copy(channel=COMP_CHANNEL-1) # Mido channels from 0-15, MIDI 1-16
-            print(newmsg)
-            outport.send(newmsg)
+            msg = self.player_notes[random.randint(0, len(self.player_notes)-1)]
+            msg = msg.copy(channel=COMP_CHANNEL-1) # Mido channels from 0-15, MIDI 1-16
+            outport.send(msg)
         time.sleep(.2)
 
 class Arpeggiator(Composer):
@@ -62,10 +61,9 @@ class Arpeggiator(Composer):
         self.active_notes = []
 
     def generate_comp(self, outport):
-        if len(self.active_notes):
-            for n in self.active_notes:
-                msg = mido.Message('note_on', note=n, velocity=100, channel=COMP_CHANNEL-1)
-                outport.send(msg)
-                time.sleep(0.2)
-                msg = mido.Message('note_off', note=n, velocity=100, channel=COMP_CHANNEL-1)
-                outport.send(msg)
+        for n in self.active_notes:
+            msg = mido.Message('note_on', note=n, velocity=100, channel=COMP_CHANNEL-1)
+            outport.send(msg)
+            time.sleep(0.2)
+            msg = mido.Message('note_off', note=n, velocity=100, channel=COMP_CHANNEL-1)
+            outport.send(msg)
