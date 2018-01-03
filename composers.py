@@ -57,8 +57,7 @@ class Arpeggiator(Composer):
     Arpeggiate notes from a currently active notes (eg. held chord)
     """
     def __init__(self):
-        Composer.__init__(self)
-        self.active_notes = []
+        Composer.__init__(self
 
     def generate_comp(self, outport):
         for n in self.active_notes:
