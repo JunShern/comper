@@ -58,7 +58,6 @@ class Arpeggiator(Composer):
     """
     def __init__(self):
         Composer.__init__(self)
-        self.active_notes = []
 
     def generate_comp(self, outport):
         for n in self.active_notes:
@@ -67,3 +66,54 @@ class Arpeggiator(Composer):
             time.sleep(0.2)
             msg = mido.Message('note_off', note=n, velocity=100, channel=COMP_CHANNEL-1)
             outport.send(msg)
+
+class MarkovMonophonicDurationless(Composer):
+    """
+    Markov generator based only on note frequencies, no regard to note durations or other characteristics.
+    """
+    def __init__(self):
+        Composer.__init__(self)
+        self.markov_chain = {} # This will be a dictionary of state:[nextstates]
+
+    def register_player_note(self, msg):
+        """
+        Keep track of all messages, and which notes are active.
+        Also, update Markov Chain.
+        """
+        if msg.type == "note_on":
+            if not msg.note in self.active_notes:
+                self.active_notes.append(msg.note)
+                if self.player_notes:
+                    # Add to Markov Chain
+                    if self.player_notes[-1].note in self.markov_chain:
+                        self.markov_chain[self.player_notes[-1].note].append(msg.note)
+                    else: # First initialization
+                        self.markov_chain[self.player_notes[-1].note] = [msg.note]
+            self.player_notes.append(msg)
+        elif msg.type == "note_off":
+            if msg.note in self.active_notes:
+                self.active_notes.remove(msg.note)
+            self.player_notes.append(msg)
+
+    def generate_comp(self, outport):
+        note_ = 0
+        if self.markov_chain:
+            print self.player_notes[-1]
+            # Generate new note from Markov Chain (if the state has been registered in the chain)
+            if self.own_notes and (self.own_notes[-1].note in self.markov_chain):
+                note_ = random.choice(self.markov_chain[self.own_notes[-1].note])
+            # Runs only the first time, before generator has produced anything
+            elif self.player_notes and (self.player_notes[-1].note in self.markov_chain):
+                note_ = random.choice(self.markov_chain[self.player_notes[-1].note])
+
+        if note_:
+            msg = mido.Message('note_on', note=note_, velocity=100, channel=COMP_CHANNEL-1)
+            self.add_to_own_memory(msg)
+            outport.send(msg)
+            time.sleep(0.2)
+            msg = mido.Message('note_off', note=note_, velocity=100, channel=COMP_CHANNEL-1)
+            self.add_to_own_memory(msg)
+            outport.send(msg)
+        else:
+            print("note not defined")
+            time.sleep(0.2)
