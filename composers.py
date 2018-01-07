@@ -69,7 +69,8 @@ class Arpeggiator(Composer):
 
 class MarkovMonophonicDurationless(Composer):
     """
-    Markov generator based only on note frequencies, no regard to note durations or other characteristics.
+    Markov generator based only on note frequencies,
+    no regard to note durations or other characteristics.
     """
     def __init__(self):
         Composer.__init__(self)
@@ -98,7 +99,6 @@ class MarkovMonophonicDurationless(Composer):
     def generate_comp(self, outport):
         note_ = 0
         if self.markov_chain:
-            print self.player_notes[-1]
             # Generate new note from Markov Chain (if the state has been registered in the chain)
             if self.own_notes and (self.own_notes[-1].note in self.markov_chain):
                 note_ = random.choice(self.markov_chain[self.own_notes[-1].note])
@@ -115,5 +115,4 @@ class MarkovMonophonicDurationless(Composer):
             self.add_to_own_memory(msg)
             outport.send(msg)
         else:
-            print("note not defined")
             time.sleep(0.2)
