@@ -2,6 +2,7 @@ import time
 import random
 import collections
 import mido
+import mido.frozen
 
 MEMORY_LENGTH = 500
 COMP_CHANNEL = 2 # MIDI channel number (1-16)
@@ -146,6 +147,69 @@ class MarkovMonophonicDurationless(Composer):
             time.sleep(0.2)
             msg = mido.Message('note_off', note=note_, velocity=100, channel=COMP_CHANNEL-1)
             self.add_to_own_memory(msg)
+            outport.send(msg)
+        else:
+            time.sleep(0.2)
+
+class MarkovQuantizeDuration(Composer):
+    """
+    Markov generator to produce full MIDI messages (with duration),
+    implements quantization of durations (by rounding) to improve note association.
+    Training based on player states; Generation based on the generator's states
+    """
+    def __init__(self):
+        Composer.__init__(self)
+        self.markov_chain = {} # This will be a dictionary of state:[nextstates]
+
+    def register_player_note(self, msg):
+        """
+        Keep track of all messages, and which notes are active.
+        Also, update Markov Chain.
+        """
+        # Delta time gives the time since the previous MIDI event
+        deltatime = 0
+        timenow = time.time()
+        if self.previous_event_time:
+            deltatime = timenow - self.previous_event_time
+        self.previous_event_time = timenow
+        msg.time = round(deltatime, 2)
+        # IMPORTANT - need to freeze message to make them hashable
+        msg = mido.frozen.freeze_message(msg)
+
+        if self.player_messages:
+            # Add to Markov Chain
+            if self.player_messages[-1] in self.markov_chain:
+                # print("In the chain!")
+                self.markov_chain[self.player_messages[-1]].append(msg)
+            else: # First initialization
+                # print("Adding to the chain!")
+                self.markov_chain[self.player_messages[-1]] = [msg]
+            # print self.markov_chain
+            # print self.player_messages[-1]
+            # print ""
+
+        if msg.type == "note_on":
+            if not msg.note in self.active_notes:
+                self.active_notes.append(msg.note)
+            self.player_messages.append(msg)
+        elif msg.type == "note_off":
+            if msg.note in self.active_notes:
+                self.active_notes.remove(msg.note)
+            self.player_messages.append(msg)
+
+    def generate_comp(self, outport):
+        msg = 0
+        if self.markov_chain:
+            # Generate new note from Markov Chain (if the state has been registered in the chain)
+            if self.own_messages and (self.own_messages[-1] in self.markov_chain):
+                msg = random.choice(self.markov_chain[self.own_messages[-1]])
+            # Runs only the first time, before generator has produced anything
+            elif self.player_messages and (self.player_messages[-1] in self.markov_chain):
+                msg = random.choice(self.markov_chain[self.player_messages[-1]])
+
+        if msg:
+            self.add_to_own_memory(msg)
+            time.sleep(msg.time)
             outport.send(msg)
         else:
             time.sleep(0.2)
