@@ -43,7 +43,7 @@ class Composer(object):
         and keeps track of all messages
         """
         delta_time = self.get_deltatime(precision)
-        msg = msg.copy(time=delta_time)
+        msg = msg.copy(time=delta_time, channel=COMP_CHANNEL)
         # IMPORTANT - need to freeze message to make them hashable
         msg = mido.frozen.freeze_message(msg)
         self.add_to_player_memory(msg)
