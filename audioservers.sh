@@ -13,6 +13,14 @@ case $1 in
 		pasuspender --\
 			jackd -d alsa --device hw:$hw --rate 44100 --period 128 --softmode \
 			&>/tmp/jackd.out &
+        sleep 1
+
+        # Start a2jmidid to bridge JACK<->ALSA MIDI ports
+        echo
+        echo "Starting a2jmidid..."
+        a2jmidid -e &
+        sleep 1
+
 		# Start fluidsynth
 		echo
 		echo "Starting Fluidsynth..."
@@ -30,6 +38,7 @@ case $1 in
 		;;
 
 	stop )
+        killall a2jmidid
 		killall fluidsynth
 		killall jackd
 		echo "Thank you for the music."
