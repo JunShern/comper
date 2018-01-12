@@ -4,8 +4,8 @@ import collections
 import mido
 import mido.frozen
 
-MEMORY_LENGTH = 500
-COMP_CHANNEL = 15 # 0-15, +1 to get the MIDI channel number (1-16) seen by the user
+MEMORY_LENGTH = 5000
+COMP_CHANNEL = 10 # 0-15, +1 to get the MIDI channel number (1-16) seen by the user
 PRECISION = 1
 
 class Composer(object):
