@@ -5,14 +5,22 @@ import sys
 import time
 import mido
 import numpy as np
+import sklearn.neighbors
+import sklearn.externals
 
-NOTE_NAME = {0:"C", 1:"C#", 2:"D", 3:"D#", 4:"E", 5:"F", \
+NOTE2NAME = {0:"C", 1:"C#", 2:"D", 3:"D#", 4:"E", 5:"F", \
     6:"F#", 7:"G", 8:"G#", 9:"A", 10:"A#", 11:"B"}
+NAME2NOTE = {"C":0, "C#":1, "D":2, "D#":3, "E":4, "F":5, \
+    "F#":6, "G":7, "G#":8, "A":9, "A#":10, "B":11}
+NUM_NOTES = len(NOTE2NAME)
 
 class KeyDetector(object):
     def __init__(self):
+        self.data = np.zeros(0) # X
+        self.labels = np.zeros(0) # y
+        self.knn_model = None # Classification model
         return
-    
+
     def info(self):
         text = """
         KeyDetector can be used for training/predicting a classifier
@@ -29,6 +37,22 @@ class KeyDetector(object):
         """
         return text
 
+    ## Not necessary to transpose the entire file, just transpose the histogram!
+    # def transpose_midi_file(self, midifile, ori_note, target_note):
+    #     """
+    #     Naive transposition using a blanket addition of interval to all note messages.
+    #     """
+    #     interval = target_note - ori_note
+    #     new_midifile = mido.MidiFile()
+    #     track = mido.MidiTrack()
+    #     new_midifile.tracks.append(track)
+    #     for msg in mido.MidiFile(midifile):
+    #         new_msg = msg.copy()
+    #         if not msg.is_meta:
+    #             new_msg = new_msg.copy(note = new_msg.note + interval)
+    #         # Copy over the (transposed) messages from old file to new file
+    #         track.append(new_msg)
+    #     return new_midifile
 
     def midi_to_note(self, note_number):
         normalized_note_number = note_number % 12
@@ -39,8 +63,12 @@ class KeyDetector(object):
         norm_hist = hist / largest_value
         return norm_hist
 
+    def load_model(self, filename='knn_model.pkl'):
+        self.knn_model, self.labels = sklearn.externals.joblib.load(filename)
+        return
+
     def get_histogram(self, midifile):
-        histogram = np.zeros(len(NOTE_NAME))
+        histogram = np.zeros(NUM_NOTES)
         for msg in mido.MidiFile(midifile):
             if not msg.is_meta:
                 if msg.type == 'note_on':
@@ -49,24 +77,61 @@ class KeyDetector(object):
         histogram = self.normalize(histogram)
         return histogram
 
-    def train_detector(self, midifile, note_label):
+    def train_detector(self, midifile, label, model_filename='knn_model.pkl'):
         """
         Given an input midi file, returns a
-        12-element list of values corresponding to the
-        probability of each 12 notes from C, C#, D, ... A#, B
-        """
-        data_vec = self.get_histogram(midifile)
-        return data_vec
+        12-element vector of values corresponding to the
+        probability of each 12 notes from C, C#, D, ... A#, B.
 
-    def predict(self, midifile):
-        return "C"
+        IMPORTANT:
+        The resulting data vector and its label are shifted to all 12
+        possible transpositions of that SAME MODE, so the detector is
+        trained with 12 new data-label pairs for each midi file.
+        """
+        if label not in NAME2NOTE:
+            print "Invalid note label"
+            return
+
+        # Original key
+        data_vec = self.get_histogram(midifile)
+        self.data = data_vec
+        self.labels = [label]
+        # Add 11 other possible keys
+        for interval in range(1, NUM_NOTES): # 1-11
+            # Musical-tranpose label
+            new_note = (NAME2NOTE[label] + interval) % NUM_NOTES
+            new_label = NOTE2NAME[new_note]
+            # Musical-tranpose (shift/cycle) histogram
+            new_data_vec = [data_vec[(i-interval) % NUM_NOTES] for i in range(len(data_vec))]
+            # Append to data matrix
+            self.data = np.vstack((self.data, new_data_vec))
+            self.labels.append(new_label)
+        # Fit data using nearest neighbors
+        self.knn_model = sklearn.neighbors.NearestNeighbors(n_neighbors=1).fit(self.data)
+        # Save model
+        sklearn.externals.joblib.dump((self.knn_model, self.labels), model_filename)
+        print "Training complete. Model saved in " + model_filename
+        return
+
+    def predict(self, histogram):
+        """
+        Predicts the class/key of one histogram using nearest-neighbors search
+        """
+        histogram = histogram.reshape(1, -1) # Comment out this line for multiple samples
+        distances, indices = self.knn_model.kneighbors(histogram)
+        predicted_labels = self.labels[indices[0][0]]
+        return predicted_labels
 
 if __name__ == "__main__":
     key_detector = KeyDetector()
     if sys.argv[1] == 'train' and len(sys.argv) == 4:
-        print key_detector.train_detector(sys.argv[2], sys.argv[3])
+        key_detector.train_detector(sys.argv[2], sys.argv[3])
     elif sys.argv[1] == 'predict' and len(sys.argv) == 3:
-        print key_detector.predict(sys.argv[2])
+        # Load previously trained model
+        key_detector.load_model()
+        # Convert midifile to histogram then predict
+        data_vec = key_detector.get_histogram(sys.argv[2])
+        print key_detector.predict(data_vec)
     else:
-        print "Incorrect number of arguments."
+        print "Invalid arguments / Incorrect number of arguments."
         print key_detector.info()
