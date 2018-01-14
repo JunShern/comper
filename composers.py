@@ -1,12 +1,15 @@
 import time
 import random
 import collections
+import itertools
 import mido
 import mido.frozen
+import key_detector
 
 MEMORY_LENGTH = 5000
 COMP_CHANNEL = 10 # 0-15, +1 to get the MIDI channel number (1-16) seen by the user
-PRECISION = 1
+TIME_PRECISION = 1
+KEY_CHANGE_MEMORY_LEN = 70
 
 class Composer(object):
     """
@@ -20,6 +23,9 @@ class Composer(object):
         self.gen_messages = collections.deque(maxlen=MEMORY_LENGTH)
         self.active_notes = []
         self.previous_event_time = 0
+        self.current_key = 'C'
+        self.key_detector = key_detector.KeyDetector()
+        self.key_detector.load_model()
 
     def get_deltatime(self, precision=None):
         """
@@ -47,6 +53,14 @@ class Composer(object):
         # IMPORTANT - need to freeze message to make them hashable
         msg = mido.frozen.freeze_message(msg)
         self.add_to_player_memory(msg)
+        self.detect_key()
+
+    def detect_key(self):
+        # Detect key from KEY_CHANGE_MEMORY_LEN latest messages
+        if self.player_messages:
+            start_index = max(0, len(self.player_messages)-KEY_CHANGE_MEMORY_LEN)
+            latest_messages = list(itertools.islice(self.player_messages, start_index, None))
+            self.current_key = self.key_detector.predict(latest_messages)
 
     def add_to_player_memory(self, msg):
         """
@@ -211,7 +225,7 @@ class MarkovQuantizeDuration(MarkovBaseClass):
         and keeps track of all messages
         Also, update Markov Chain.
         """
-        MarkovBaseClass.register_player_note(self, msg, PRECISION)
+        MarkovBaseClass.register_player_note(self, msg, TIME_PRECISION)
         # Add to Markov Chain
         if len(self.player_messages) >= 2:
             self.add_to_chain(self.player_messages[-2], self.player_messages[-1])
