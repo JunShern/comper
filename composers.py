@@ -11,6 +11,16 @@ COMP_CHANNEL = 10 # 0-15, +1 to get the MIDI channel number (1-16) seen by the u
 TIME_PRECISION = 1
 KEY_CHANGE_MEMORY_LEN = 70
 
+#------------------------------------------------------------- GENERAL PURPOSE FUNCTIONS
+
+def transpose_message(msg, original_key, target_key):
+    if msg and not msg.is_meta:
+        interval = key_detector.NAME2NOTE[target_key] - key_detector.NAME2NOTE[original_key]
+        msg = msg.copy(note=msg.note+interval)
+    return msg
+
+#-------------------------------------------------------------
+
 class Composer(object):
     """
     Base class for possible composer types, implements:
@@ -232,6 +242,39 @@ class MarkovQuantizeDuration(MarkovBaseClass):
 
     def generate_comp(self, outport):
         msg = self.get_next_state(self.gen_messages, self.player_messages)
+        if msg:
+            self.add_to_gen_memory(msg)
+            time.sleep(msg.time)
+            outport.send(msg)
+        else:
+            time.sleep(0.2)
+
+class MarkovQuantizeDurationKeyTranspose(MarkovBaseClass):
+    """
+    Builds on MarkovQuantizeDuration, but also handles automatic transposition
+    by detecting the current key the player is in. All learned patterns are
+    transposed to the key of C major, then retransposed to suit the current
+    key upon generation.
+    """
+    def __init__(self):
+        MarkovBaseClass.__init__(self)
+
+    def register_player_note(self, msg, precision=None):
+        """
+        Registers the (quantized) deltatime of a message,
+        and keeps track of all messages
+        Also, update Markov Chain.
+        """
+        msg = transpose_message(msg, self.current_key, 'C') # Store in key of C
+        MarkovBaseClass.register_player_note(self, msg, TIME_PRECISION)
+        # Add to Markov Chain
+        if len(self.player_messages) >= 2:
+            self.add_to_chain(self.player_messages[-2], self.player_messages[-1])
+
+    def generate_comp(self, outport):
+        print self.current_key
+        msg = self.get_next_state(self.gen_messages, self.player_messages)
+        msg = transpose_message(msg, 'C', self.current_key) # Generate in current key
         if msg:
             self.add_to_gen_memory(msg)
             time.sleep(msg.time)
