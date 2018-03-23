@@ -127,11 +127,15 @@ class KeyDetector(object):
         print "Training complete. Model saved in " + model_filename
         return
 
-    def predict(self, msglist):
+    def predict_from_msglist(self, msglist):
         """
         Predicts the class/key of a list of messages using nearest-neighbors search
         """
         histogram = self.get_histogram(msglist)
+        return self.predict_from_histogram(histogram)
+
+    def predict_from_histogram(self, histogram):
+        # print histogram
         histogram = histogram.reshape(1, -1) # Comment out this line for multiple samples
         distances, indices = self.knn_model.kneighbors(histogram)
         predicted_labels = self.labels[indices[0][0]]
@@ -156,7 +160,7 @@ if __name__ == "__main__":
         key_detector.load_model()
         # Convert midifile to histogram then predict
         data_vec = key_detector.file2histogram(sys.argv[2])
-        print key_detector.predict(data_vec)
+        print key_detector.predict_from_histogram(data_vec)
     else:
         print "Invalid arguments / Incorrect number of arguments."
         print key_detector.info()

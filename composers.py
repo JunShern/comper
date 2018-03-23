@@ -5,8 +5,9 @@ import itertools
 import mido
 import mido.frozen
 import key_detector
+import sklearn.externals
 
-MEMORY_LENGTH = 5000
+MEMORY_LENGTH = 10000
 COMP_CHANNEL = 10 # 0-15, +1 to get the MIDI channel number (1-16) seen by the user
 TIME_PRECISION = 1
 KEY_CHANGE_MEMORY_LEN = 70
@@ -14,7 +15,7 @@ KEY_CHANGE_MEMORY_LEN = 70
 #------------------------------------------------------------- GENERAL PURPOSE FUNCTIONS
 
 def transpose_message(msg, original_key, target_key):
-    if msg and not msg.is_meta:
+    if hasattr(msg, 'note'): # Only transpose NOTE_ON/NOTE_OFF
         interval = key_detector.NAME2NOTE[target_key] - key_detector.NAME2NOTE[original_key]
         msg = msg.copy(note=msg.note+interval)
     return msg
@@ -37,7 +38,7 @@ class Composer(object):
         self.key_detector = key_detector.KeyDetector()
         self.key_detector.load_model()
 
-    def get_deltatime(self, precision=None):
+    def get_deltatime(self):
         """
         Delta time gives the time since the previous MIDI event
         """
@@ -46,31 +47,33 @@ class Composer(object):
         if self.previous_event_time:
             deltatime = timenow - self.previous_event_time
         self.previous_event_time = timenow
-
-        if not precision:
-            return deltatime
-        else:
-            # Quantize time
-            return round(deltatime, precision)
+        return deltatime
 
     def register_player_note(self, msg, precision=None):
         """
-        Registers the deltatime of a message,
+        Registers the deltatime of a note_on/note_off message,
         and keeps track of all messages
         """
-        delta_time = self.get_deltatime(precision)
-        msg = msg.copy(time=delta_time, channel=COMP_CHANNEL)
-        # IMPORTANT - need to freeze message to make them hashable
-        msg = mido.frozen.freeze_message(msg)
-        self.add_to_player_memory(msg)
-        self.detect_key()
+        if hasattr(msg, 'note'): # Only register NOTE_ON or NOTE_OFF messages
+            # Set time attribute
+            delta_time = msg.time
+            if not delta_time: # Set time based on live playing
+                delta_time = self.get_deltatime()
+            if precision: # Quantize time
+                delta_time = round(delta_time, precision)
+            msg = msg.copy(time=delta_time, channel=COMP_CHANNEL)
+
+            # IMPORTANT - need to freeze message to make them hashable
+            msg = mido.frozen.freeze_message(msg)
+            self.add_to_player_memory(msg)
+            self.detect_key()
 
     def detect_key(self):
         # Detect key from KEY_CHANGE_MEMORY_LEN latest messages
         if self.player_messages:
             start_index = max(0, len(self.player_messages)-KEY_CHANGE_MEMORY_LEN)
             latest_messages = list(itertools.islice(self.player_messages, start_index, None))
-            self.current_key = self.key_detector.predict(latest_messages)
+            self.current_key = self.key_detector.predict_from_msglist(latest_messages)
 
     def add_to_player_memory(self, msg):
         """
@@ -281,3 +284,31 @@ class MarkovQuantizeDurationKeyTranspose(MarkovBaseClass):
             outport.send(msg)
         else:
             time.sleep(0.2)
+
+class MarkovQuantizeDurationKeyTransposeLongTermMemory(MarkovQuantizeDurationKeyTranspose):
+    def __init__(self):
+        MarkovQuantizeDurationKeyTranspose.__init__(self)
+        INFILE = 'midi_files/all_out_of_love_A#.mid'
+        OUTFILE = 'models/markov_1.pkl'
+        self.train_markov(INFILE, OUTFILE)
+        self.markov_chain = sklearn.externals.joblib.load(OUTFILE)
+
+    def train_markov(self, infile_name, outfile_name):
+        """
+        Loads a MIDI file (infile_name) into a Markov model,
+        then saves the model to a .pkl file (outfile_name)
+        """
+        midifile = mido.MidiFile(infile_name)
+        print "Number of tracks: " + str(len(midifile.tracks))
+        for i, track in enumerate(midifile.tracks):
+            print "(Track " + str(i) + "): " + str(track.name) + " has " + str(len(track)) + " messages."
+        if midifile.type != 2:
+            for msg in midifile:
+                print self.current_key
+                self.register_player_note(msg)
+        else:
+            print "Asynchronous midi file not supported, exiting..."
+        sklearn.externals.joblib.dump(self.markov_chain, outfile_name)
+        print self.markov_chain
+        print "Training complete. Model saved in " + outfile_name
+        return
