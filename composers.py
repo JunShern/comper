@@ -185,7 +185,6 @@ class MarkovBaseClass(Composer):
             #     print "This only happens when: gen_states are empty, or when generator lands on player's newest note"
         return 0
 
-
 class MarkovDurationless(MarkovBaseClass):
     """
     Markov generator based only on note frequencies,
@@ -312,3 +311,82 @@ class MarkovQuantizeDurationKeyTransposeLongTermMemory(MarkovQuantizeDurationKey
         print self.markov_chain
         print "Training complete. Model saved in " + outfile_name
         return
+
+################################################################ LOOPER
+
+class Looper(Composer):
+    """
+    Records 4 beats of music and plays it back
+    """
+    def __init__(self):
+        Composer.__init__(self)
+        # Prompt user for BPM
+        self.beats_per_minute = int(raw_input("Beats per minute: "))
+        # Time definitions
+        self.beats_per_bar = 4
+        self.ticks_per_beat = 24
+        self.seconds_per_tick = 60. / self.beats_per_minute / self.ticks_per_beat
+        # Prepare for tick-quantized music
+        self.num_ticks = self.ticks_per_beat * self.beats_per_bar        
+        self.quantized_events = [[] for _ in range(self.num_ticks)] # Each tick gets a list to store events
+        self.current_tick = 0 # This acts as an index for quantized events
+        self.midifile_path = '/tmp/record_midi.mid'
+        # Prepare for saving MIDI file
+        self.previous_event_time = 0
+        self.mid = mido.MidiFile()
+        self.track = mido.MidiTrack()
+        self.mid.tracks.append(self.track)
+    
+    def generate_comp(self, outport):
+        """
+        Simultaneously carries out three goals:
+        1. Acts as a metronome by playing drum sounds at each beat
+            - Drums https://commons.wikimedia.org/wiki/File:GMStandardDrumMap.gif
+        2. Plays back recorded user input in a loop
+        3. Plays back the generated accompaniment
+        """
+        # Reset the track at every loop - for recording purposes
+        self.previous_event_time = 0
+        self.mid = mido.MidiFile()
+        self.track = mido.MidiTrack()
+        self.mid.tracks.append(self.track)
+
+        DRUM_CHANNEL = 9
+        HI_HAT, BASS, SNARE = (42, 36, 38)
+        beat_sounds = [(BASS, HI_HAT), (HI_HAT,), (HI_HAT,), (HI_HAT,)]
+        # Loop through every tick in every beat
+        for beat in range(self.beats_per_bar):
+            # Play drum sounds at each beat
+            for sound in beat_sounds[beat]:
+                msg = mido.Message('note_on', note=sound, velocity=60, time=0.)
+                msg = msg.copy(channel=DRUM_CHANNEL)
+                outport.send(msg)
+            # Play recorded messages and wait at each tick
+            for tick in range(self.ticks_per_beat):
+                self.current_tick = beat*self.ticks_per_beat + tick
+                for msg in self.quantized_events[self.current_tick]:
+                    outport.send(msg.copy(channel=COMP_CHANNEL, time=0.))
+                time.sleep(self.seconds_per_tick)
+
+        # Save the loop as a MIDI file
+        self.mid.save(self.midifile_path)
+
+    def register_player_note(self, msg, precision=None):
+        """
+        Registers the deltatime of a note_on/note_off message,
+        and keeps track of all messages
+        """
+        if hasattr(msg, 'note'): # Only register NOTE_ON or NOTE_OFF messages
+            # Set time attribute
+            delta_time = msg.time
+            if not delta_time: # Set time based on live playing
+                delta_time = self.get_deltatime()
+            if precision: # Quantize time
+                delta_time = round(delta_time, precision)
+            # Be careful here - MIDI files store time as deltaticks
+            delta_ticks = int(delta_time / self.seconds_per_tick)
+            msg = msg.copy(time=delta_ticks, channel=COMP_CHANNEL)
+            # Store as an event for current tick
+            self.quantized_events[self.current_tick].append(msg)
+            # Store in MIDI file track
+            self.track.append(msg)
