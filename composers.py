@@ -336,13 +336,7 @@ class Looper(Composer):
         self.current_tick = 0 # This acts as an index for quantized events
         # Prepare pianoroll
         self.input_pianoroll = np.zeros((128, self.num_ticks))
-        # Prepare for saving MIDI file
-        self.previous_event_time = 0 # Used for deltatime
-        self.midifile_path = '/tmp/record_midi.mid'
-        self.mid = mido.MidiFile()
-        self.track = mido.MidiTrack()
-        self.mid.tracks.append(self.track)
-    
+
     def generate_comp(self, outport):
         """
         Simultaneously carries out three goals:
@@ -351,12 +345,6 @@ class Looper(Composer):
         2. Plays back recorded user input in a loop
         3. Plays back the generated accompaniment
         """
-        # Append new track at every loop - for recording purposes
-        # self.previous_event_time = 0
-        # self.track = mido.MidiTrack()
-        # self.mid.tracks.append(self.track)
-        # self.track.append(mido.MetaMessage('set_tempo', tempo=mido.bpm2tempo(self.beats_per_minute)))
-
         DRUM_CHANNEL = 9
         HI_HAT, BASS, SNARE = (42, 36, 38)
         beat_sounds = [(BASS, HI_HAT), (HI_HAT,), (HI_HAT,), (HI_HAT,)]
@@ -374,10 +362,8 @@ class Looper(Composer):
                     outport.send(msg.copy(channel=COMP_CHANNEL, time=0.))
                 time.sleep(self.seconds_per_tick)
 
-        # Save the loop as a MIDI file
-        # self.mid.save(self.midifile_path)
+        # Save the current pianoroll
         np.save('recorded_pianoroll.npy', self.input_pianoroll)
-        print "Saved", self.mid
 
     def register_player_note(self, msg, precision=None):
         """
@@ -391,9 +377,7 @@ class Looper(Composer):
                 delta_time = self.get_deltatime()
             if precision: # Quantize time
                 delta_time = round(delta_time, precision)
-            # Be careful here - MIDI files store time as deltaticks
-            delta_ticks = int(delta_time / self.seconds_per_tick)
-            msg = msg.copy(time=delta_ticks, channel=COMP_CHANNEL)
+            msg = msg.copy(time=delta_time, channel=COMP_CHANNEL)
             # Store as an event for current tick
             self.quantized_events[self.current_tick].append(msg)
             # Write to pianoroll
@@ -401,6 +385,3 @@ class Looper(Composer):
                 self.input_pianoroll[msg.note, self.current_tick:] = msg.velocity
             elif msg.type == "note_off":
                 self.input_pianoroll[msg.note, self.current_tick:] = 0
-
-            # # Store in MIDI file track
-            # self.track.append(msg)
