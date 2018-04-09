@@ -32,7 +32,6 @@ if __name__ == "__main__":
         inport.callback = comp.register_player_note
         # Run comping
         while not done:
+            comp.generate_comp(outport)
             tk.update_idletasks()
             tk.update()
-            comp.generate_comp(outport)
-
