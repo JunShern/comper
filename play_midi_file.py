@@ -5,6 +5,7 @@ import sys
 if __name__ == "__main__":
     if len(sys.argv) == 2:
         with mido.open_output('midi_read_out', virtual=True, autoreset=True) as outport:
+            time.sleep(2)
             midifile = mido.MidiFile(sys.argv[1])
             print "Number of tracks: " + str(len(midifile.tracks))
             for i, track in enumerate(midifile.tracks):

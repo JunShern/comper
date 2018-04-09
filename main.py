@@ -1,9 +1,21 @@
 import mido
 import composers
+import tkinter
+
+def callback():
+    global done 
+    done = True
+    print "The end!"
 
 def all_subclasses(cls):
     return cls.__subclasses__() + [g for s in cls.__subclasses__() for g in all_subclasses(s)]
 
+# GUI
+tk = tkinter.Tk()
+btn = tkinter.Button(tk, text="Quit", command=callback)
+btn.pack()
+
+done = False # Composer loop
 if __name__ == "__main__":
     # User select Composer mode
     comp_classes = all_subclasses(composers.Composer)
@@ -19,5 +31,8 @@ if __name__ == "__main__":
         # Install callback function for input
         inport.callback = comp.register_player_note
         # Run comping
-        while 1:
+        while not done:
+            tk.update_idletasks()
+            tk.update()
             comp.generate_comp(outport)
+

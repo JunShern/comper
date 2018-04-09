@@ -6,6 +6,7 @@ import mido
 import mido.frozen
 import key_detector
 import sklearn.externals
+import numpy as np
 
 MEMORY_LENGTH = 10000
 COMP_CHANNEL = 10 # 0-15, +1 to get the MIDI channel number (1-16) seen by the user
@@ -102,6 +103,9 @@ class Composer(object):
         Dummy function - should be overriden in child classes
         """
         time.sleep(0.2)
+        return
+
+    def exit(self):
         return
 
 class RandomMemoryDurationless(Composer):
@@ -330,9 +334,11 @@ class Looper(Composer):
         self.num_ticks = self.ticks_per_beat * self.beats_per_bar        
         self.quantized_events = [[] for _ in range(self.num_ticks)] # Each tick gets a list to store events
         self.current_tick = 0 # This acts as an index for quantized events
-        self.midifile_path = '/tmp/record_midi.mid'
+        # Prepare pianoroll
+        self.input_pianoroll = np.zeros((128, self.num_ticks))
         # Prepare for saving MIDI file
-        self.previous_event_time = 0
+        self.previous_event_time = 0 # Used for deltatime
+        self.midifile_path = '/tmp/record_midi.mid'
         self.mid = mido.MidiFile()
         self.track = mido.MidiTrack()
         self.mid.tracks.append(self.track)
@@ -345,11 +351,11 @@ class Looper(Composer):
         2. Plays back recorded user input in a loop
         3. Plays back the generated accompaniment
         """
-        # Reset the track at every loop - for recording purposes
-        self.previous_event_time = 0
-        self.mid = mido.MidiFile()
-        self.track = mido.MidiTrack()
-        self.mid.tracks.append(self.track)
+        # Append new track at every loop - for recording purposes
+        # self.previous_event_time = 0
+        # self.track = mido.MidiTrack()
+        # self.mid.tracks.append(self.track)
+        # self.track.append(mido.MetaMessage('set_tempo', tempo=mido.bpm2tempo(self.beats_per_minute)))
 
         DRUM_CHANNEL = 9
         HI_HAT, BASS, SNARE = (42, 36, 38)
@@ -358,7 +364,7 @@ class Looper(Composer):
         for beat in range(self.beats_per_bar):
             # Play drum sounds at each beat
             for sound in beat_sounds[beat]:
-                msg = mido.Message('note_on', note=sound, velocity=60, time=0.)
+                msg = mido.Message('note_on', note=sound, velocity=100, time=0.)
                 msg = msg.copy(channel=DRUM_CHANNEL)
                 outport.send(msg)
             # Play recorded messages and wait at each tick
@@ -369,7 +375,9 @@ class Looper(Composer):
                 time.sleep(self.seconds_per_tick)
 
         # Save the loop as a MIDI file
-        self.mid.save(self.midifile_path)
+        # self.mid.save(self.midifile_path)
+        np.save('recorded_pianoroll.npy', self.input_pianoroll)
+        print "Saved", self.mid
 
     def register_player_note(self, msg, precision=None):
         """
@@ -388,5 +396,11 @@ class Looper(Composer):
             msg = msg.copy(time=delta_ticks, channel=COMP_CHANNEL)
             # Store as an event for current tick
             self.quantized_events[self.current_tick].append(msg)
-            # Store in MIDI file track
-            self.track.append(msg)
+            # Write to pianoroll
+            if msg.type == "note_on":
+                self.input_pianoroll[msg.note, self.current_tick:] = msg.velocity
+            elif msg.type == "note_off":
+                self.input_pianoroll[msg.note, self.current_tick:] = 0
+
+            # # Store in MIDI file track
+            # self.track.append(msg)
