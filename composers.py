@@ -7,7 +7,7 @@ import mido.frozen
 import key_detector
 import sklearn.externals
 import numpy as np
-import unit_selector
+import unit_predictor
 
 MEMORY_LENGTH = 10000
 COMP_CHANNEL = 10 # 0-15, +1 to get the MIDI channel number (1-16) seen by the user
@@ -319,7 +319,7 @@ class MarkovQuantizeDurationKeyTransposeLongTermMemory(MarkovQuantizeDurationKey
 
 ################################################################ LOOPER
 
-class Looper(Composer):
+class UnitLooper(Composer):
     """
     Records 4 beats of music and plays it back
     """
@@ -339,7 +339,8 @@ class Looper(Composer):
         # Prepare pianoroll
         self.num_pitches = 128
         self.input_pianoroll = np.zeros((self.num_pitches, self.num_ticks))
-        self.unit_selector = unit_selector.UnitSelector()
+        self.comp_pianoroll = np.zeros((self.num_pitches, self.num_ticks))
+        self.unit_predictor = unit_predictor.UnitPredictor()
         # Alternate between input and response
         self.loopcount = 0
 
@@ -381,39 +382,70 @@ class Looper(Composer):
                         outport.send(msg.copy(channel=COMP_CHANNEL, time=0))
                 time.sleep(self.seconds_per_tick)
 
-        # Save the current pianoroll
+        # Predict comp events for the next unit
         if np.sum(self.input_pianoroll) > 0:
-            comp_pianoroll = self.unit_selector.get_comp_pianoroll(self.input_pianoroll)
-            self.comp_events = self.pianoroll_2_events(comp_pianoroll)
+            self.comp_pianoroll = self.unit_predictor.get_comp_pianoroll(self.input_pianoroll)
+            np.save('recorded_pianoroll.npy', self.input_pianoroll)
+            np.save('generated_pianoroll.npy', self.comp_pianoroll)
+            self.comp_events = self.pianoroll_2_events(self.comp_pianoroll)
         else:
             self.comp_events = [[] for _ in range(self.num_ticks)] # Each tick gets a list to store events
-        # np.save('recorded_pianoroll.npy', self.input_pianoroll)
-        # np.save('generated_pianoroll.npy', comp_pianoroll)
-
         self.loopcount += 1
+
+    # def pianoroll_2_events(self, pianoroll):
+    #     """
+    #     Takes an input pianoroll of shape (NUM_PITCHES, NUM_TICKS) 
+    #     and returns a list of quantized events
+    #     """
+    #     assert pianoroll.shape == (self.num_pitches, self.num_ticks)
+    #     events = [[] for _ in range(self.num_ticks)] # Each tick gets a list to store events
+    #     # [[0,0,127,127,0,0]] -> [[0,0,127,0,-127,0]]
+    #     first_column = pianoroll[:,0].reshape(-1,1)
+    #     difference_matrix = pianoroll[:,1:] - pianoroll[:,:-1]
+    #     matrix = np.hstack((first_column, difference_matrix))
+    #     # [[0,0,127,0,-127,0]] -> [[-1,-1,127,-1, 0,-1]]
+    #     matrix[matrix == 0] = -1 # -1 denotes "no event"
+    #     for pitch_index in range(matrix.shape[0]):
+    #         velocity = 0
+    #         for tick_index in range(matrix.shape[1]):
+    #             if matrix[pitch_index, tick_index] != -1:
+    #                 velocity = max(0, min(127, int(matrix[pitch_index, tick_index]) ))
+    #                 # velocity = max(0, min(127, velocity))
+    #                 print(pitch_index, velocity, matrix[pitch_index, tick_index], pianoroll[pitch_index, tick_index])
+    #                 # Generate a message
+    #                 msg = mido.Message('note_on', note=pitch_index, velocity=velocity, time=0)
+    #                 msg = msg.copy(channel=COMP_CHANNEL)
+    #                 events[tick_index].append(msg)
+    #     return events
 
     def pianoroll_2_events(self, pianoroll):
         """
         Takes an input pianoroll of shape (NUM_PITCHES, NUM_TICKS) 
         and returns a list of quantized events
+        "Adjacent nonzero values of the same pitch will be considered a 
+        single note with their mean as its velocity.", as per pypianoroll.
+        https://github.com/salu133445/pypianoroll/blob/master/pypianoroll/multitrack.py#L1171
         """
         assert pianoroll.shape == (self.num_pitches, self.num_ticks)
-        events = [[] for _ in range(self.num_ticks)] # Each tick gets a list to store events
-        # [[0,0,127,127,0,0]] -> [[0,0,127,0,-127,0]]
-        first_column = pianoroll[:,0].reshape(-1,1)
-        difference_matrix = pianoroll[:,1:] - pianoroll[:,:-1]
-        matrix = np.hstack((first_column, difference_matrix))
-        # [[0,0,127,0,-127,0]] -> [[-1,-1,127,-1, 0,-1]]
-        matrix[matrix == 0] = -1 # -1 denotes "no event"
-        for pitch_index in range(matrix.shape[0]):
-            velocity = 0
-            for tick_index in range(matrix.shape[1]):
-                if matrix[pitch_index, tick_index] != -1:
-                    velocity += int(matrix[pitch_index, tick_index])
-                    # Generate a message
-                    msg = mido.Message('note_on', note=pitch_index, velocity=velocity, time=0)
-                    msg = msg.copy(channel=COMP_CHANNEL)
-                    events[tick_index].append(msg)
+        pianoroll = pianoroll.T
+        
+        events = [[] for _ in range(96)] # Each tick gets a list to store events
+        clipped = pianoroll.astype(int)
+        binarized = clipped.astype(bool)
+        padded = np.pad(binarized, ((1, 1), (0, 0)), 'constant')
+        diff = np.diff(padded.astype(int), axis=0)
+
+        for pitch in range(128):
+            note_ons = np.nonzero(diff[:, pitch] > 0)[0]
+            note_offs = np.nonzero(diff[:, pitch] < 0)[0]
+            for idx, note_on in enumerate(note_ons):
+                velocity = np.mean(clipped[note_on:note_offs[idx], pitch])
+                # Create message events
+                on_msg = mido.Message('note_on', note=pitch, velocity=int(velocity), time=0)
+                events[note_ons[idx]].append(on_msg)
+                if note_offs[idx] < 96:
+                    off_msg = mido.Message('note_on', note=pitch, velocity=0, time=0)
+                    events[note_offs[idx]].append(off_msg)
         return events
 
     def register_player_note(self, msg, precision=None):
@@ -436,3 +468,13 @@ class Looper(Composer):
                 self.input_pianoroll[msg.note, self.current_tick:] = msg.velocity
             elif msg.type == "note_off":
                 self.input_pianoroll[msg.note, self.current_tick:] = 0
+
+class UnitSelector(UnitLooper):
+    def __init__(self):
+        UnitLooper.__init__(self)
+        self.unit_predictor = unit_predictor.UnitSelector()
+
+class UnitAutoencoder(UnitLooper):
+    def __init__(self):
+        UnitLooper.__init__(self)
+        self.unit_predictor = unit_predictor.UnitAutoencoder()

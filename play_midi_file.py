@@ -12,7 +12,9 @@ if __name__ == "__main__":
                 print "(Track " + str(i) + "): " + str(track.name) + " has " + str(len(track)) + " messages."
             if midifile.type != 2:
                 for msg in midifile:
-                    print msg
+                    if hasattr(msg, 'note'):
+                        if msg.note != 0:
+                            print msg
                     time.sleep(msg.time)
                     if not msg.is_meta:
                         outport.send(msg)
