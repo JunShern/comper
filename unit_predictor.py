@@ -63,7 +63,7 @@ class UnitSelector(UnitPredictor):
 class UnitAutoencoder(UnitPredictor):
     def __init__(self):
         UnitPredictor.__init__(self)
-        AUTOENCODER_MODEL_FILE = "./models/autoencoder_v4.h5"
+        AUTOENCODER_MODEL_FILE = "./models/autoencoder_v4_embed2400.h5"
         # Load up the autoencoder model
         self.autoencoder = keras.models.load_model(AUTOENCODER_MODEL_FILE)
         return
