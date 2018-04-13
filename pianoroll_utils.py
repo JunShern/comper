@@ -5,6 +5,8 @@ import subprocess
 import pypianoroll
 from matplotlib import pyplot as plt
 import numpy as np
+import mido
+from mido import Message, MidiFile, MidiTrack
 # Dataset definitions
 NUM_PITCHES = 128
 PARTITION_NOTE = 60 # Break into left- and right-accompaniments at middle C
@@ -46,6 +48,61 @@ def playPianoroll(pianoroll, bpm=120.0, beat_resolution=24):
     pypianoroll.write(multitrack, FILEPATH)
     return_code = subprocess.call("timidity " + FILEPATH, shell=True)
     return return_code
+
+def playPianoroll_events(pianoroll):
+    return play_midi_events(pianoroll_2_events(pianoroll))
+
+def play_midi_events(events):
+    COMP_CHANNEL = 5
+    beats_per_bar = 4
+    ticks_per_beat = 24
+
+    mid = MidiFile()
+    track = MidiTrack()
+    mid.tracks.append(track)
+    # Loop through every tick in every beat
+    for beat in range(beats_per_bar):
+        # Play recorded messages and wait at each tick
+        for tick in range(ticks_per_beat):
+            current_tick = beat*ticks_per_beat + tick
+            for msg in events[current_tick]:
+                track.append(msg.copy(channel=COMP_CHANNEL, time=0))
+            # This effectively acts as a time.sleep for 1 tick
+            track.append(Message('note_off', note=0, velocity=0, time=16))
+    FILEPATH = '/tmp/tmp_.midi' # For Linux
+    mid.save(FILEPATH)
+    return_code = subprocess.call("timidity " + FILEPATH, shell=True)
+    return return_code
+
+def pianoroll_2_events(pianoroll):
+    """
+    Takes an input pianoroll of shape (NUM_PITCHES, NUM_TICKS) 
+    and returns a list of quantized events
+    "Adjacent nonzero values of the same pitch will be considered a 
+    single note with their mean as its velocity.", as per pypianoroll.
+    https://github.com/salu133445/pypianoroll/blob/master/pypianoroll/multitrack.py#L1171
+    """
+    assert pianoroll.shape == (128, 96)
+    pianoroll = pianoroll.T
+    
+    events = [[] for _ in range(96)] # Each tick gets a list to store events
+    clipped = pianoroll.astype(int)
+    binarized = clipped.astype(bool)
+    padded = np.pad(binarized, ((1, 1), (0, 0)), 'constant')
+    diff = np.diff(padded.astype(int), axis=0)
+
+    for pitch in range(128):
+        note_ons = np.nonzero(diff[:, pitch] > 0)[0]
+        note_offs = np.nonzero(diff[:, pitch] < 0)[0]
+        for idx, note_on in enumerate(note_ons):
+            velocity = np.mean(clipped[note_on:note_offs[idx], pitch])
+            # Create message events
+            on_msg = mido.Message('note_on', note=pitch, velocity=int(velocity), time=0)
+            events[note_ons[idx]].append(on_msg)
+            if note_offs[idx] < 96:
+                off_msg = mido.Message('note_on', note=pitch, velocity=0, time=0)
+                events[note_offs[idx]].append(off_msg)
+    return events
 
 def get_transposed_pianoroll(pianoroll, num_semitones):
     """
