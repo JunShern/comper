@@ -63,7 +63,7 @@ class UnitSelector(UnitPredictor):
 class UnitAutoencoder(UnitPredictor):
     def __init__(self):
         UnitPredictor.__init__(self)
-        AUTOENCODER_MODEL_FILE = "./models/autoencoder_v4_embed2400.h5"
+        AUTOENCODER_MODEL_FILE = "./models/autoencoder_v4_input_comp.h5"
         # Load up the autoencoder model
         self.autoencoder = keras.models.load_model(AUTOENCODER_MODEL_FILE)
         return
@@ -79,6 +79,7 @@ class UnitAutoencoder(UnitPredictor):
         input_pianoroll = input_pianoroll.reshape(1, self.NUM_PITCHES, self.NUM_TICKS, 1)
         autoencoder_output = self.autoencoder.predict(input_pianoroll) # (1, 128, 96, 1)
         output_pianoroll = autoencoder_output[0].reshape(self.NUM_PITCHES, self.NUM_TICKS) * 127
-        # Artificially boost the output :(
-        output_pianoroll = np.clip(output_pianoroll * 3, 0, 127)
+        # Quantize the output
+        output_pianoroll[output_pianoroll < 10] = 0
+        output_pianoroll[output_pianoroll > 0] = 100
         return output_pianoroll
