@@ -83,3 +83,39 @@ class UnitAutoencoder(UnitPredictor):
         output_pianoroll[output_pianoroll < 10] = 0
         output_pianoroll[output_pianoroll > 0] = 100
         return output_pianoroll
+
+class UnitVariationalAutoencoder(UnitPredictor):
+    def __init__(self):
+        UnitPredictor.__init__(self)
+        ENCODER_MODEL_FILE = "./models/vae_v1_encoder.h5"
+        DECODER_MODEL_FILE = "./models/vae_v1_generator.h5"
+        # Load up the autoencoder model
+        latent_dim = 2400
+        epsilon_std = 1.0
+
+        self.encoder = keras.models.load_model(ENCODER_MODEL_FILE,
+            custom_objects={'latent_dim': latent_dim, 
+                            'epsilon_std': epsilon_std})
+        self.decoder = keras.models.load_model(DECODER_MODEL_FILE,
+            custom_objects={'latent_dim': latent_dim, 
+                            'epsilon_std': epsilon_std})
+        return
+    
+    def get_comp_pianoroll(self, input_pianoroll):
+        """
+        Given a input pianoroll with shape [NUM_PITCHES, NUM_TICKS],
+        return an accompanying pianoroll with equivalent shape.
+        """
+        # Normalize input_pianoroll
+        input_pianoroll = input_pianoroll / 127.
+        # Get encoding of the input
+        input_pianoroll = input_pianoroll.reshape(1, self.NUM_PITCHES, self.NUM_TICKS, 1)
+        # autoencoder_output = self.encoder.predict(input_pianoroll) # (1, 128, 96, 1)
+        z = self.encoder.predict(input_pianoroll)
+        autoencoder_output = self.decoder.predict(z)
+
+        output_pianoroll = autoencoder_output[0].reshape(self.NUM_PITCHES, self.NUM_TICKS) * 127
+        # Quantize the output
+        output_pianoroll[output_pianoroll < 10] = 0
+        output_pianoroll = np.clip(output_pianoroll * 2, 0, 127)
+        return output_pianoroll

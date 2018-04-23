@@ -478,3 +478,8 @@ class UnitAutoencoder(UnitLooper):
     def __init__(self):
         UnitLooper.__init__(self)
         self.unit_predictor = unit_predictor.UnitAutoencoder()
+
+class UnitVariationalAutoencoder(UnitLooper):
+    def __init__(self):
+        UnitLooper.__init__(self)
+        self.unit_predictor = unit_predictor.UnitVariationalAutoencoder()
