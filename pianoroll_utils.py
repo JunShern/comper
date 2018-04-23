@@ -96,15 +96,17 @@ def play_pianoroll(pianoroll, min_pitch=0, max_pitch=127, bpm=120.0, beat_resolu
     Returns the exit code of timidity
     """
     FILEPATH = '/tmp/tmp.midi' # For Linux
-    pianoroll = pad_pianoroll(pianoroll, min_pitch, max_pitch) # Pad to full 128 pitches
+    if min_pitch != 0 or max_pitch != 127:
+        print(min_pitch, max_pitch)
+        pianoroll = pad_pianoroll(pianoroll, min_pitch, max_pitch) # Pad to full 128 pitches
     track = pypianoroll.Track(pianoroll=pianoroll, program=0, is_drum=False, name='tmp')
     multitrack = pypianoroll.Multitrack(tracks=[track], tempo=bpm, beat_resolution=beat_resolution)
     pypianoroll.write(multitrack, FILEPATH)
     return_code = subprocess.call("timidity " + FILEPATH, shell=True)
     return return_code
 
-def playPianoroll_events(pianoroll):
-    return play_midi_events(pianoroll_2_events(pianoroll))
+def play_pianoroll_events(pianoroll, min_pitch=0, max_pitch=127):
+    return play_midi_events(pianoroll_2_events(pianoroll, min_pitch, max_pitch))
 
 def play_midi_events(events):
     COMP_CHANNEL = 5
@@ -128,7 +130,7 @@ def play_midi_events(events):
     return_code = subprocess.call("timidity " + FILEPATH, shell=True)
     return return_code
 
-def pianoroll_2_events(pianoroll):
+def pianoroll_2_events(pianoroll, min_pitch=0, max_pitch=127):
     """
     Takes an input pianoroll of shape (NUM_PITCHES, NUM_TICKS) 
     and returns a list of quantized events
@@ -136,21 +138,23 @@ def pianoroll_2_events(pianoroll):
     single note with their mean as its velocity.", as per pypianoroll.
     https://github.com/salu133445/pypianoroll/blob/master/pypianoroll/multitrack.py#L1171
     """
+    assert pianoroll.shape[0] == max_pitch - min_pitch + 1
     num_pitches = pianoroll.shape[0]
     num_ticks = pianoroll.shape[1]
     pianoroll = pianoroll.T
     
-    events = [[] for _ in range(num_pitches)] # Each tick gets a list to store events
+    events = [[] for _ in range(num_ticks)] # Each tick gets a list to store events
     clipped = pianoroll.astype(int)
     binarized = clipped.astype(bool)
     padded = np.pad(binarized, ((1, 1), (0, 0)), 'constant')
     diff = np.diff(padded.astype(int), axis=0)
 
-    for pitch in range(num_pitches):
+    for p in range(num_pitches):
+        pitch = min_pitch + p
         note_ons = np.nonzero(diff[:, pitch] > 0)[0]
         note_offs = np.nonzero(diff[:, pitch] < 0)[0]
         for idx, note_on in enumerate(note_ons):
-            velocity = np.mean(clipped[note_on:note_offs[idx], pitch])
+            velocity = np.mean(clipped[note_on:note_offs[idx], p])
             # Create message events
             on_msg = mido.Message('note_on', note=pitch, velocity=int(velocity), time=0)
             events[note_ons[idx]].append(on_msg)
