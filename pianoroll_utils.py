@@ -238,7 +238,7 @@ def shuffle_left_right(left_units, right_units):
     return [input_units, comp_units]
 
 
-def create_units(pianoroll, num_pitches, ticks_per_unit, partition_note, filter_threshold=0):
+def create_units(pianoroll, num_pitches, ticks_per_unit, partition_note, min_pitch=0, filter_threshold=0):
     """
     Given an input pianoroll matrix of shape [NUM_TICKS, NUM_PITCHES], 
     return input_units and comp_units of shape [M, TICKS PER UNIT, NUM_PITCHES]
@@ -253,6 +253,7 @@ def create_units(pianoroll, num_pitches, ticks_per_unit, partition_note, filter_
     comp_units = np.zeros([M, ticks_per_unit, num_pitches])
     
     # Split pianoroll into left- and right- accompaniments
+    partition_note = partition_note - min_pitch
     left_comp = pianoroll.copy()
     left_comp[:, partition_note:] = 0
     right_comp = pianoroll.copy()
