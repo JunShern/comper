@@ -215,54 +215,42 @@ def chop_to_unit_multiple(pianoroll, ticks_per_unit):
     return [M, pianoroll_truncated]
 
 
-def shuffle_left_right(left_units, left_units_next, right_units, right_units_next):
+def shuffle_left_right(left_units, right_units):
     """
-    Given 4 matrices left, left_next, right, and right_next
-    return 4 matrices which have left and right randomly exchanged
+    Given 2 matrices of left and right pianorolls units,
+    return 2 matrices which have left and right randomly exchanged
     while maintaining index order, eg:
     
-    [a1,a2,a3,a4]      [a1,b2,b3,a4]
-    [a2,a3,a4,a5]  ->  [a2,b3,b4,a5]
+    [a1,a2,a3,a4]  ->  [a1,b2,b3,a4]
     [b1,b2,b3,b4]      [b1,a2,a3,b4]
-    [b2,b3,b4,b5]      [b2,a3,a4,b5]
     """
     
     bool_array = np.random.randint(0, 2, left_units.shape[0], dtype=bool) # Random True/False
     
     # Initialize as copies of one side of the accompaniment
     input_units = left_units.copy()
-    input_units_next = left_units_next.copy()
     comp_units = right_units.copy()
-    comp_units_next = right_units_next.copy()
 
     # Replace half of array with elements from the other side
     input_units[bool_array, ...] = right_units[bool_array, ...]
-    input_units_next[bool_array, ...] = right_units_next[bool_array, ...]
     comp_units[bool_array, ...] = left_units[bool_array, ...]
-    comp_units_next[bool_array, ...] = left_units_next[bool_array, ...]
     
-    return [input_units, input_units_next, comp_units, comp_units_next]
+    return [input_units, comp_units]
 
 
 def create_units(pianoroll, num_pitches, ticks_per_unit, partition_note, filter_threshold=0):
     """
     Given an input pianoroll matrix of shape [NUM_TICKS, NUM_PITCHES], 
-    return input_units, input_units_next, comp_units, comp_units_next_shape
-    all of the same shape [M, TICKS PER UNIT, NUM_PITCHES]
+    return input_units and comp_units of shape [M, TICKS PER UNIT, NUM_PITCHES]
     """
     assert(pianoroll.shape[1] == num_pitches)
     
     # Truncate pianoroll so it can be evenly divided into units
-    # Pianoroll is divided into M+1, not M 
-    # since we can only get M next-units for M+1 input units
-    [M_plus_one, pianoroll] = chop_to_unit_multiple(pianoroll, ticks_per_unit)
-    M = M_plus_one - 1
+    [M, pianoroll] = chop_to_unit_multiple(pianoroll, ticks_per_unit)
     
     # Prepare outputs
     input_units = np.zeros([M, ticks_per_unit, num_pitches])
-    input_units_next = np.zeros([M, ticks_per_unit, num_pitches])
     comp_units = np.zeros([M, ticks_per_unit, num_pitches])
-    comp_units_next = np.zeros([M, ticks_per_unit, num_pitches])
     
     # Split pianoroll into left- and right- accompaniments
     left_comp = pianoroll.copy()
@@ -271,31 +259,22 @@ def create_units(pianoroll, num_pitches, ticks_per_unit, partition_note, filter_
     right_comp[:, :partition_note] = 0
     
     # Get the units by reshaping left_comp and right_comp
-    all_left_units = left_comp.reshape(M_plus_one, ticks_per_unit, num_pitches)
-    all_right_units = right_comp.reshape(M_plus_one, ticks_per_unit, num_pitches)
-    left_units = all_left_units[:-1,:,:] # All but the last unit
-    left_units_next = all_left_units[1:,:,:] # Skip the first unit
-    right_units = all_right_units[:-1,:,:] # All but the last unit
-    right_units_next = all_right_units[1:,:,:] # Skip the first unit
+    left_units = left_comp.reshape(M, ticks_per_unit, num_pitches)
+    right_units = right_comp.reshape(M, ticks_per_unit, num_pitches)
     
     # Randomly choose between left/right for input/comp units, 
     # so the model learns both sides of the accompaniment
-    [input_units, input_units_next, comp_units, comp_units_next] = \
-        shuffle_left_right(left_units, left_units_next, right_units, right_units_next)
+    [input_units, comp_units] = shuffle_left_right(left_units, right_units)
     
     # Filter out near-empty units
     input_units_means = np.mean(input_units, axis=(1,2)).squeeze()
     filter_array = input_units_means > filter_threshold
     input_units = input_units[filter_array, ...]
-    input_units_next = input_units_next[filter_array, ...]
     comp_units = comp_units[filter_array, ...]
-    comp_units_next = comp_units_next[filter_array, ...]
     M = np.sum(filter_array) # Recount M after filtering
     
     # Debug assertions
     assert(input_units.shape == (M, ticks_per_unit, num_pitches))
-    assert(input_units_next.shape == (M, ticks_per_unit, num_pitches))
     assert(comp_units.shape == (M, ticks_per_unit, num_pitches))
-    assert(comp_units_next.shape == (M, ticks_per_unit, num_pitches))
     
-    return [input_units, input_units_next, comp_units, comp_units_next]
+    return [input_units, comp_units]
