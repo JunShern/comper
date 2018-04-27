@@ -246,7 +246,8 @@ def shuffle_left_right(left_units, right_units):
     return [input_units, comp_units]
 
 
-def create_units(pianoroll, num_pitches, ticks_per_unit, partition_note, min_pitch=0, filter_threshold=0):
+def create_units(pianoroll, num_pitches, ticks_per_unit, partition_note,
+    min_pitch=0, filter_threshold=0, shuffle=True):
     """
     Given an input pianoroll matrix of shape [NUM_TICKS, NUM_PITCHES], 
     return input_units and comp_units of shape [M, TICKS PER UNIT, NUM_PITCHES]
@@ -273,8 +274,11 @@ def create_units(pianoroll, num_pitches, ticks_per_unit, partition_note, min_pit
     
     # Randomly choose between left/right for input/comp units, 
     # so the model learns both sides of the accompaniment
-    [input_units, comp_units] = shuffle_left_right(left_units, right_units)
-    
+    if shuffle:
+        [input_units, comp_units] = shuffle_left_right(left_units, right_units)
+    else:
+        [input_units, comp_units] = [left_units, right_units]
+
     # Filter out near-empty units
     input_units_means = np.mean(input_units, axis=(1,2)).squeeze()
     filter_array = input_units_means > filter_threshold
