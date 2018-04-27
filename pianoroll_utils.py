@@ -7,6 +7,8 @@ from matplotlib import pyplot as plt
 import numpy as np
 import mido
 from mido import Message, MidiFile, MidiTrack
+import IPython
+
 # Dataset definitions
 # NUM_PITCHES = 128
 # PARTITION_NOTE = 60 # Break into left- and right-accompaniments at middle C
@@ -86,29 +88,30 @@ def plot_four_units(units, unit_index, min_pitch, max_pitch):
     fig.tight_layout()
     return
 
-def play_pianoroll(pianoroll, min_pitch=0, max_pitch=127, bpm=120.0, beat_resolution=24):
-    """
-    !!----------- Not widely supported ---------------!!
-    Given an input pianoroll, creates a MIDI file in /tmp/
-    and plays the MIDI file (requires TiMidity++ softsynth)
-    [https://wiki.archlinux.org/index.php/timidity]
+# DEPRECATED
+# def play_pianoroll(pianoroll, min_pitch=0, max_pitch=127, bpm=120.0, beat_resolution=24):
+#     """
+#     !!----------- Not widely supported ---------------!!
+#     Given an input pianoroll, creates a MIDI file in /tmp/
+#     and plays the MIDI file (requires TiMidity++ softsynth)
+#     [https://wiki.archlinux.org/index.php/timidity]
     
-    Returns the exit code of timidity
-    """
-    FILEPATH = '/tmp/tmp.midi' # For Linux
-    if min_pitch != 0 or max_pitch != 127:
-        print(min_pitch, max_pitch)
-        pianoroll = pad_pianoroll(pianoroll, min_pitch, max_pitch) # Pad to full 128 pitches
-    track = pypianoroll.Track(pianoroll=pianoroll, program=0, is_drum=False, name='tmp')
-    multitrack = pypianoroll.Multitrack(tracks=[track], tempo=bpm, beat_resolution=beat_resolution)
-    pypianoroll.write(multitrack, FILEPATH)
-    return_code = subprocess.call("timidity " + FILEPATH, shell=True)
-    return return_code
+#     Returns the exit code of timidity
+#     """
+#     FILEPATH = '/tmp/tmp.midi' # For Linux
+#     if min_pitch != 0 or max_pitch != 127:
+#         print(min_pitch, max_pitch)
+#         pianoroll = pad_pianoroll(pianoroll, min_pitch, max_pitch) # Pad to full 128 pitches
+#     track = pypianoroll.Track(pianoroll=pianoroll, program=0, is_drum=False, name='tmp')
+#     multitrack = pypianoroll.Multitrack(tracks=[track], tempo=bpm, beat_resolution=beat_resolution)
+#     pypianoroll.write(multitrack, FILEPATH)
+#     return_code = subprocess.call("timidity " + FILEPATH, shell=True)
+#     return return_code
 
-def play_pianoroll_events(pianoroll, min_pitch=0, max_pitch=127):
-    return play_midi_events(pianoroll_2_events(pianoroll, min_pitch, max_pitch))
+def play_pianoroll(pianoroll, min_pitch=0, max_pitch=127, filelabel='0'):
+    return play_midi_events(pianoroll_2_events(pianoroll, min_pitch, max_pitch), filelabel)
 
-def play_midi_events(events):
+def play_midi_events(events, filelabel=0):
     COMP_CHANNEL = 5
     beats_per_bar = 4
     ticks_per_beat = 24
@@ -125,10 +128,15 @@ def play_midi_events(events):
                 track.append(msg.copy(channel=COMP_CHANNEL, time=0))
             # This effectively acts as a time.sleep for 1 tick
             track.append(Message('note_off', note=0, velocity=0, time=16))
-    FILEPATH = '/tmp/tmp_.midi' # For Linux
-    mid.save(FILEPATH)
-    return_code = subprocess.call("timidity " + FILEPATH, shell=True)
-    return return_code
+    FILEPATH = '/tmp/tmp_'+filelabel
+    MIDIPATH = FILEPATH + '.mid'
+    WAVPATH = FILEPATH + '.wav'
+    mid.save(MIDIPATH)
+    return_code = subprocess.call("timidity {} -Ow -o {}".format(MIDIPATH, WAVPATH), shell=True)
+    if return_code == 0:
+        return WAVPATH
+    else:
+        return return_code
 
 def pianoroll_2_events(pianoroll, min_pitch=0, max_pitch=127):
     """
@@ -151,8 +159,8 @@ def pianoroll_2_events(pianoroll, min_pitch=0, max_pitch=127):
 
     for p in range(num_pitches):
         pitch = min_pitch + p
-        note_ons = np.nonzero(diff[:, pitch] > 0)[0]
-        note_offs = np.nonzero(diff[:, pitch] < 0)[0]
+        note_ons = np.nonzero(diff[:, p] > 0)[0]
+        note_offs = np.nonzero(diff[:, p] < 0)[0]
         for idx, note_on in enumerate(note_ons):
             velocity = np.mean(clipped[note_on:note_offs[idx], p])
             # Create message events
