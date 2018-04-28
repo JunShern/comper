@@ -9,13 +9,6 @@ import mido
 from mido import Message, MidiFile, MidiTrack
 import IPython
 
-# Dataset definitions
-# NUM_PITCHES = 128
-# PARTITION_NOTE = 60 # Break into left- and right-accompaniments at middle C
-# BEAT_RESOLUTION = 24 # This is set by the encoding of the lpd-5 dataset, corresponds to number of ticks per beat
-# BEATS_PER_UNIT = 4
-# TICKS_PER_UNIT = BEATS_PER_UNIT * BEAT_RESOLUTION
-
 def crop_pianoroll(pianoroll, min_pitch, max_pitch):
     """
     Given a pianoroll of shape(NUM_TICKS, 128),
@@ -119,15 +112,11 @@ def play_midi_events(events, filelabel=0):
     mid = MidiFile()
     track = MidiTrack()
     mid.tracks.append(track)
-    # Loop through every tick in every beat
-    for beat in range(beats_per_bar):
-        # Play recorded messages and wait at each tick
-        for tick in range(ticks_per_beat):
-            current_tick = beat*ticks_per_beat + tick
-            for msg in events[current_tick]:
-                track.append(msg.copy(channel=COMP_CHANNEL, time=0))
-            # This effectively acts as a time.sleep for 1 tick
-            track.append(Message('note_off', note=0, velocity=0, time=16))
+    for tick_event in events:
+        for msg in tick_event:
+            track.append(msg.copy(channel=COMP_CHANNEL, time=0))
+        # This effectively acts as a time.sleep for 1 tick
+        track.append(Message('note_off', note=0, velocity=0, time=16))
     FILEPATH = '/tmp/tmp_'+filelabel
     MIDIPATH = FILEPATH + '.mid'
     WAVPATH = FILEPATH + '.wav'
