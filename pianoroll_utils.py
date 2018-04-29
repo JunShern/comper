@@ -40,7 +40,7 @@ def plot_pianoroll(ax, pianoroll, min_pitch=0, max_pitch=127, beat_resolution=No
     """
     assert pianoroll.shape[1] == max_pitch - min_pitch + 1
     ax.imshow(pianoroll.T, cmap=cmap, aspect='auto', 
-              vmin=0, vmax=1, origin='lower', interpolation='none')
+              vmin=0, vmax=127, origin='lower', interpolation='none')
     ax.set_ylabel('pitch')
     lowest_octave = ((min_pitch - 1) // 12 + 1) - 2
     highest_octave = max_pitch // 12 - 2
