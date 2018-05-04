@@ -3,6 +3,7 @@ import cPickle as pickle
 import keras.models
 import sklearn.neighbors
 import sklearn.externals
+import pianoroll_utils
 
 class UnitPredictor:
     def __init__(self):
@@ -118,4 +119,67 @@ class UnitVariationalAutoencoder(UnitPredictor):
         # Quantize the output
         output_pianoroll[output_pianoroll < 10] = 0
         output_pianoroll = np.clip(output_pianoroll * 2, 0, 127)
+        return output_pianoroll
+
+class UnitAccompanier(UnitPredictor):
+    def __init__(self):
+        UnitPredictor.__init__(self)
+        # Music shape
+        self.MIN_PITCH = 21 # A-1 (MIDI 21)
+        self.MAX_PITCH = 108 # C7 (MIDI 108)
+        self.NUM_PITCHES = self.MAX_PITCH - self.MIN_PITCH + 1
+        # Load up all our Keras models
+        latent_dim = 10
+        epsilon_std = 1.0
+        ENCODER_MODEL_FILE = './models/vae_v4_encoder.h5'
+        DECODER_MODEL_FILE = './models/vae_v4_generator.h5'
+        RNN_MODEL_FILE = './models/rlstm_v3.h5'
+        self.encoder = keras.models.load_model(ENCODER_MODEL_FILE, 
+            custom_objects={'latent_dim': latent_dim, 'epsilon_std': epsilon_std})
+        self.decoder = keras.models.load_model(DECODER_MODEL_FILE, 
+            custom_objects={'latent_dim': latent_dim, 'epsilon_std': epsilon_std})
+        self.rnn = keras.models.load_model(RNN_MODEL_FILE)
+        # Prepare the fixed memory
+        self.WINDOW_LENGTH = 4
+        self.x_input_embed = np.zeros((self.WINDOW_LENGTH, latent_dim))
+        self.x_comp_embed = np.zeros((self.WINDOW_LENGTH, latent_dim))
+        return
+
+    def get_comp_pianoroll(self, input_pianoroll):
+        """
+        Given a input pianoroll with shape [NUM_PITCHES, NUM_TICKS],
+        return an accompanying pianoroll with equivalent shape.
+        """
+        # Normalize input_pianoroll
+        input_pianoroll = input_pianoroll / 127.
+        # Resize input_pianoroll from 128 to 88 keys
+        input_pianoroll = pianoroll_utils.crop_pianoroll(input_pianoroll.T,
+            self.MIN_PITCH, self.MAX_PITCH).T
+
+        # Get encoding of the input
+        input_pianoroll = input_pianoroll.reshape(1, self.NUM_PITCHES, self.NUM_TICKS, 1)
+        input_embed = self.encoder.predict(input_pianoroll) # (1, 10)
+        assert(input_embed.shape == (1, 10))
+        # Append new input to past-inputs window
+        self.x_input_embed = np.concatenate([self.x_input_embed[1:], input_embed], axis=0)
+        assert(self.x_input_embed.shape == (self.WINDOW_LENGTH, 10))
+        
+        # Get prediction of next comp embedding
+        next_comp_embed = self.rnn.predict([np.array([self.x_input_embed]), # (1, 10)
+                                            np.array([self.x_comp_embed]) ])
+        assert(next_comp_embed.shape == (1, 10))
+        
+        # Decode next comp embedding
+        next_comp = self.decoder.predict(next_comp_embed) # (1, NUM_PITCHES, NUM_TICKS, 1)
+        output_pianoroll = next_comp[0].reshape(self.NUM_PITCHES, self.NUM_TICKS) * 127
+        # Quantize the output
+        output_pianoroll[output_pianoroll < 10] = 0
+        output_pianoroll[output_pianoroll > 0] = 100
+        # Pad the pianoroll from 88 to 128 keys
+        output_pianoroll = pianoroll_utils.pad_pianoroll(output_pianoroll.T,
+            self.MIN_PITCH, self.MAX_PITCH).T
+
+        # Append new comp to past-comps window
+        self.x_comp_embed = np.concatenate([self.x_comp_embed[1:], next_comp_embed], axis=0)
+        assert(self.x_comp_embed.shape == (self.WINDOW_LENGTH, 10))
         return output_pianoroll

@@ -8,6 +8,7 @@ import key_detector
 import sklearn.externals
 import numpy as np
 import unit_predictor
+import pianoroll_utils
 
 MEMORY_LENGTH = 10000
 COMP_CHANNEL = 10 # 0-15, +1 to get the MIDI channel number (1-16) seen by the user
@@ -392,32 +393,6 @@ class UnitLooper(Composer):
             self.comp_events = [[] for _ in range(self.num_ticks)] # Each tick gets a list to store events
         self.loopcount += 1
 
-    # def pianoroll_2_events(self, pianoroll):
-    #     """
-    #     Takes an input pianoroll of shape (NUM_PITCHES, NUM_TICKS) 
-    #     and returns a list of quantized events
-    #     """
-    #     assert pianoroll.shape == (self.num_pitches, self.num_ticks)
-    #     events = [[] for _ in range(self.num_ticks)] # Each tick gets a list to store events
-    #     # [[0,0,127,127,0,0]] -> [[0,0,127,0,-127,0]]
-    #     first_column = pianoroll[:,0].reshape(-1,1)
-    #     difference_matrix = pianoroll[:,1:] - pianoroll[:,:-1]
-    #     matrix = np.hstack((first_column, difference_matrix))
-    #     # [[0,0,127,0,-127,0]] -> [[-1,-1,127,-1, 0,-1]]
-    #     matrix[matrix == 0] = -1 # -1 denotes "no event"
-    #     for pitch_index in range(matrix.shape[0]):
-    #         velocity = 0
-    #         for tick_index in range(matrix.shape[1]):
-    #             if matrix[pitch_index, tick_index] != -1:
-    #                 velocity = max(0, min(127, int(matrix[pitch_index, tick_index]) ))
-    #                 # velocity = max(0, min(127, velocity))
-    #                 print(pitch_index, velocity, matrix[pitch_index, tick_index], pianoroll[pitch_index, tick_index])
-    #                 # Generate a message
-    #                 msg = mido.Message('note_on', note=pitch_index, velocity=velocity, time=0)
-    #                 msg = msg.copy(channel=COMP_CHANNEL)
-    #                 events[tick_index].append(msg)
-    #     return events
-
     def pianoroll_2_events(self, pianoroll):
         """
         Takes an input pianoroll of shape (NUM_PITCHES, NUM_TICKS) 
@@ -483,3 +458,46 @@ class UnitVariationalAutoencoder(UnitLooper):
     def __init__(self):
         UnitLooper.__init__(self)
         self.unit_predictor = unit_predictor.UnitVariationalAutoencoder()
+
+
+################################################################ ACCOMPANIMENT
+class UnitAccompanier(UnitLooper):
+    """
+    Predicts a next-state accompaniment unit based on 
+    previous input and accompaniment units
+    """
+    def __init__(self):
+        UnitLooper.__init__(self)
+        self.unit_predictor = unit_predictor.UnitAccompanier()
+
+    def generate_comp(self, outport):
+        """
+        Simultaneously carries out two goals:
+        1. Acts as a metronome by playing drum sounds at each beat
+            - Drums https://commons.wikimedia.org/wiki/File:GMStandardDrumMap.gif
+        2. Plays back the generated accompaniment
+        """
+        # Empty the input
+        self.input_pianoroll = np.zeros((self.num_pitches, self.num_ticks))
+        self.input_events = [[] for _ in range(self.num_ticks)] # Each tick gets a list to store events
+
+        DRUM_CHANNEL = 9
+        HI_HAT, BASS, SNARE = (42, 36, 38)
+        beat_sounds = [(BASS, HI_HAT), (HI_HAT,), (HI_HAT,), (HI_HAT,)]
+        # Loop through every tick in every beat
+        for beat in range(self.beats_per_bar):
+            # Play drum sounds at each beat
+            for sound in beat_sounds[beat]:
+                msg = mido.Message('note_on', note=sound, velocity=100, time=0.)
+                msg = msg.copy(channel=DRUM_CHANNEL)
+                outport.send(msg)
+            # Play recorded messages and wait at each tick
+            for tick in range(self.ticks_per_beat):
+                self.current_tick = beat*self.ticks_per_beat + tick
+                for msg in self.comp_events[self.current_tick]:
+                    outport.send(msg.copy(channel=COMP_CHANNEL, time=0))
+                time.sleep(self.seconds_per_tick)
+
+        # Predict comp events for the next unit
+        self.comp_pianoroll = self.unit_predictor.get_comp_pianoroll(self.input_pianoroll)
+        self.comp_events = pianoroll_utils.pianoroll_2_events(self.comp_pianoroll)
