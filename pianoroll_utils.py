@@ -11,36 +11,39 @@ import IPython
 
 def crop_pianoroll(pianoroll, min_pitch, max_pitch):
     """
-    Given a pianoroll of shape(NUM_TICKS, 128),
+    Given a pianoroll of shape (128, NUM_TICKS),
     crop the pitch axis to range from min_pitch:max_pitch+1
     (inclusive of min_pitch and max_pitch)
     """
-    assert pianoroll.shape[1] == 128
-    output = pianoroll[:, min_pitch:max_pitch+1] # Crop pitch range of pianoroll
-    assert output.shape[1] == max_pitch - min_pitch + 1
+    assert pianoroll.shape[0] == 128
+    output = pianoroll[min_pitch:max_pitch+1, :] # Crop pitch range of pianoroll
+    assert output.shape[0] == max_pitch - min_pitch + 1
     return output
 
 def pad_pianoroll(pianoroll, min_pitch, max_pitch):
     """
-    Given a pianoroll of shape (NUM_TICKS, NUM_PITCHES),
-    return a zero-padded matrix (NUM_TICKS, 128)
+    Given a pianoroll of shape (NUM_PITCHES, NUM_TICKS),
+    return a zero-padded matrix (128, NUM_TICKS)
     """
-    assert pianoroll.shape[1] == max_pitch - min_pitch + 1
-    ticks = pianoroll.shape[0]
-    front = np.zeros((ticks, min_pitch-1))
-    back = np.zeros((ticks, 128-max_pitch))
-    output = np.hstack((front, pianoroll, back))
-    assert output.shape[1] == 128
+    assert pianoroll.shape[0] == max_pitch - min_pitch + 1
+    ticks = pianoroll.shape[1]
+    front = np.zeros((min_pitch-1, ticks))
+    back = np.zeros((128-max_pitch, ticks))
+    output = np.vstack((front, pianoroll, back))
+    assert output.shape[0] == 128
     return output
 
 def plot_pianoroll(ax, pianoroll, min_pitch=0, max_pitch=127, beat_resolution=None, cmap='Blues'):
     """
-    Plots a pianoroll matrix, code adapted from 
+    Plots a pianoroll matrix of shape (NUM_PITCHES, NUM_TICKS)
+    Code adapted from 
     https://salu133445.github.io/pypianoroll/_modules/pypianoroll/plot.html#plot_pianoroll
     """
-    assert pianoroll.shape[1] == max_pitch - min_pitch + 1
-    ax.imshow(pianoroll.T, cmap=cmap, aspect='auto', 
-              vmin=0, vmax=127, origin='lower', interpolation='none')
+    assert pianoroll.shape[0] == max_pitch - min_pitch + 1
+    num_ticks = pianoroll.shape[1]
+    
+    ax.imshow(pianoroll, cmap=cmap, aspect='auto', 
+              vmin=0, vmax=1, origin='lower', interpolation='none')
     ax.set_ylabel('pitch')
     lowest_octave = ((min_pitch - 1) // 12 + 1) - 2
     highest_octave = max_pitch // 12 - 2
@@ -50,7 +53,7 @@ def plot_pianoroll(ax, pianoroll, min_pitch=0, max_pitch=127, beat_resolution=No
     ax.set_xlabel('ticks')
     # Beat lines
     if beat_resolution is not None:
-        num_beat = pianoroll.shape[0]//beat_resolution
+        num_beat = num_ticks//beat_resolution
         xticks_major = beat_resolution * np.arange(0, num_beat)
         xticks_minor = beat_resolution * (0.5 + np.arange(0, num_beat))
         xtick_labels = np.arange(1, 1 + num_beat)
@@ -63,23 +66,24 @@ def plot_pianoroll(ax, pianoroll, min_pitch=0, max_pitch=127, beat_resolution=No
     ax.grid(axis='both', color='k', linestyle=':', linewidth=.5)
     return
 
-def plot_four_units(units, unit_index, min_pitch, max_pitch):
-    """
-    Given an input dictionary containing "input", "input_next", "comp" and "comp_next",
-    plot 2x2 subplots of the four unit pianorolls
-    """
-    fig, ax = plt.subplots(2,2)
-    fig.set_size_inches(10, 6, forward=True)
-    ax[0,0].set_title('Input')
-    ax[0,1].set_title('Input next')
-    ax[1,0].set_title('Comp')
-    ax[1,1].set_title('Comp next')
-    plot_pianoroll(ax[0,0], units["input"][unit_index], min_pitch, max_pitch, beat_resolution=24)
-    plot_pianoroll(ax[0,1], units["input_next"][unit_index], min_pitch, max_pitch, beat_resolution=24)
-    plot_pianoroll(ax[1,0], units["comp"][unit_index], min_pitch, max_pitch, beat_resolution=24)
-    plot_pianoroll(ax[1,1], units["comp_next"][unit_index], min_pitch, max_pitch, beat_resolution=24)
-    fig.tight_layout()
-    return
+# DEPRECATED
+# def plot_four_units(units, unit_index, min_pitch, max_pitch):
+#     """
+#     Given an input dictionary containing "input", "input_next", "comp" and "comp_next",
+#     plot 2x2 subplots of the four unit pianorolls
+#     """
+#     fig, ax = plt.subplots(2,2)
+#     fig.set_size_inches(10, 6, forward=True)
+#     ax[0,0].set_title('Input')
+#     ax[0,1].set_title('Input next')
+#     ax[1,0].set_title('Comp')
+#     ax[1,1].set_title('Comp next')
+#     plot_pianoroll(ax[0,0], units["input"][unit_index], min_pitch, max_pitch, beat_resolution=24)
+#     plot_pianoroll(ax[0,1], units["input_next"][unit_index], min_pitch, max_pitch, beat_resolution=24)
+#     plot_pianoroll(ax[1,0], units["comp"][unit_index], min_pitch, max_pitch, beat_resolution=24)
+#     plot_pianoroll(ax[1,1], units["comp_next"][unit_index], min_pitch, max_pitch, beat_resolution=24)
+#     fig.tight_layout()
+#     return
 
 # DEPRECATED
 # def play_pianoroll(pianoroll, min_pitch=0, max_pitch=127, bpm=120.0, beat_resolution=24):
@@ -102,7 +106,9 @@ def plot_four_units(units, unit_index, min_pitch, max_pitch):
 #     return return_code
 
 def play_pianoroll(pianoroll, min_pitch=0, max_pitch=127, filelabel='0'):
-    return play_midi_events(pianoroll_2_events(pianoroll, min_pitch, max_pitch), filelabel)
+    filepath = play_midi_events(pianoroll_2_events(pianoroll, min_pitch, max_pitch), filelabel)
+    IPython.display.display(IPython.display.Audio(filepath))
+    return 
 
 def play_midi_events(events, filelabel=0):
     COMP_CHANNEL = 5
@@ -135,10 +141,12 @@ def pianoroll_2_events(pianoroll, min_pitch=0, max_pitch=127):
     single note with their mean as its velocity.", as per pypianoroll.
     https://github.com/salu133445/pypianoroll/blob/master/pypianoroll/multitrack.py#L1171
     """
+    assert np.max(pianoroll) <= 1 # Pianorolls must be normalized between 0 and 1
+    pianoroll = pianoroll.T * 127
+    
     assert pianoroll.shape[0] == max_pitch - min_pitch + 1
     num_pitches = pianoroll.shape[0]
     num_ticks = pianoroll.shape[1]
-    pianoroll = pianoroll.T
     
     events = [[] for _ in range(num_ticks)] # Each tick gets a list to store events
     clipped = pianoroll.astype(int)
@@ -162,52 +170,52 @@ def pianoroll_2_events(pianoroll, min_pitch=0, max_pitch=127):
 
 def get_transposed_pianoroll(pianoroll, num_semitones):
     """
-    Given an input pianoroll matrix of shape [NUM_TICKS, NUM_PITCHES],
+    Given an input pianoroll matrix of shape [NUM_PITCHES, NUM_TICKS],
     musically-transpose the pianoroll by num_semitones and
     return the new transposed pianoroll.
     """
-    num_ticks = pianoroll.shape[0]
-    num_pitches = pianoroll.shape[1]
+    num_pitches = pianoroll.shape[0]
+    num_ticks = pianoroll.shape[1]
     assert(abs(num_semitones) <= num_pitches)
     
     # Default case, no transposition
-    transposed_pianoroll = pianoroll
+    transposed_pianoroll = pianoroll.copy()
     # Transpose up
     if (num_semitones > 0):
-        transposed_pianoroll = np.hstack([np.zeros(num_semitones*num_ticks).reshape(num_ticks,num_semitones),
-                                          pianoroll[:,:num_pitches-num_semitones] ])
+        transposed_pianoroll = np.vstack([np.zeros(num_semitones*num_ticks).reshape(num_semitones, num_ticks),
+                                          pianoroll[:num_pitches-num_semitones, :] ])
     # Transpose down
     elif (num_semitones < 0):
         num_semitones = abs(num_semitones)
-        transposed_pianoroll = np.hstack([pianoroll[:,num_semitones:],
-                                          np.zeros(num_semitones*num_ticks).reshape(num_ticks,num_semitones) ])
+        transposed_pianoroll = np.vstack([pianoroll[num_semitones:, :],
+                                          np.zeros(num_semitones*num_ticks).reshape(num_semitones, num_ticks) ])
     # Debug assertion
-    assert(transposed_pianoroll.shape == (num_ticks, num_pitches))
+    assert(transposed_pianoroll.shape == (num_pitches, num_ticks))
     return transposed_pianoroll
 
 
 
 def chop_to_unit_multiple(pianoroll, ticks_per_unit):
     """
-    Given an input pianoroll matrix of shape [NUM_TICKS, NUM_PITCHES],
+    Given an input pianoroll matrix of shape [NUM_PITCHES, NUM_TICKS],
     truncate the matrix so that it can be evenly divided into M units.
     
     Returns [M, pianoroll_truncated]
     where M is the largest integer such that M*ticks_per_unit <= NUM_TICKS
-    and pianoroll_truncated is of shape [M*ticks_per_unit, NUM_PITCHES]
+    and pianoroll_truncated is of shape [NUM_PITCHES, M*ticks_per_unit]
     """
     
-    num_ticks = pianoroll.shape[0]
-    num_pitches = pianoroll.shape[1]
+    num_pitches = pianoroll.shape[0]
+    num_ticks = pianoroll.shape[1]
     
     # Get M
     M = int(num_ticks / ticks_per_unit) # Floor
     # Truncate
-    pianoroll_truncated = pianoroll[:M*ticks_per_unit, :]
+    pianoroll_truncated = pianoroll[:, :M*ticks_per_unit]
     
     # Debug assertions
     assert(M*ticks_per_unit <= num_ticks)
-    assert(pianoroll_truncated.shape == (M*ticks_per_unit, num_pitches))
+    assert(pianoroll_truncated.shape == (num_pitches, M*ticks_per_unit))
     
     return [M, pianoroll_truncated]
 
@@ -238,28 +246,24 @@ def shuffle_left_right(left_units, right_units):
 def create_units(pianoroll, num_pitches, ticks_per_unit, partition_note,
     min_pitch=0, filter_threshold=0, shuffle=True):
     """
-    Given an input pianoroll matrix of shape [NUM_TICKS, NUM_PITCHES], 
-    return input_units and comp_units of shape [M, TICKS PER UNIT, NUM_PITCHES]
+    Given an input pianoroll matrix of shape [NUM_PITCHES, ticks_per_unit], 
+    return input_units and comp_units of shape [M, NUM_PITCHES, ticks_per_unit]
     """
-    assert(pianoroll.shape[1] == num_pitches)
+    assert(pianoroll.shape[0] == num_pitches)
     
     # Truncate pianoroll so it can be evenly divided into units
     [M, pianoroll] = chop_to_unit_multiple(pianoroll, ticks_per_unit)
     
-    # Prepare outputs
-    input_units = np.zeros([M, ticks_per_unit, num_pitches])
-    comp_units = np.zeros([M, ticks_per_unit, num_pitches])
-    
     # Split pianoroll into left- and right- accompaniments
     partition_note = partition_note - min_pitch
     left_comp = pianoroll.copy()
-    left_comp[:, partition_note:] = 0
+    left_comp[partition_note:, :] = 0
     right_comp = pianoroll.copy()
-    right_comp[:, :partition_note] = 0
+    right_comp[:partition_note, :] = 0
     
     # Get the units by reshaping left_comp and right_comp
-    left_units = left_comp.reshape(M, ticks_per_unit, num_pitches)
-    right_units = right_comp.reshape(M, ticks_per_unit, num_pitches)
+    left_units = left_comp.T.reshape(M, ticks_per_unit, num_pitches).swapaxes(1,2)
+    right_units = right_comp.T.reshape(M, ticks_per_unit, num_pitches).swapaxes(1,2)
     
     # Randomly choose between left/right for input/comp units, 
     # so the model learns both sides of the accompaniment
@@ -268,15 +272,15 @@ def create_units(pianoroll, num_pitches, ticks_per_unit, partition_note,
     else:
         [input_units, comp_units] = [left_units, right_units]
 
-    # Filter out near-empty units
+    # Filter out both units if near-empty input units
     input_units_means = np.mean(input_units, axis=(1,2)).squeeze()
-    filter_array = input_units_means > filter_threshold
+    filter_array = input_units_means >= filter_threshold
     input_units = input_units[filter_array, ...]
     comp_units = comp_units[filter_array, ...]
     M = np.sum(filter_array) # Recount M after filtering
     
     # Debug assertions
-    assert(input_units.shape == (M, ticks_per_unit, num_pitches))
-    assert(comp_units.shape == (M, ticks_per_unit, num_pitches))
+    assert(input_units.shape == (M, num_pitches, ticks_per_unit))
+    assert(comp_units.shape == (M, num_pitches, ticks_per_unit))
     
     return [input_units, comp_units]
