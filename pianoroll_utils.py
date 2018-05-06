@@ -141,12 +141,12 @@ def pianoroll_2_events(pianoroll, min_pitch=0, max_pitch=127):
     single note with their mean as its velocity.", as per pypianoroll.
     https://github.com/salu133445/pypianoroll/blob/master/pypianoroll/multitrack.py#L1171
     """
-    assert np.max(pianoroll) <= 1 # Pianorolls must be normalized between 0 and 1
-    pianoroll = pianoroll.T * 127
-    
     assert pianoroll.shape[0] == max_pitch - min_pitch + 1
     num_pitches = pianoroll.shape[0]
     num_ticks = pianoroll.shape[1]
+    
+    assert np.max(pianoroll) <= 1 # Pianorolls must be normalized between 0 and 1
+    pianoroll = pianoroll.T * 127
     
     events = [[] for _ in range(num_ticks)] # Each tick gets a list to store events
     clipped = pianoroll.astype(int)
