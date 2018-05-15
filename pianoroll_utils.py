@@ -105,10 +105,12 @@ def plot_pianoroll(ax, pianoroll, min_pitch=0, max_pitch=127, beat_resolution=No
 #     return_code = subprocess.call("timidity " + FILEPATH, shell=True)
 #     return return_code
 
-def play_pianoroll(pianoroll, min_pitch=0, max_pitch=127, filelabel='0'):
+def play_pianoroll(pianoroll, min_pitch=0, max_pitch=127, filelabel='0', process=True):
+    if process:
+        pianoroll = pianoroll_preprocess(pianoroll, min_pitch, max_pitch) # Get proper notes from probability matrix
     filepath = play_midi_events(pianoroll_2_events(pianoroll, min_pitch, max_pitch), filelabel)
     IPython.display.display(IPython.display.Audio(filepath))
-    return 
+    return
 
 def play_midi_events(events, filelabel=0):
     COMP_CHANNEL = 5
@@ -133,6 +135,40 @@ def play_midi_events(events, filelabel=0):
     else:
         return return_code
 
+def pianoroll_preprocess(pianoroll, min_pitch=0, max_pitch=127, empty_threshold=0.1, max_threshold=0.20):
+    """
+    Takes an input matrix of pianoroll note probabilities and
+    extracts a clean pianoroll from the probabilities.
+    Returns a pianoroll matrix of the same shape.
+    """
+    assert pianoroll.shape[0] == max_pitch - min_pitch + 1
+    num_pitches = pianoroll.shape[0]
+    num_ticks = pianoroll.shape[1]
+    
+    assert np.max(pianoroll) <= 1 # Pianorolls must be normalized between 0 and 1
+    pianoroll_ = pianoroll.copy() * 127
+
+    if np.max(pianoroll_) < 127 * empty_threshold:
+    # If all notes are ghost notes
+        pianoroll_[:] = 0
+    else: 
+        pianoroll_[pianoroll_ < np.max(pianoroll_) * max_threshold] = 0
+
+    # events = [[] for _ in range(num_ticks)] # Each tick gets a list to store events
+    clipped = pianoroll_.astype(int)
+
+    binarized = clipped.astype(bool)
+    padded = np.pad(binarized, ((0, 0), (1, 1)), 'constant')
+    diff = np.diff(padded.astype(int), axis=1)
+
+    for p in range(num_pitches):
+        note_ons = np.nonzero(diff[p,:] > 0)[0]
+        note_offs = np.nonzero(diff[p,:] < 0)[0]
+        for idx, note_on in enumerate(note_ons):
+            velocity = np.mean(clipped[p, note_on:note_offs[idx]])
+            clipped[p, note_on:note_offs[idx]] = velocity
+    return clipped / 127.
+
 def pianoroll_2_events(pianoroll, min_pitch=0, max_pitch=127):
     """
     Takes an input pianoroll of shape (NUM_PITCHES, NUM_TICKS) 
@@ -146,20 +182,20 @@ def pianoroll_2_events(pianoroll, min_pitch=0, max_pitch=127):
     num_ticks = pianoroll.shape[1]
     
     assert np.max(pianoroll) <= 1 # Pianorolls must be normalized between 0 and 1
-    pianoroll = pianoroll.T * 127
-    
+    pianoroll = pianoroll * 127
+
     events = [[] for _ in range(num_ticks)] # Each tick gets a list to store events
     clipped = pianoroll.astype(int)
     binarized = clipped.astype(bool)
-    padded = np.pad(binarized, ((1, 1), (0, 0)), 'constant')
-    diff = np.diff(padded.astype(int), axis=0)
+    padded = np.pad(binarized, ((0, 0), (1, 1)), 'constant')
+    diff = np.diff(padded.astype(int), axis=1)
 
     for p in range(num_pitches):
         pitch = min_pitch + p
-        note_ons = np.nonzero(diff[:, p] > 0)[0]
-        note_offs = np.nonzero(diff[:, p] < 0)[0]
+        note_ons = np.nonzero(diff[p,:] > 0)[0]
+        note_offs = np.nonzero(diff[p,:] < 0)[0]
         for idx, note_on in enumerate(note_ons):
-            velocity = np.mean(clipped[note_on:note_offs[idx], p])
+            velocity = np.mean(clipped[p, note_on:note_offs[idx]])
             # Create message events
             on_msg = mido.Message('note_on', note=pitch, velocity=int(velocity), time=0)
             events[note_ons[idx]].append(on_msg)
