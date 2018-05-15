@@ -1,3 +1,6 @@
 pianorolls*/
 pickle_jar/
+model/
 lpd_5_cleansed/
+.ipynb_checkpoints/
+*.pyc
