@@ -83,8 +83,7 @@ class UnitSelectorV2(UnitPredictor):
         Given a input pianoroll with shape [NUM_PITCHES, NUM_TICKS],
         return an accompanying pianoroll with equivalent shape.
         """
-        # Normalize input_pianoroll
-        input_pianoroll = input_pianoroll / 127.
+        # Get input_pianoroll into the right shape
         input_pianoroll = pianoroll_utils.crop_pianoroll(input_pianoroll, self.MIN_PITCH, self.MAX_PITCH)
         # Get encoding of the input
         input_pianoroll = input_pianoroll[np.newaxis, ..., np.newaxis]

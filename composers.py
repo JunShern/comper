@@ -344,6 +344,7 @@ class UnitLooper(Composer):
         self.unit_predictor = unit_predictor.UnitPredictor()
         # Alternate between input and response
         self.loopcount = 0
+        self.rec_count = 0 # For debugging purposes
 
     def generate_comp(self, outport):
         """
@@ -386,9 +387,10 @@ class UnitLooper(Composer):
         # Predict comp events for the next unit
         if np.sum(self.input_pianoroll) > 0:
             self.comp_pianoroll = self.unit_predictor.get_comp_pianoroll(self.input_pianoroll)
-            # np.save('recorded_pianoroll.npy', self.input_pianoroll)
-            # np.save('generated_pianoroll.npy', self.comp_pianoroll)
+            np.save('/tmp/recorded_pianoroll_{}.npy'.format(self.rec_count), self.input_pianoroll)
+            np.save('/tmp/generated_pianoroll_{}.npy'.format(self.rec_count), self.comp_pianoroll)
             self.comp_events = pianoroll_utils.pianoroll_2_events(self.comp_pianoroll)
+            self.rec_count += 1
         else:
             self.comp_events = [[] for _ in range(self.num_ticks)] # Each tick gets a list to store events
         self.loopcount += 1
@@ -410,7 +412,8 @@ class UnitLooper(Composer):
             self.input_events[self.current_tick].append(msg)
             # Write to pianoroll
             if msg.type == "note_on":
-                self.input_pianoroll[msg.note, self.current_tick:] = msg.velocity
+                vel = msg.velocity / 127. # Normalize between 0-1
+                self.input_pianoroll[msg.note, self.current_tick:] = vel
             elif msg.type == "note_off":
                 self.input_pianoroll[msg.note, self.current_tick:] = 0
 
