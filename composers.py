@@ -338,7 +338,7 @@ class UnitLooper(Composer):
         self.comp_events = [[] for _ in range(self.num_ticks)] # Each tick gets a list to store events
         self.current_tick = 0 # This acts as an index for quantized events
         # Prepare pianoroll
-        self.num_pitches = 128
+        self.num_pitches = 128 
         self.input_pianoroll = np.zeros((self.num_pitches, self.num_ticks))
         self.comp_pianoroll = np.zeros((self.num_pitches, self.num_ticks))
         self.unit_predictor = unit_predictor.UnitPredictor()
@@ -386,42 +386,12 @@ class UnitLooper(Composer):
         # Predict comp events for the next unit
         if np.sum(self.input_pianoroll) > 0:
             self.comp_pianoroll = self.unit_predictor.get_comp_pianoroll(self.input_pianoroll)
-            np.save('recorded_pianoroll.npy', self.input_pianoroll)
-            np.save('generated_pianoroll.npy', self.comp_pianoroll)
-            self.comp_events = self.pianoroll_2_events(self.comp_pianoroll)
+            # np.save('recorded_pianoroll.npy', self.input_pianoroll)
+            # np.save('generated_pianoroll.npy', self.comp_pianoroll)
+            self.comp_events = pianoroll_utils.pianoroll_2_events(self.comp_pianoroll)
         else:
             self.comp_events = [[] for _ in range(self.num_ticks)] # Each tick gets a list to store events
         self.loopcount += 1
-
-    def pianoroll_2_events(self, pianoroll):
-        """
-        Takes an input pianoroll of shape (NUM_PITCHES, NUM_TICKS) 
-        and returns a list of quantized events
-        "Adjacent nonzero values of the same pitch will be considered a 
-        single note with their mean as its velocity.", as per pypianoroll.
-        https://github.com/salu133445/pypianoroll/blob/master/pypianoroll/multitrack.py#L1171
-        """
-        assert pianoroll.shape == (self.num_pitches, self.num_ticks)
-        pianoroll = pianoroll.T
-        
-        events = [[] for _ in range(96)] # Each tick gets a list to store events
-        clipped = pianoroll.astype(int)
-        binarized = clipped.astype(bool)
-        padded = np.pad(binarized, ((1, 1), (0, 0)), 'constant')
-        diff = np.diff(padded.astype(int), axis=0)
-
-        for pitch in range(128):
-            note_ons = np.nonzero(diff[:, pitch] > 0)[0]
-            note_offs = np.nonzero(diff[:, pitch] < 0)[0]
-            for idx, note_on in enumerate(note_ons):
-                velocity = np.mean(clipped[note_on:note_offs[idx], pitch])
-                # Create message events
-                on_msg = mido.Message('note_on', note=pitch, velocity=int(velocity), time=0)
-                events[note_ons[idx]].append(on_msg)
-                if note_offs[idx] < 96:
-                    off_msg = mido.Message('note_on', note=pitch, velocity=0, time=0)
-                    events[note_offs[idx]].append(off_msg)
-        return events
 
     def register_player_note(self, msg, precision=None):
         """
@@ -448,6 +418,11 @@ class UnitSelector(UnitLooper):
     def __init__(self):
         UnitLooper.__init__(self)
         self.unit_predictor = unit_predictor.UnitSelector()
+
+class UnitSelectorV2(UnitLooper):
+    def __init__(self):
+        UnitLooper.__init__(self)
+        self.unit_predictor = unit_predictor.UnitSelectorV2()
 
 class UnitAutoencoder(UnitLooper):
     def __init__(self):

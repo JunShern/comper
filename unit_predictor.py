@@ -4,6 +4,7 @@ import keras.models
 import sklearn.neighbors
 import sklearn.externals
 import pianoroll_utils
+import h5py
 
 class UnitPredictor:
     def __init__(self):
@@ -60,6 +61,40 @@ class UnitSelector(UnitPredictor):
         # Retrieve pianoroll
         comp_pianoroll = self.units["input"][knn_index].reshape(self.NUM_PITCHES, self.NUM_TICKS) * 127
         return comp_pianoroll
+
+class UnitSelectorV2(UnitPredictor):
+    def __init__(self):
+        UnitPredictor.__init__(self)
+        self.MIN_PITCH = 13
+        self.MAX_PITCH = 108
+        self.NUM_PITCHES = self.MAX_PITCH - self.MIN_PITCH + 1
+        # Load up the kNN model along with the units used to learn the model
+        KNN_MODEL_FILE = "./models/vae_v7_unit_selector_knn.pkl"
+        self.knn_model, UNITS_FILE = sklearn.externals.joblib.load(KNN_MODEL_FILE)
+        f = h5py.File(UNITS_FILE, 'r')
+        self.units = f['units_train']
+        # Load up the encoder model
+        ENCODER_MODEL_FILE = "./models/vae_v7_encoder.h5"
+        self.encoder = keras.models.load_model(ENCODER_MODEL_FILE)
+        return
+
+    def get_comp_pianoroll(self, input_pianoroll):
+        """
+        Given a input pianoroll with shape [NUM_PITCHES, NUM_TICKS],
+        return an accompanying pianoroll with equivalent shape.
+        """
+        # Normalize input_pianoroll
+        input_pianoroll = input_pianoroll / 127.
+        input_pianoroll = pianoroll_utils.crop_pianoroll(input_pianoroll, self.MIN_PITCH, self.MAX_PITCH)
+        # Get encoding of the input
+        input_pianoroll = input_pianoroll[np.newaxis, ..., np.newaxis]
+        input_encoding = self.encoder.predict(input_pianoroll)
+        # Retrieve closest neighbor
+        knn_index = self.knn_model.kneighbors(input_encoding, return_distance = False)[0][0]
+        knn_pianoroll = self.units[knn_index].squeeze()
+        # Pad the pianoroll from 88 to 128 keys
+        knn_pianoroll = pianoroll_utils.pad_pianoroll(knn_pianoroll, self.MIN_PITCH, self.MAX_PITCH)
+        return knn_pianoroll
 
 class UnitAutoencoder(UnitPredictor):
     def __init__(self):
