@@ -9,6 +9,38 @@ import mido
 from mido import Message, MidiFile, MidiTrack
 import IPython
 
+def get_active_pitch_classes(pianoroll, min_pitch=0, max_pitch=127):
+    """
+    Given a pianoroll matrix, return a list of all pitch classes
+    (0-11 from C-B) that were played in this pianoroll.
+    """
+    assert pianoroll.shape[0] == max_pitch - min_pitch + 1
+    num_pitches = pianoroll.shape[0]
+    
+    pitches = np.arange(num_pitches) + min_pitch
+    active_pitch_rows = np.any(pianoroll, axis=1) # List of booleans
+    active_pitches = pitches[active_pitch_rows]
+    active_pitch_classes = np.unique(active_pitches % 12)
+    return active_pitch_classes
+
+def pitch_intersection_over_union(pianoroll_1, pianoroll_2, min_pitch=0, max_pitch=127):
+    """
+    Given two pianoroll matrices, return the intersection over union
+    of their active pitch classes (ignoring octaves)
+    """
+    assert pianoroll_1.shape[0] == max_pitch - min_pitch + 1
+    assert pianoroll_2.shape[0] == max_pitch - min_pitch + 1
+    
+    notes_1 = set(get_active_pitch_classes(pianoroll_1, min_pitch, max_pitch))
+    notes_2 = set(get_active_pitch_classes(pianoroll_2, min_pitch, max_pitch))
+    
+    intersection = notes_1.intersection(notes_2)
+    union = notes_1.union(notes_2)
+    if len(union) > 0:
+        return float(len(intersection)) / len(union)
+    else:
+        return 0
+
 def crop_pianoroll(pianoroll, min_pitch, max_pitch):
     """
     Given a pianoroll of shape (128, NUM_TICKS),
