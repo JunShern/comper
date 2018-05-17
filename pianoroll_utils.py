@@ -9,6 +9,36 @@ import mido
 from mido import Message, MidiFile, MidiTrack
 import IPython
 
+def score_note_onsets(pianoroll, sigma=2, min_pitch=0, max_pitch=127, beats_per_unit=4):
+    """
+    Reward for onsets occuring at 1/2-beat marks (ie. at 24-tick resolution, occuring at 0, 11, 23... )
+    Also reward onsets at +/- sigma from those marks, for imperceivable timing inaccuracies
+    Impartial to onsets occuring at 1/4-beat marks
+    Penalizes onsets occuring at all other ticks
+    """
+    ticks_per_beat = 24
+    assert pianoroll.shape[1] == ticks_per_beat * beats_per_unit
+
+    # Score mask
+    score_mask_row = -np.ones(pianoroll.shape[1])
+    for half_beat in range(2*beats_per_unit):
+        hb = half_beat * ticks_per_beat / 2
+        next_hb = hb + ticks_per_beat / 2
+        # Good ticks
+        score_mask_row[hb : hb + sigma + 1] = 1
+        score_mask_row[next_hb - sigma : next_hb] = 1
+        # Impartial ticks
+        score_mask_row[hb + ticks_per_beat / 4] = 0
+    score_mask = np.zeros(pianoroll.shape)
+    score_mask[:] = score_mask_row # Fill all rows
+
+    # Get note onset matrix
+    note_onsets = get_note_onsets(pianoroll)
+    
+    # Calculate score
+    score = np.sum(np.multiply(score_mask, note_onsets)) / np.sum(note_onsets)
+    return score
+
 def get_active_pitch_classes(pianoroll, min_pitch=0, max_pitch=127):
     """
     Given a pianoroll matrix, return a list of all pitch classes
@@ -200,6 +230,23 @@ def pianoroll_preprocess(pianoroll, min_pitch=0, max_pitch=127, empty_threshold=
             velocity = np.mean(clipped[p, note_on:note_offs[idx]])
             clipped[p, note_on:note_offs[idx]] = velocity
     return clipped / 127.
+
+def get_note_onsets(pianoroll, min_pitch=0, max_pitch=127):
+    """
+    Takes an input pianoroll of shape (NUM_PITCHES, NUM_TICKS)
+    and returns a list of tick-indices for all note-on events 
+    for each pitch, as a list of lists.
+    """
+    assert pianoroll.shape[0] == max_pitch - min_pitch + 1
+    num_pitches = pianoroll.shape[0]
+
+    binarized = pianoroll.astype(bool)
+    padded = np.pad(binarized, ((0, 0), (1, 1)), 'constant')
+    diff = np.diff(padded.astype(int), axis=1)
+    note_ons = np.array(diff > 0)[:,:-1] # Discard last column
+
+    assert note_ons.shape == pianoroll.shape
+    return note_ons
 
 def pianoroll_2_events(pianoroll, min_pitch=0, max_pitch=127):
     """
