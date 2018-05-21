@@ -9,7 +9,7 @@ import mido
 from mido import Message, MidiFile, MidiTrack
 import IPython
 
-def score_note_onsets(pianoroll, sigma=2, min_pitch=0, max_pitch=127, beats_per_unit=4):
+def score_note_onsets(pianoroll, min_pitch=0, max_pitch=127, sigma=2, beats_per_unit=4, num_units=1):
     """
     Reward for onsets occuring at 1/2-beat marks (ie. at 24-tick resolution, occuring at 0, 11, 23... )
     Also reward onsets at +/- sigma from those marks, for imperceivable timing inaccuracies
@@ -17,11 +17,11 @@ def score_note_onsets(pianoroll, sigma=2, min_pitch=0, max_pitch=127, beats_per_
     Penalizes onsets occuring at all other ticks
     """
     ticks_per_beat = 24
-    assert pianoroll.shape[1] == ticks_per_beat * beats_per_unit
+    assert pianoroll.shape[1] == ticks_per_beat * beats_per_unit * num_units
 
     # Score mask
     score_mask_row = -np.ones(pianoroll.shape[1])
-    for half_beat in range(2*beats_per_unit):
+    for half_beat in range(2*beats_per_unit*num_units):
         hb = half_beat * ticks_per_beat / 2
         next_hb = hb + ticks_per_beat / 2
         # Good ticks
@@ -33,16 +33,31 @@ def score_note_onsets(pianoroll, sigma=2, min_pitch=0, max_pitch=127, beats_per_
     score_mask[:] = score_mask_row # Fill all rows
 
     # Get note onset matrix
-    note_onsets = get_note_onsets(pianoroll)
+    note_onsets = get_note_onsets(pianoroll, min_pitch, max_pitch)
     
     # Calculate score
-    score = np.sum(np.multiply(score_mask, note_onsets)) / np.sum(note_onsets)
-    return score
+    if np.sum(note_onsets) != 0:
+        score = np.sum(np.multiply(score_mask, note_onsets)) / np.sum(note_onsets)
+        return score
+    else:
+        return 0
 
-def get_active_pitch_classes(pianoroll, min_pitch=0, max_pitch=127):
+def mask_pitches(pianoroll, pitches, min_pitch=0, max_pitch=127):
     """
-    Given a pianoroll matrix, return a list of all pitch classes
-    (0-11 from C-B) that were played in this pianoroll.
+    Given a pianoroll matrix and a list of pitch numbers,
+    mute all notes in that pianoroll corresponding to those pitches.
+    Return the new masked pianoroll.
+    """
+    assert pianoroll.shape[0] == max_pitch - min_pitch + 1
+    pitches = pitches - min_pitch
+    masked = pianoroll.copy()
+    masked[pitches] = 0
+    return masked
+    
+def get_active_pitches(pianoroll, min_pitch=0, max_pitch=127):
+    """
+    Given a pianoroll matrix, return a list of all pitches that 
+    were played in this pianoroll.
     """
     assert pianoroll.shape[0] == max_pitch - min_pitch + 1
     num_pitches = pianoroll.shape[0]
@@ -50,6 +65,14 @@ def get_active_pitch_classes(pianoroll, min_pitch=0, max_pitch=127):
     pitches = np.arange(num_pitches) + min_pitch
     active_pitch_rows = np.any(pianoroll, axis=1) # List of booleans
     active_pitches = pitches[active_pitch_rows]
+    return active_pitches
+
+def get_active_pitch_classes(pianoroll, min_pitch=0, max_pitch=127):
+    """
+    Given a pianoroll matrix, return a list of all pitch classes
+    (0-11 from C-B) that were played in this pianoroll.
+    """
+    active_pitches = get_active_pitches(pianoroll, min_pitch, max_pitch)
     active_pitch_classes = np.unique(active_pitches % 12)
     return active_pitch_classes
 
