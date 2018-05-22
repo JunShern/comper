@@ -437,12 +437,13 @@ def create_bass_units(pianoroll, num_pitches=128, ticks_per_unit=96, filter_thre
     
     # Split pianoroll into left- and right- accompaniments
     binary_pianoroll = pianoroll.astype(bool)
+    # Using argmax to find lowest pitches, all-zero columns will select the first pitch. 
+    # So we use this [1,0,0,...] vector as the OHE for empty token
     pitch_indices = np.argmax(binary_pianoroll, axis=0)
     input_pianoroll = pianoroll.copy()
     input_pianoroll[pitch_indices, np.arange(input_pianoroll.shape[1])] = 0
     bass_pianoroll = np.zeros(pianoroll.shape)
     bass_pianoroll[pitch_indices, np.arange(bass_pianoroll.shape[1])] = 1
-    bass_pianoroll[0] = 0 # This is a hack; otherwise argmax will turn on first pitch for empty columns
     
     # Get the units by reshaping left_comp and right_comp
     input_units = input_pianoroll.T.reshape(M, ticks_per_unit, num_pitches).swapaxes(1,2)
@@ -454,6 +455,11 @@ def create_bass_units(pianoroll, num_pitches=128, ticks_per_unit=96, filter_thre
     input_units = input_units[filter_array, ...]
     bass_units = bass_units[filter_array, ...]
     M = np.sum(filter_array) # Recount M after filtering
+    
+    # Replace first column of all bass units with start-of-sequence token [...,0,0,0,1]
+    start_token = np.zeros((num_pitches))
+    start_token[-1] = 1
+    bass_units[:, :, 0] = start_token
     
     # Debug assertions
     assert(input_units.shape == (M, num_pitches, ticks_per_unit))
