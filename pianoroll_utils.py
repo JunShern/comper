@@ -422,3 +422,41 @@ def create_units(pianoroll, num_pitches, ticks_per_unit, partition_note,
     assert(comp_units.shape == (M, num_pitches, ticks_per_unit))
     
     return [input_units, comp_units]
+
+def create_bass_units(pianoroll, num_pitches=128, ticks_per_unit=96, filter_threshold=0):
+    """
+    Given an input pianoroll matrix of shape [NUM_PITCHES, ticks_per_unit], 
+    return input_units and bass_units of shape [M, NUM_PITCHES, ticks_per_unit]
+    where bass_units contain the lowest-pitched notes of each tick and 
+    input_units contain the remaining notes.
+    """
+    assert pianoroll.shape[0] == num_pitches
+    
+    # Truncate pianoroll so it can be evenly divided into units
+    [M, pianoroll] = chop_to_unit_multiple(pianoroll, ticks_per_unit)
+    
+    # Split pianoroll into left- and right- accompaniments
+    binary_pianoroll = pianoroll.astype(bool)
+    pitch_indices = np.argmax(binary_pianoroll, axis=0)
+    input_pianoroll = pianoroll.copy()
+    input_pianoroll[pitch_indices, np.arange(input_pianoroll.shape[1])] = 0
+    bass_pianoroll = np.zeros(pianoroll.shape)
+    bass_pianoroll[pitch_indices, np.arange(bass_pianoroll.shape[1])] = 1
+    bass_pianoroll[0] = 0 # This is a hack; otherwise argmax will turn on first pitch for empty columns
+    
+    # Get the units by reshaping left_comp and right_comp
+    input_units = input_pianoroll.T.reshape(M, ticks_per_unit, num_pitches).swapaxes(1,2)
+    bass_units = bass_pianoroll.T.reshape(M, ticks_per_unit, num_pitches).swapaxes(1,2)
+    
+    # Filter out both units if near-empty input units
+    input_units_means = np.mean(input_units, axis=(1,2)).squeeze()
+    filter_array = input_units_means >= filter_threshold
+    input_units = input_units[filter_array, ...]
+    bass_units = bass_units[filter_array, ...]
+    M = np.sum(filter_array) # Recount M after filtering
+    
+    # Debug assertions
+    assert(input_units.shape == (M, num_pitches, ticks_per_unit))
+    assert(bass_units.shape == (M, num_pitches, ticks_per_unit))
+    
+    return [input_units, bass_units]
