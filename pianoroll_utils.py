@@ -423,6 +423,33 @@ def create_units(pianoroll, num_pitches, ticks_per_unit, partition_note,
     
     return [input_units, comp_units]
 
+def one_hot_to_pianoroll(one_hot_matrix):
+    """
+    Given a one-hot matrix [NUM_VECTORS=NUM_TICKS, NUM_TOKENS=NUM_PITCHES],
+    return a pianoroll matrix of shape [NUM_PITCHES, NUM_TICKS] but 
+    with special tokens converted according to:
+    - Start token [...,0,0,0,1] -> Copy next token
+    - Empty token [1,0,0,0,...] -> [0,0,0,...,0]
+    """
+    assert np.all(np.sum(one_hot_matrix, axis=1) == 1)
+    num_tokens = one_hot_matrix.shape[1]
+    proll = one_hot_matrix.copy()
+    # Define special tokens
+    empty_token = np.zeros(num_tokens)
+    empty_token[0] = 1
+    start_token = np.zeros(num_tokens)
+    start_token[-1] = 1
+    # Start tokens
+    start_token_rows = np.all(proll == start_token, axis=1) # Boolean indexing array
+    next_token_rows = np.concatenate([[False], start_token_rows[:-1]]) # Boolean array shifted
+    proll[start_token_rows] = proll[next_token_rows] # Replace with next token
+    # End tokens
+    empty_token_rows = np.all(proll == empty_token, axis=1)
+    proll[empty_token_rows] = np.zeros(num_tokens) # Replace with zeros
+    # Change to (NUM_PITCHES, NUM_TICKS)
+    proll = proll.swapaxes(0,1)
+    return proll
+    
 def create_bass_units(pianoroll, num_pitches=128, ticks_per_unit=96, filter_threshold=0):
     """
     Given an input pianoroll matrix of shape [NUM_PITCHES, ticks_per_unit], 
