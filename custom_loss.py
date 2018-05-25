@@ -92,3 +92,6 @@ def smoothness_loss(pianorolls_batch):
     # Average over all batches
     mean_smoothness = K.mean(smoothness)
     return mean_smoothness
+
+def smoothness_metric(y_true, y_pred):
+    return smoothness_loss(y_pred)
