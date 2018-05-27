@@ -38,6 +38,12 @@ def pitch_intersection_over_union_keras(pianorolls_batch_1, pianorolls_batch_2):
     iou = K.mean(num_intersections / K.clip(num_unions, K.epsilon(), None)) # Protect against 0-division
     return iou
 
+def pitch_loss(pianorolls_batch_1, pianorolls_batch_2):
+    """
+    Pitch loss is 1 when IOU is 0, and 0 when IOU is 1. 
+    """
+    return 1 - pitch_intersection_over_union_keras(pianorolls_batch_1, pianorolls_batch_2)
+
 def onsets_loss(pianorolls_batch):
     '''
     Given a batch of pianorolls (NUM_BATCHES, NUM_PITCHES, NUM_TICKS, 1),
