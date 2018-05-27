@@ -1,45 +1,67 @@
 import numpy as np
 import tensorflow as tf
 from keras import backend as K
+from tensorflow import keras as tfK
 
-def get_active_pitches_keras(pianoroll):
+def get_active_pitch_classes_keras(pianorolls_batch):
     """
-    Given a pianoroll matrix, return a list of all pitches that 
-    were played in this pianoroll.
+    Given a batch of pianoroll matrices, return a boolean Tensor of shape
+    (NUM_BATCHES, 12) indicating whether a particular pitch class was played 
+    in this pianoroll.
     """
-    pianoroll = K.cast_to_floatx(pianoroll)
-    min_pitch = 13
-    num_pitches = 96
+    pianorolls_batch = K.cast(pianorolls_batch, 'float32')
+    # min_pitch = 13
+    # num_pitches = 96
     
-    pitches = K.arange(num_pitches) + min_pitch
-    active_pitch_rows = K.any(pianoroll, axis=1) # List of booleans
-    active_pitches = tf.boolean_mask(pitches, active_pitch_rows)
-    return active_pitches
-
-def get_active_pitch_classes_keras(pianoroll):
-    """
-    Given a pianoroll matrix, return a list of all pitch classes
-    (0-11 from C-B) that were played in this pianoroll.
-    """
-    active_pitches = get_active_pitches_keras(pianoroll)
-    active_pitch_classes, _ = tf.unique(tf.floormod(active_pitches, 12))
+    # num_batches = K.eval(pianorolls_batch).shape[0]
+    # pitches = K.repeat_elements((K.arange(num_pitches) + min_pitch), num_batches, axis=0)
+    # pitches = K.arange(num_pitches) + min_pitch
+    active_pitch_rows = K.any(pianorolls_batch, axis=2) # List of booleans
+    active_pitch_rows = K.reshape(active_pitch_rows, (-1, 8, 12)) # Separated into octaves
+    # Get active pitches
+    active_pitch_classes = K.any(active_pitch_rows, axis=1)
+    # print(K.eval(active_pitch_classes))
+    # active_pitches = tf.boolean_mask(pitches, active_pitch_rows, axis=0)
+    # print(K.eval(active_pitches))
     return active_pitch_classes
 
-def pitch_intersection_over_union_keras(pianoroll_1, pianoroll_2):
+# def get_active_pitch_classes_keras(pianorolls_batch):
+#     """
+#     Given a batch of pianoroll matrices, return a list of all pitch classes
+#     (0-11 from C-B) that were played in this pianoroll.
+#     """
+#     active_pitches = get_active_pitches_keras(pianorolls_batch)
+#     active_pitch_classes, _ = tf.unique(tf.floormod(active_pitches, 12))
+#     return active_pitch_classes
+
+def pitch_intersection_over_union_keras(pianorolls_batch_1, pianorolls_batch_2):
     """
-    Given two pianoroll matrices, return the intersection over union
+    Given two batches of pianoroll matrices, return the intersection over union
     of their active pitch classes (ignoring octaves)
     """
-    notes_1 = K.cast(get_active_pitch_classes_keras(pianoroll_1), 'int32')
-    notes_2 = K.cast(get_active_pitch_classes_keras(pianoroll_2), 'int32')
+    notes_1 = K.cast(get_active_pitch_classes_keras(pianorolls_batch_1), 'int32')
+    notes_2 = K.cast(get_active_pitch_classes_keras(pianorolls_batch_2), 'int32')
+    # # Get intersection
+    # intersection = tf.sets.set_intersection(notes_1[None,:], notes_2[None,:])
+    # num_intersections = K.cast(tf.size(intersection.values), 'float32')
+    # # Get union
+    # union = tf.sets.set_union(notes_1[None,:], notes_2[None,:])
+    # num_unions = K.cast(tf.size(union.values), 'float32')
+    # # Get IOU
+    # iou = num_intersections / K.clip(num_unions, K.epsilon(), None) # Protect against 0-division
+
+    # Join both matrices
+    notes_1 = tfK.backend.expand_dims(notes_1)
+    notes_2 = tfK.backend.expand_dims(notes_2)
+    notes_concat = K.concatenate([notes_1, notes_2])
     # Get intersection
-    intersection = tf.sets.set_intersection(notes_1[None,:], notes_2[None,:])
-    num_intersections = K.cast(tf.size(intersection.values), 'float32')
+    intersections = K.cast(K.all(notes_concat, axis=-1), 'float32')
+    num_intersections = K.sum(intersections, axis=-1)
     # Get union
-    union = tf.sets.set_union(notes_1[None,:], notes_2[None,:])
-    num_unions = K.cast(tf.size(union.values), 'float32')
-    # Get IOU
-    iou = num_intersections / K.clip(num_unions, K.epsilon(), None) # Protect against 0-division
+    unions = K.cast(K.any(notes_concat, axis=-1), 'float32')
+    num_unions = K.sum(unions, axis=-1)
+    # Calculate average IOU across all batches
+    iou = K.mean(num_intersections / K.clip(num_unions, K.epsilon(), None)) # Protect against 0-division
     return iou
 
 def onsets_loss(pianorolls_batch):
