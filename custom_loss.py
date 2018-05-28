@@ -9,9 +9,11 @@ def get_active_pitch_classes_keras(pianorolls_batch):
     (NUM_BATCHES, 12) indicating whether a particular pitch class was played 
     in this pianoroll.
     """
+    EPSILON = 1e-4
     pianorolls_batch = K.cast(pianorolls_batch, 'float32')
 
-    active_pitch_rows = K.any(pianorolls_batch, axis=2) # List of booleans
+    epsilon_active = K.greater(pianorolls_batch, EPSILON)
+    active_pitch_rows = K.any(epsilon_active, axis=2) # List of booleans
     active_pitch_rows = K.reshape(active_pitch_rows, (-1, 8, 12)) # Separated into octaves
     # Get active pitches
     active_pitch_classes = K.any(active_pitch_rows, axis=1)
