@@ -9,7 +9,7 @@ def get_active_pitch_classes_keras(pianorolls_batch):
     (NUM_BATCHES, 12) indicating whether a particular pitch class was played 
     in this pianoroll.
     """
-    EPSILON = 1e-4
+    EPSILON = 1e-2
     pianorolls_batch = K.cast(pianorolls_batch, 'float32')
 
     epsilon_active = K.greater(pianorolls_batch, EPSILON)
@@ -69,7 +69,7 @@ def onsets_loss(pianorolls_batch):
         score_mask_row[next_hb - sigma : next_hb] = 1
         # Impartial ticks
         score_mask_row[hb + ticks_per_beat / 4] = 0
-    score_mask = np.zeros(K.eval(pianorolls_batch).shape)
+    score_mask = np.zeros((1024, 96, NUM_TICKS))#K.int_shape(pianorolls_batch))
     score_mask[:,:] = score_mask_row # Fill all rows
 
     note_onset_matrix = get_note_onsets_keras(pianorolls_batch)
@@ -89,7 +89,7 @@ def get_note_onsets_keras(pianorolls_batch):
     # Binarize
     binarized = K.sign(pianorolls_batch)
     # Pad along time axis (axis=2)
-    padding = K.zeros((pianorolls_batch.shape[0], pianorolls_batch.shape[1],1))
+    padding = K.zeros((1024, 96, 1)) #(pianorolls_batch.shape[0], pianorolls_batch.shape[1],1))
     padded = K.concatenate([padding, binarized, padding], axis=2)
     # Diff
     diff = padded[:,:,1:] - padded[:,:,:-1]
@@ -105,14 +105,18 @@ def smoothness_loss(pianorolls_batch):
     pianorolls_batch = K.squeeze(pianorolls_batch, axis=3)
     # Take difference along time axis
     diff = pianorolls_batch[:,:,1:] - pianorolls_batch[:,:,:-1]
-    # Smoothness as ratio of nonzero changes over all changes
-    epsilon_diff = K.greater(diff, EPSILON)
-    num_nonzero = K.cast(tf.count_nonzero(epsilon_diff, axis=(1,2)), 'float32')
-    num_elements = K.cast(tf.size(diff[0]), 'float32')
-    smoothness = num_nonzero / num_elements
-    # Average over all batches
-    mean_smoothness = K.mean(smoothness)
-    return mean_smoothness
+    clipped_diff = K.clip(diff, 0, EPSILON)
+    return K.mean(clipped_diff)
+
+#     # Smoothness as ratio of nonzero changes over all changes
+#     epsilon_diff = K.greater(diff, EPSILON)
+    
+#     num_nonzero = K.cast(tf.count_nonzero(epsilon_diff, axis=(1,2)), 'float32')
+#     num_elements = K.cast(tf.size(diff[0]), 'float32')
+#     smoothness = tf.divide(num_nonzero, num_elements)
+#     # Average over all batches
+#     mean_smoothness = K.mean(smoothness)
+#     return mean_smoothness
 
 ### METRICS
 # These are essentially just wrappers around the loss functions,
