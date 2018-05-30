@@ -499,3 +499,27 @@ def create_bass_units(pianoroll, num_pitches=128, ticks_per_unit=96, filter_thre
     assert(bass_units.shape == (M, num_pitches, ticks_per_unit))
     
     return [input_units, bass_units]
+
+def get_pianoroll(filepath, min_pitch=0, max_pitch=127):
+    """
+    Given a path to a pypianoroll .npz file from LPD5-clean dataset, 
+    extract the Piano track into a 0-1 normalized pianoroll matrix of
+    shape (NUM_PITCHES, ?) where NUM_PITCHES = max_pitch - min_pitch + 1
+    """
+    # Load pianoroll file as a multitrack object
+    multi = pypianoroll.Multitrack(filepath)
+    for track in multi.tracks:
+        # Non-empty piano pianoroll
+        if track.name == "Piano":
+            if track.pianoroll.shape[0] > 0:
+                proll = track.pianoroll.T
+                # Clip and normalize velocities between 0 and 1
+                proll = proll.clip(0, 127) / 127.
+                # Crop pitch range of pianoroll
+                proll = crop_pianoroll(proll, min_pitch, max_pitch)
+                return proll
+            else:
+                return np.array([]) # No pianoroll
+    # Error
+    print("Unexpected condition: No Piano track in file", filepath)
+    return np.array([]) # No pianoroll
