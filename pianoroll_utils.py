@@ -382,7 +382,7 @@ def shuffle_left_right(left_units, right_units):
 
 
 def create_units(pianoroll, num_pitches, ticks_per_unit, partition_note,
-    min_pitch=0, filter_threshold=0, shuffle=True):
+    min_pitch=0, filter_threshold=0, shuffle=True, return_full_units=False):
     """
     Given an input pianoroll matrix of shape [NUM_PITCHES, ticks_per_unit], 
     return input_units and comp_units of shape [M, NUM_PITCHES, ticks_per_unit]
@@ -402,6 +402,7 @@ def create_units(pianoroll, num_pitches, ticks_per_unit, partition_note,
     # Get the units by reshaping left_comp and right_comp
     left_units = left_comp.T.reshape(M, ticks_per_unit, num_pitches).swapaxes(1,2)
     right_units = right_comp.T.reshape(M, ticks_per_unit, num_pitches).swapaxes(1,2)
+    full_units = pianoroll.T.reshape(M, ticks_per_unit, num_pitches).swapaxes(1,2)
     
     # Randomly choose between left/right for input/comp units, 
     # so the model learns both sides of the accompaniment
@@ -415,13 +416,18 @@ def create_units(pianoroll, num_pitches, ticks_per_unit, partition_note,
     filter_array = input_units_means >= filter_threshold
     input_units = input_units[filter_array, ...]
     comp_units = comp_units[filter_array, ...]
+    full_units = full_units[filter_array, ...]
     M = np.sum(filter_array) # Recount M after filtering
     
     # Debug assertions
     assert(input_units.shape == (M, num_pitches, ticks_per_unit))
     assert(comp_units.shape == (M, num_pitches, ticks_per_unit))
+    assert(full_units.shape == (M, num_pitches, ticks_per_unit))
     
-    return [input_units, comp_units]
+    if return_full_units:
+        return [input_units, comp_units, full_units]
+    else:
+        return [input_units, comp_units]
 
 def one_hot_to_pianoroll(one_hot_matrix):
     """
