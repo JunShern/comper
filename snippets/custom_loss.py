@@ -17,28 +17,31 @@ def get_active_pitch_classes_keras(pianorolls_batch):
     active_pitch_rows = K.reshape(active_pitch_rows, (-1, 8, 12)) # Separated into octaves
     # Get active pitches
     active_pitch_classes = K.any(active_pitch_rows, axis=1)
-    return active_pitch_classes
+    return pianorolls_batch #active_pitch_classes
 
 def pitch_intersection_over_union_keras(pianorolls_batch_1, pianorolls_batch_2):
     """
     Given two batches of pianoroll matrices, return the intersection over union
     of their active pitch classes (ignoring octaves)
     """
-    notes_1 = K.cast(get_active_pitch_classes_keras(pianorolls_batch_1), 'int32')
-    notes_2 = K.cast(get_active_pitch_classes_keras(pianorolls_batch_2), 'int32')
-    # Join both matrices
-    notes_1 = tfK.backend.expand_dims(notes_1)
-    notes_2 = tfK.backend.expand_dims(notes_2)
-    notes_concat = K.concatenate([notes_1, notes_2])
-    # Get intersection
-    intersections = K.cast(K.all(notes_concat, axis=-1), 'float32')
-    num_intersections = K.sum(intersections, axis=-1)
-    # Get union
-    unions = K.cast(K.any(notes_concat, axis=-1), 'float32')
-    num_unions = K.sum(unions, axis=-1)
-    # Calculate average IOU across all batches
-    iou = K.mean(num_intersections / K.clip(num_unions, K.epsilon(), None)) # Protect against 0-division
-    return iou
+#     notes_1 = K.cast(get_active_pitch_classes_keras(pianorolls_batch_1), 'int32')
+#     notes_2 = K.cast(get_active_pitch_classes_keras(pianorolls_batch_2), 'int32')
+    notes_1 = K.cast(K.cast(pianorolls_batch_1, 'int32'), 'float32')
+    notes_2 = K.cast(K.cast(pianorolls_batch_2, 'int32'), 'float32')
+    return K.mean(notes_1 - notes_2)
+#     # Join both matrices
+#     notes_1 = tfK.backend.expand_dims(notes_1)
+#     notes_2 = tfK.backend.expand_dims(notes_2)
+#     notes_concat = K.concatenate([notes_1, notes_2])
+#     # Get intersection
+#     intersections = K.cast(K.all(notes_concat, axis=-1), 'float32')
+#     num_intersections = K.sum(intersections, axis=-1)
+#     # Get union
+#     unions = K.cast(K.any(notes_concat, axis=-1), 'float32')
+#     num_unions = K.sum(unions, axis=-1)
+#     # Calculate average IOU across all batches
+#     iou = K.mean(num_intersections / K.clip(num_unions, K.epsilon(), None)) # Protect against 0-division
+#     return iou
 
 def pitch_loss(pianorolls_batch_1, pianorolls_batch_2):
     """
