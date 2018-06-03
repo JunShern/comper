@@ -3,6 +3,27 @@ import tensorflow as tf
 from keras import backend as K
 from tensorflow import keras as tfK
 
+def get_pitch_class_histogram(pianorolls_batch):
+    """
+    Given a batch of pianoroll matrices, return a Tensor of shape (NUM_BATCHES, 12)
+    with each 12 elements in a batch being the sum of velocities for that pitch class, 
+    normalized between zero and one.
+    """
+    pianorolls_batch_tensor = K.cast(pianorolls_batch, 'float32')
+    # Get sum of velocities for each pitch class
+    pitch_velocities = K.sum(pianorolls_batch_tensor, axis=2) # sum along tick axis
+    pitch_class_velocities = K.sum(K.reshape(pitch_velocities, (-1, 8, 12)), axis=1) # Separated into octaves
+    # Normalize against total note velocities in this pianoroll
+    total_velocities = K.sum(pitch_class_velocities, axis=1, keepdims=True)
+    norm_pitch_class_velocities = pitch_class_velocities / total_velocities
+    return norm_pitch_class_velocities
+
+def pitch_histogram_distance(pianorolls_batch_1, pianorolls_batch_2):
+    hist1 = get_pitch_class_histogram(pianorolls_batch_1)
+    hist2 = get_pitch_class_histogram(pianorolls_batch_2)
+    distance = K.abs(hist1 - hist2) # Might want to swap this out for some histogram distance metric
+    return K.mean(distance)
+
 def get_active_pitch_classes_keras(pianorolls_batch):
     """
     Given a batch of pianoroll matrices, return a boolean Tensor of shape
@@ -17,31 +38,28 @@ def get_active_pitch_classes_keras(pianorolls_batch):
     active_pitch_rows = K.reshape(active_pitch_rows, (-1, 8, 12)) # Separated into octaves
     # Get active pitches
     active_pitch_classes = K.any(active_pitch_rows, axis=1)
-    return pianorolls_batch #active_pitch_classes
+    return active_pitch_classes
 
 def pitch_intersection_over_union_keras(pianorolls_batch_1, pianorolls_batch_2):
     """
     Given two batches of pianoroll matrices, return the intersection over union
     of their active pitch classes (ignoring octaves)
     """
-#     notes_1 = K.cast(get_active_pitch_classes_keras(pianorolls_batch_1), 'int32')
-#     notes_2 = K.cast(get_active_pitch_classes_keras(pianorolls_batch_2), 'int32')
-    notes_1 = K.cast(K.cast(pianorolls_batch_1, 'int32'), 'float32')
-    notes_2 = K.cast(K.cast(pianorolls_batch_2, 'int32'), 'float32')
-    return K.mean(notes_1 - notes_2)
-#     # Join both matrices
-#     notes_1 = tfK.backend.expand_dims(notes_1)
-#     notes_2 = tfK.backend.expand_dims(notes_2)
-#     notes_concat = K.concatenate([notes_1, notes_2])
-#     # Get intersection
-#     intersections = K.cast(K.all(notes_concat, axis=-1), 'float32')
-#     num_intersections = K.sum(intersections, axis=-1)
-#     # Get union
-#     unions = K.cast(K.any(notes_concat, axis=-1), 'float32')
-#     num_unions = K.sum(unions, axis=-1)
-#     # Calculate average IOU across all batches
-#     iou = K.mean(num_intersections / K.clip(num_unions, K.epsilon(), None)) # Protect against 0-division
-#     return iou
+    notes_1 = get_active_pitch_classes_keras(pianorolls_batch_1)
+    notes_2 = get_active_pitch_classes_keras(pianorolls_batch_2)
+    # Join both matrices
+    notes_1 = tfK.backend.expand_dims(notes_1)
+    notes_2 = tfK.backend.expand_dims(notes_2)
+    notes_concat = K.concatenate([notes_1, notes_2])
+    # Get intersection
+    intersections = K.cast(K.all(notes_concat, axis=-1), 'float32')
+    num_intersections = K.sum(intersections, axis=-1)
+    # Get union
+    unions = K.cast(K.any(notes_concat, axis=-1), 'float32')
+    num_unions = K.sum(unions, axis=-1)
+    # Calculate average IOU across all batches
+    iou = K.mean(num_intersections / K.clip(num_unions, K.epsilon(), None)) # Protect against 0-division
+    return iou
 
 def pitch_loss(pianorolls_batch_1, pianorolls_batch_2):
     """
