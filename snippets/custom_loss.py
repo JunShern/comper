@@ -10,7 +10,7 @@ def get_pitch_class_histogram(pianorolls_batch):
     with each 12 elements in a batch being the sum of velocities for that pitch class, 
     normalized between zero and one.
     """
-    pianorolls_batch_tensor = K.cast(pianorolls_batch, 'float32')
+    pianorolls_batch_tensor = K.cast(K.squeeze(pianorolls_batch, -1), 'float32')
     # Get sum of velocities for each pitch class
     pitch_velocities = K.sum(pianorolls_batch_tensor, axis=2) # sum along tick axis
     pitch_class_velocities = K.sum(K.reshape(pitch_velocities, (-1, 8, 12)), axis=1) # Separated into octaves
