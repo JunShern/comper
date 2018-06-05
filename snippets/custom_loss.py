@@ -1,6 +1,7 @@
 import numpy as np
 import tensorflow as tf
 from keras import backend as K
+from keras import losses
 from tensorflow import keras as tfK
 
 def get_pitch_class_histogram(pianorolls_batch):
@@ -18,11 +19,20 @@ def get_pitch_class_histogram(pianorolls_batch):
     norm_pitch_class_velocities = pitch_class_velocities / total_velocities
     return norm_pitch_class_velocities
 
-def pitch_histogram_distance(pianorolls_batch_1, pianorolls_batch_2):
+def pitch_histogram_distance(pianorolls_batch_1, pianorolls_batch_2, distance_metric='cosine'):
+    """
+    Calculates the pitch class histograms for two batches of pianoroll matrices,
+    then using cosine proximity to calculate the distance between histograms.
+    Returns a value between -1 and 0, where -1 is maximum similarity and 
+    0 is completely orthogonal.
+    """
     hist1 = get_pitch_class_histogram(pianorolls_batch_1)
     hist2 = get_pitch_class_histogram(pianorolls_batch_2)
-    distance = K.abs(hist1 - hist2) # Might want to swap this out for some histogram distance metric
-    return K.mean(distance)
+    if distance_metric == 'cosine':
+        distance = losses.cosine_proximity(hist1, hist2)
+    elif distance_metric == 'mse':
+        distance = losses.mean_squared_error(hist1, hist2)
+    return distance
 
 def get_active_pitch_classes_keras(pianorolls_batch):
     """
