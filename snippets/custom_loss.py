@@ -130,6 +130,33 @@ def get_note_onsets_keras(pianorolls_batch):
     note_ons = note_ons[:,:,:-1]
     return K.cast(note_ons, 'float32')
 
+def onset_distance(pianorolls_batch_1, pianorolls_batch_2):
+    """
+    Given two batches of pianoroll matrices, return the difference
+    between their note onset matrices.
+    """
+    onsets_1 = get_note_onsets_time_only(pianorolls_batch_1)
+    onsets_2 = get_note_onsets_time_only(pianorolls_batch_2)
+    return losses.mean_squared_error(onsets_1, onsets_2)
+
+def get_note_onsets_time_only(pianorolls_batch):
+    """
+    Given a batch of pianorolls (NUM_BATCHES, NUM_PITCHES, NUM_TICKS, 1),
+    return a matrix of shape (NUM_BATCHES, NUM_TICKS), containing the 
+    total onset velocities at each tick (if no onsets, value will be 0).
+    """
+    pianorolls_batch = K.cast(pianorolls_batch, 'float32')
+    # Pad along time axis
+    padded = K.spatial_2d_padding(pianorolls_batch, padding=((0, 0), (1, 0)), data_format="channels_last")
+    # Remove channel axis
+    padded_no_channel = K.squeeze(padded, 3)
+    # Take difference along time axis
+    diff = padded_no_channel[:,:,1:] - padded_no_channel[:,:,:-1]
+    clipped_diff = K.clip(diff, 0, None) # Ignore negative (note-off) values
+    # Sum along pitch axis
+    time_only = K.sum(clipped_diff, axis=1)
+    return time_only
+
 def smoothness_loss(pianorolls_batch):
     EPSILON = 1e-4
     # Remove channel axis
