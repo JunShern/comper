@@ -118,6 +118,20 @@ def pad_pianoroll(pianoroll, min_pitch, max_pitch):
     assert output.shape[0] == 128
     return output
 
+def plot_pitch_class_histogram(ax, hist):
+    """
+    Plots a pitch class histogram, given a histogram of vector
+    of shape (12).
+    """
+    assert len(hist) == 12
+    x_pos = np.arange(len(hist))
+    ax.bar(x_pos, hist, align='center', alpha=0.5)
+    ax.set_xticks(x_pos, minor=False)
+    ax.set_ylabel('normalized velocity sum')
+    ax.set_xlabel('pitch class')
+    ax.set_ylim([0,1])
+    return 
+
 def plot_pianoroll(ax, pianoroll, min_pitch=0, max_pitch=127, beat_resolution=None, cmap='Blues'):
     """
     Plots a pianoroll matrix of shape (NUM_PITCHES, NUM_TICKS)
