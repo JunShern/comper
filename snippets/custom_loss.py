@@ -23,13 +23,13 @@ def pitch_histogram_distance(pianorolls_batch_1, pianorolls_batch_2, distance_me
     """
     Calculates the pitch class histograms for two batches of pianoroll matrices,
     then using cosine proximity to calculate the distance between histograms.
-    Returns a value between -1 and 0, where -1 is maximum similarity and 
-    0 is completely orthogonal.
+    Returns a distance value between 0 and 1, where 0 is maximum similarity and 
+    1 is completely orthogonal.
     """
     hist1 = get_pitch_class_histogram(pianorolls_batch_1)
     hist2 = get_pitch_class_histogram(pianorolls_batch_2)
     if distance_metric == 'cosine':
-        distance = losses.cosine_proximity(hist1, hist2)
+        distance = 1 + losses.cosine_proximity(hist1, hist2)
     elif distance_metric == 'mse':
         distance = losses.mean_squared_error(hist1, hist2)
     return distance
