@@ -23,6 +23,7 @@ from keras.layers import Lambda, Flatten, Reshape, Dropout
 from keras import backend as K
 from keras import metrics
 from keras import losses
+from keras import optimizers
 
 sys.path.append('./snippets')
 import pianoroll_utils

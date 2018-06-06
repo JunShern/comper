@@ -118,6 +118,37 @@ def pad_pianoroll(pianoroll, min_pitch, max_pitch):
     assert output.shape[0] == 128
     return output
 
+def plot_velocities(ax, pianoroll, beat_resolution=24):
+    """
+    Given a pianoroll, plot the sum of all velocities occurring
+    at each time tick.
+    """
+    assert pianoroll.shape[1] == 96
+    num_ticks = pianoroll.shape[1]
+    num_beat = 4
+    
+    ax.step(range(num_ticks), np.sum(pianoroll, axis=0))
+    ax.set_ylabel('total velocity')
+    ax.set_xlabel('ticks')
+    ax.set_xlim([0, num_ticks-1])
+    ax.set_ylim([0, 5]) # May exceed but it's okay
+    
+    # Beat lines
+    if beat_resolution is not None:
+        num_beat = num_ticks//beat_resolution
+        xticks_major = beat_resolution * np.arange(0, num_beat)
+        xticks_minor = beat_resolution * (0.5 + np.arange(0, num_beat))
+        xtick_labels = np.arange(1, 1 + num_beat)
+        ax.set_xticks(xticks_major)
+        ax.set_xticklabels('')
+        ax.set_xticks(xticks_minor, minor=True)
+        ax.set_xticklabels(xtick_labels, minor=True)
+        ax.tick_params(axis='x', which='minor', width=0)
+        ax.set_xlabel('beats')
+    ax.grid(axis='both', color='k', linestyle=':', linewidth=.5)
+    return
+
+    
 def plot_onsets(ax, onsets, beat_resolution=24):
     """
     Plots a pitch class histogram, given an onsets vector
@@ -127,8 +158,8 @@ def plot_onsets(ax, onsets, beat_resolution=24):
     num_ticks = len(onsets)
     num_beat = 4
     
-    ax.plot(range(num_ticks), onsets)
-    ax.set_ylabel('toatl onsets velocity')
+    ax.step(range(num_ticks), onsets)
+    ax.set_ylabel('total onsets velocity')
     ax.set_xlabel('ticks')
     ax.set_xlim([0, num_ticks-1])
     ax.set_ylim([0, 5]) # May exceed but it's okay

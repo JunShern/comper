@@ -158,7 +158,7 @@ def get_note_onsets_time_only(pianorolls_batch):
     return time_only
 
 def smoothness_loss(pianorolls_batch):
-    EPSILON = 1e-4
+    EPSILON = 0.01
     # Remove channel axis
     pianorolls_batch = K.squeeze(pianorolls_batch, axis=3)
     # Take difference along time axis

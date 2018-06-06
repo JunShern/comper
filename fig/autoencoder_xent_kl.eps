@@ -1,0 +1,6004 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%Title: fig/autoencoder_xent_kl.eps
+%%Creator: matplotlib version 2.2.2, http://matplotlib.org/
+%%CreationDate: Tue Jun  5 21:40:55 2018
+%%Orientation: portrait
+%%BoundingBox: -54 36 666 756
+%%EndComments
+%%BeginProlog
+/mpldict 8 dict def
+mpldict begin
+/m { moveto } bind def
+/l { lineto } bind def
+/r { rlineto } bind def
+/c { curveto } bind def
+/cl { closepath } bind def
+/box {
+m
+1 index 0 r
+0 exch r
+neg 0 r
+cl
+} bind def
+/clipbox {
+box
+clip
+newpath
+} bind def
+%!PS-Adobe-3.0 Resource-Font
+%%Title: DejaVu Sans
+%%Copyright: Copyright (c) 2003 by Bitstream, Inc. All Rights Reserved. Copyright (c) 2006 by Tavmjong Bah. All Rights Reserved. DejaVu changes are in public domain 
+%%Creator: Converted from TrueType to type 3 by PPR
+25 dict begin
+/_d{bind def}bind def
+/_m{moveto}_d
+/_l{lineto}_d
+/_cl{closepath eofill}_d
+/_c{curveto}_d
+/_sc{7 -1 roll{setcachedevice}{pop pop pop pop pop pop}ifelse}_d
+/_e{exec}_d
+/FontName /DejaVuSans def
+/PaintType 0 def
+/FontMatrix[.001 0 0 .001 0 0]def
+/FontBBox[-1021 -463 1793 1232]def
+/FontType 3 def
+/Encoding [ /space /period /zero /one /two /three /four /five /six /seven /eight /nine /C /I /O /a /b /c /d /e /h /i /l /m /n /o /p /r /s /t /u /v /y /z ] def
+/FontInfo 10 dict dup begin
+/FamilyName (DejaVu Sans) def
+/FullName (DejaVu Sans) def
+/Notice (Copyright (c) 2003 by Bitstream, Inc. All Rights Reserved. Copyright (c) 2006 by Tavmjong Bah. All Rights Reserved. DejaVu changes are in public domain ) def
+/Weight (Book) def
+/Version (Version 2.35) def
+/ItalicAngle 0.0 def
+/isFixedPitch false def
+/UnderlinePosition -130 def
+/UnderlineThickness 90 def
+end readonly def
+/CharStrings 35 dict dup begin
+/.notdef 0 def
+/space{318 0 0 0 0 0 _sc
+}_d
+/period{318 0 107 0 210 124 _sc
+107 124 _m
+210 124 _l
+210 0 _l
+107 0 _l
+107 124 _l
+_cl}_d
+/zero{636 0 66 -13 570 742 _sc
+318 664 _m
+267 664 229 639 203 589 _c
+177 539 165 464 165 364 _c
+165 264 177 189 203 139 _c
+229 89 267 64 318 64 _c
+369 64 407 89 433 139 _c
+458 189 471 264 471 364 _c
+471 464 458 539 433 589 _c
+407 639 369 664 318 664 _c
+318 742 _m
+399 742 461 709 505 645 _c
+548 580 570 486 570 364 _c
+570 241 548 147 505 83 _c
+461 19 399 -13 318 -13 _c
+236 -13 173 19 130 83 _c
+87 147 66 241 66 364 _c
+66 486 87 580 130 645 _c
+173 709 236 742 318 742 _c
+_cl}_d
+/one{636 0 110 0 544 729 _sc
+124 83 _m
+285 83 _l
+285 639 _l
+110 604 _l
+110 694 _l
+284 729 _l
+383 729 _l
+383 83 _l
+544 83 _l
+544 0 _l
+124 0 _l
+124 83 _l
+_cl}_d
+/two{{636 0 73 0 536 742 _sc
+192 83 _m
+536 83 _l
+536 0 _l
+73 0 _l
+73 83 _l
+110 121 161 173 226 239 _c
+290 304 331 346 348 365 _c
+380 400 402 430 414 455 _c
+426 479 433 504 433 528 _c
+433 566 419 598 392 622 _c
+365 646 330 659 286 659 _c
+255 659 222 653 188 643 _c
+154 632 117 616 78 594 _c
+78 694 _l
+118 710 155 722 189 730 _c
+223 738 255 742 284 742 _c
+}_e{359 742 419 723 464 685 _c
+509 647 532 597 532 534 _c
+532 504 526 475 515 449 _c
+504 422 484 390 454 354 _c
+446 344 420 317 376 272 _c
+332 227 271 164 192 83 _c
+_cl}_e}_d
+/three{{636 0 76 -13 556 742 _sc
+406 393 _m
+453 383 490 362 516 330 _c
+542 298 556 258 556 212 _c
+556 140 531 84 482 45 _c
+432 6 362 -13 271 -13 _c
+240 -13 208 -10 176 -4 _c
+144 1 110 10 76 22 _c
+76 117 _l
+103 101 133 89 166 81 _c
+198 73 232 69 268 69 _c
+330 69 377 81 409 105 _c
+441 129 458 165 458 212 _c
+458 254 443 288 413 312 _c
+383 336 341 349 287 349 _c
+}_e{202 349 _l
+202 430 _l
+291 430 _l
+339 430 376 439 402 459 _c
+428 478 441 506 441 543 _c
+441 580 427 609 401 629 _c
+374 649 336 659 287 659 _c
+260 659 231 656 200 650 _c
+169 644 135 635 98 623 _c
+98 711 _l
+135 721 170 729 203 734 _c
+235 739 266 742 296 742 _c
+370 742 429 725 473 691 _c
+517 657 539 611 539 553 _c
+539 513 527 479 504 451 _c
+481 423 448 403 406 393 _c
+_cl}_e}_d
+/four{636 0 49 0 580 729 _sc
+378 643 _m
+129 254 _l
+378 254 _l
+378 643 _l
+352 729 _m
+476 729 _l
+476 254 _l
+580 254 _l
+580 172 _l
+476 172 _l
+476 0 _l
+378 0 _l
+378 172 _l
+49 172 _l
+49 267 _l
+352 729 _l
+_cl}_d
+/five{{636 0 77 -13 549 729 _sc
+108 729 _m
+495 729 _l
+495 646 _l
+198 646 _l
+198 467 _l
+212 472 227 476 241 478 _c
+255 480 270 482 284 482 _c
+365 482 429 459 477 415 _c
+525 370 549 310 549 234 _c
+549 155 524 94 475 51 _c
+426 8 357 -13 269 -13 _c
+238 -13 207 -10 175 -6 _c
+143 -1 111 6 77 17 _c
+77 116 _l
+106 100 136 88 168 80 _c
+199 72 232 69 267 69 _c
+}_e{323 69 368 83 401 113 _c
+433 143 450 183 450 234 _c
+450 284 433 324 401 354 _c
+368 384 323 399 267 399 _c
+241 399 214 396 188 390 _c
+162 384 135 375 108 363 _c
+108 729 _l
+_cl}_e}_d
+/six{{636 0 70 -13 573 742 _sc
+330 404 _m
+286 404 251 388 225 358 _c
+199 328 186 286 186 234 _c
+186 181 199 139 225 109 _c
+251 79 286 64 330 64 _c
+374 64 409 79 435 109 _c
+461 139 474 181 474 234 _c
+474 286 461 328 435 358 _c
+409 388 374 404 330 404 _c
+526 713 _m
+526 623 _l
+501 635 476 644 451 650 _c
+425 656 400 659 376 659 _c
+310 659 260 637 226 593 _c
+}_e{192 549 172 482 168 394 _c
+187 422 211 444 240 459 _c
+269 474 301 482 336 482 _c
+409 482 467 459 509 415 _c
+551 371 573 310 573 234 _c
+573 159 550 99 506 54 _c
+462 9 403 -13 330 -13 _c
+246 -13 181 19 137 83 _c
+92 147 70 241 70 364 _c
+70 479 97 571 152 639 _c
+206 707 280 742 372 742 _c
+396 742 421 739 447 735 _c
+472 730 498 723 526 713 _c
+_cl}_e}_d
+/seven{636 0 82 0 551 729 _sc
+82 729 _m
+551 729 _l
+551 687 _l
+286 0 _l
+183 0 _l
+432 646 _l
+82 646 _l
+82 729 _l
+_cl}_d
+/eight{{636 0 68 -13 568 742 _sc
+318 346 _m
+271 346 234 333 207 308 _c
+180 283 167 249 167 205 _c
+167 161 180 126 207 101 _c
+234 76 271 64 318 64 _c
+364 64 401 76 428 102 _c
+455 127 469 161 469 205 _c
+469 249 455 283 429 308 _c
+402 333 365 346 318 346 _c
+219 388 _m
+177 398 144 418 120 447 _c
+96 476 85 511 85 553 _c
+85 611 105 657 147 691 _c
+188 725 245 742 318 742 _c
+}_e{390 742 447 725 489 691 _c
+530 657 551 611 551 553 _c
+551 511 539 476 515 447 _c
+491 418 459 398 417 388 _c
+464 377 501 355 528 323 _c
+554 291 568 251 568 205 _c
+568 134 546 80 503 43 _c
+459 5 398 -13 318 -13 _c
+237 -13 175 5 132 43 _c
+89 80 68 134 68 205 _c
+68 251 81 291 108 323 _c
+134 355 171 377 219 388 _c
+183 544 _m
+183 506 194 476 218 455 _c
+}_e{242 434 275 424 318 424 _c
+360 424 393 434 417 455 _c
+441 476 453 506 453 544 _c
+453 582 441 611 417 632 _c
+393 653 360 664 318 664 _c
+275 664 242 653 218 632 _c
+194 611 183 582 183 544 _c
+_cl}_e}_d
+/nine{{636 0 63 -13 566 742 _sc
+110 15 _m
+110 105 _l
+134 93 159 84 185 78 _c
+210 72 235 69 260 69 _c
+324 69 374 90 408 134 _c
+442 178 462 244 468 334 _c
+448 306 424 284 396 269 _c
+367 254 335 247 300 247 _c
+226 247 168 269 126 313 _c
+84 357 63 417 63 494 _c
+63 568 85 628 129 674 _c
+173 719 232 742 306 742 _c
+390 742 455 709 499 645 _c
+543 580 566 486 566 364 _c
+}_e{566 248 538 157 484 89 _c
+429 21 356 -13 264 -13 _c
+239 -13 214 -10 189 -6 _c
+163 -2 137 5 110 15 _c
+306 324 _m
+350 324 385 339 411 369 _c
+437 399 450 441 450 494 _c
+450 546 437 588 411 618 _c
+385 648 350 664 306 664 _c
+262 664 227 648 201 618 _c
+175 588 162 546 162 494 _c
+162 441 175 399 201 369 _c
+227 339 262 324 306 324 _c
+_cl}_e}_d
+/C{{698 0 56 -13 644 742 _sc
+644 673 _m
+644 569 _l
+610 599 575 622 537 638 _c
+499 653 460 661 418 661 _c
+334 661 270 635 226 584 _c
+182 533 160 460 160 364 _c
+160 268 182 194 226 143 _c
+270 92 334 67 418 67 _c
+460 67 499 74 537 90 _c
+575 105 610 128 644 159 _c
+644 56 _l
+609 32 572 15 534 4 _c
+496 -7 455 -13 412 -13 _c
+302 -13 215 20 151 87 _c
+}_e{87 154 56 246 56 364 _c
+56 481 87 573 151 641 _c
+215 708 302 742 412 742 _c
+456 742 497 736 535 725 _c
+573 713 610 696 644 673 _c
+_cl}_e}_d
+/I{295 0 98 0 197 729 _sc
+98 729 _m
+197 729 _l
+197 0 _l
+98 0 _l
+98 729 _l
+_cl}_d
+/O{787 0 56 -13 731 742 _sc
+394 662 _m
+322 662 265 635 223 582 _c
+181 528 160 456 160 364 _c
+160 272 181 199 223 146 _c
+265 92 322 66 394 66 _c
+465 66 522 92 564 146 _c
+606 199 627 272 627 364 _c
+627 456 606 528 564 582 _c
+522 635 465 662 394 662 _c
+394 742 _m
+496 742 577 707 639 639 _c
+700 571 731 479 731 364 _c
+731 248 700 157 639 89 _c
+577 21 496 -13 394 -13 _c
+291 -13 209 21 148 89 _c
+86 157 56 248 56 364 _c
+56 479 86 571 148 639 _c
+209 707 291 742 394 742 _c
+_cl}_d
+/a{{613 0 60 -13 522 560 _sc
+343 275 _m
+270 275 220 266 192 250 _c
+164 233 150 205 150 165 _c
+150 133 160 107 181 89 _c
+202 70 231 61 267 61 _c
+317 61 357 78 387 114 _c
+417 149 432 196 432 255 _c
+432 275 _l
+343 275 _l
+522 312 _m
+522 0 _l
+432 0 _l
+432 83 _l
+411 49 385 25 355 10 _c
+325 -5 287 -13 243 -13 _c
+187 -13 142 2 109 33 _c
+76 64 60 106 60 159 _c
+}_e{60 220 80 266 122 298 _c
+163 329 224 345 306 345 _c
+432 345 _l
+432 354 _l
+432 395 418 427 391 450 _c
+364 472 326 484 277 484 _c
+245 484 215 480 185 472 _c
+155 464 127 453 100 439 _c
+100 522 _l
+132 534 164 544 195 550 _c
+226 556 256 560 286 560 _c
+365 560 424 539 463 498 _c
+502 457 522 395 522 312 _c
+_cl}_e}_d
+/b{{635 0 91 -13 580 760 _sc
+487 273 _m
+487 339 473 390 446 428 _c
+418 466 381 485 334 485 _c
+286 485 249 466 222 428 _c
+194 390 181 339 181 273 _c
+181 207 194 155 222 117 _c
+249 79 286 61 334 61 _c
+381 61 418 79 446 117 _c
+473 155 487 207 487 273 _c
+181 464 _m
+199 496 223 520 252 536 _c
+281 552 316 560 356 560 _c
+422 560 476 533 518 481 _c
+559 428 580 359 580 273 _c
+}_e{580 187 559 117 518 65 _c
+476 13 422 -13 356 -13 _c
+316 -13 281 -5 252 10 _c
+223 25 199 49 181 82 _c
+181 0 _l
+91 0 _l
+91 760 _l
+181 760 _l
+181 464 _l
+_cl}_e}_d
+/c{{550 0 55 -13 488 560 _sc
+488 526 _m
+488 442 _l
+462 456 437 466 411 473 _c
+385 480 360 484 334 484 _c
+276 484 230 465 198 428 _c
+166 391 150 339 150 273 _c
+150 206 166 154 198 117 _c
+230 80 276 62 334 62 _c
+360 62 385 65 411 72 _c
+437 79 462 90 488 104 _c
+488 21 _l
+462 9 436 0 410 -5 _c
+383 -10 354 -13 324 -13 _c
+242 -13 176 12 128 64 _c
+}_e{79 115 55 185 55 273 _c
+55 362 79 432 128 483 _c
+177 534 244 560 330 560 _c
+358 560 385 557 411 551 _c
+437 545 463 537 488 526 _c
+_cl}_e}_d
+/d{{635 0 55 -13 544 760 _sc
+454 464 _m
+454 760 _l
+544 760 _l
+544 0 _l
+454 0 _l
+454 82 _l
+435 49 411 25 382 10 _c
+353 -5 319 -13 279 -13 _c
+213 -13 159 13 117 65 _c
+75 117 55 187 55 273 _c
+55 359 75 428 117 481 _c
+159 533 213 560 279 560 _c
+319 560 353 552 382 536 _c
+411 520 435 496 454 464 _c
+148 273 _m
+148 207 161 155 188 117 _c
+215 79 253 61 301 61 _c
+}_e{348 61 385 79 413 117 _c
+440 155 454 207 454 273 _c
+454 339 440 390 413 428 _c
+385 466 348 485 301 485 _c
+253 485 215 466 188 428 _c
+161 390 148 339 148 273 _c
+_cl}_e}_d
+/e{{615 0 55 -13 562 560 _sc
+562 296 _m
+562 252 _l
+149 252 _l
+153 190 171 142 205 110 _c
+238 78 284 62 344 62 _c
+378 62 412 66 444 74 _c
+476 82 509 95 541 113 _c
+541 28 _l
+509 14 476 3 442 -3 _c
+408 -9 373 -13 339 -13 _c
+251 -13 182 12 131 62 _c
+80 112 55 181 55 268 _c
+55 357 79 428 127 481 _c
+175 533 241 560 323 560 _c
+397 560 455 536 498 489 _c
+}_e{540 441 562 377 562 296 _c
+472 322 _m
+471 371 457 410 431 440 _c
+404 469 368 484 324 484 _c
+274 484 234 469 204 441 _c
+174 413 156 373 152 322 _c
+472 322 _l
+_cl}_e}_d
+/h{634 0 91 0 549 760 _sc
+549 330 _m
+549 0 _l
+459 0 _l
+459 327 _l
+459 379 448 417 428 443 _c
+408 469 378 482 338 482 _c
+289 482 251 466 223 435 _c
+195 404 181 362 181 309 _c
+181 0 _l
+91 0 _l
+91 760 _l
+181 760 _l
+181 462 _l
+202 494 227 519 257 535 _c
+286 551 320 560 358 560 _c
+420 560 468 540 500 501 _c
+532 462 549 405 549 330 _c
+_cl}_d
+/i{278 0 94 0 184 760 _sc
+94 547 _m
+184 547 _l
+184 0 _l
+94 0 _l
+94 547 _l
+94 760 _m
+184 760 _l
+184 646 _l
+94 646 _l
+94 760 _l
+_cl}_d
+/l{278 0 94 0 184 760 _sc
+94 760 _m
+184 760 _l
+184 0 _l
+94 0 _l
+94 760 _l
+_cl}_d
+/m{{974 0 91 0 889 560 _sc
+520 442 _m
+542 482 569 511 600 531 _c
+631 550 668 560 711 560 _c
+767 560 811 540 842 500 _c
+873 460 889 403 889 330 _c
+889 0 _l
+799 0 _l
+799 327 _l
+799 379 789 418 771 444 _c
+752 469 724 482 686 482 _c
+639 482 602 466 575 435 _c
+548 404 535 362 535 309 _c
+535 0 _l
+445 0 _l
+445 327 _l
+445 379 435 418 417 444 _c
+398 469 369 482 331 482 _c
+}_e{285 482 248 466 221 435 _c
+194 404 181 362 181 309 _c
+181 0 _l
+91 0 _l
+91 547 _l
+181 547 _l
+181 462 _l
+201 495 226 520 255 536 _c
+283 552 317 560 357 560 _c
+397 560 430 550 458 530 _c
+486 510 506 480 520 442 _c
+_cl}_e}_d
+/n{634 0 91 0 549 560 _sc
+549 330 _m
+549 0 _l
+459 0 _l
+459 327 _l
+459 379 448 417 428 443 _c
+408 469 378 482 338 482 _c
+289 482 251 466 223 435 _c
+195 404 181 362 181 309 _c
+181 0 _l
+91 0 _l
+91 547 _l
+181 547 _l
+181 462 _l
+202 494 227 519 257 535 _c
+286 551 320 560 358 560 _c
+420 560 468 540 500 501 _c
+532 462 549 405 549 330 _c
+_cl}_d
+/o{612 0 55 -13 557 560 _sc
+306 484 _m
+258 484 220 465 192 427 _c
+164 389 150 338 150 273 _c
+150 207 163 156 191 118 _c
+219 80 257 62 306 62 _c
+354 62 392 80 420 118 _c
+448 156 462 207 462 273 _c
+462 337 448 389 420 427 _c
+392 465 354 484 306 484 _c
+306 560 _m
+384 560 445 534 490 484 _c
+534 433 557 363 557 273 _c
+557 183 534 113 490 63 _c
+445 12 384 -13 306 -13 _c
+227 -13 165 12 121 63 _c
+77 113 55 183 55 273 _c
+55 363 77 433 121 484 _c
+165 534 227 560 306 560 _c
+_cl}_d
+/p{{635 0 91 -207 580 560 _sc
+181 82 _m
+181 -207 _l
+91 -207 _l
+91 547 _l
+181 547 _l
+181 464 _l
+199 496 223 520 252 536 _c
+281 552 316 560 356 560 _c
+422 560 476 533 518 481 _c
+559 428 580 359 580 273 _c
+580 187 559 117 518 65 _c
+476 13 422 -13 356 -13 _c
+316 -13 281 -5 252 10 _c
+223 25 199 49 181 82 _c
+487 273 _m
+487 339 473 390 446 428 _c
+418 466 381 485 334 485 _c
+}_e{286 485 249 466 222 428 _c
+194 390 181 339 181 273 _c
+181 207 194 155 222 117 _c
+249 79 286 61 334 61 _c
+381 61 418 79 446 117 _c
+473 155 487 207 487 273 _c
+_cl}_e}_d
+/r{411 0 91 0 411 560 _sc
+411 463 _m
+401 469 390 473 378 476 _c
+366 478 353 480 339 480 _c
+288 480 249 463 222 430 _c
+194 397 181 350 181 288 _c
+181 0 _l
+91 0 _l
+91 547 _l
+181 547 _l
+181 462 _l
+199 495 224 520 254 536 _c
+284 552 321 560 365 560 _c
+371 560 378 559 386 559 _c
+393 558 401 557 411 555 _c
+411 463 _l
+_cl}_d
+/s{{521 0 54 -13 472 560 _sc
+443 531 _m
+443 446 _l
+417 458 391 468 364 475 _c
+336 481 308 485 279 485 _c
+234 485 200 478 178 464 _c
+156 450 145 430 145 403 _c
+145 382 153 366 169 354 _c
+185 342 217 330 265 320 _c
+296 313 _l
+360 299 405 279 432 255 _c
+458 230 472 195 472 151 _c
+472 100 452 60 412 31 _c
+372 1 316 -13 246 -13 _c
+216 -13 186 -10 154 -5 _c
+}_e{122 0 89 8 54 20 _c
+54 113 _l
+87 95 120 82 152 74 _c
+184 65 216 61 248 61 _c
+290 61 323 68 346 82 _c
+368 96 380 117 380 144 _c
+380 168 371 187 355 200 _c
+339 213 303 226 247 238 _c
+216 245 _l
+160 257 119 275 95 299 _c
+70 323 58 356 58 399 _c
+58 450 76 490 112 518 _c
+148 546 200 560 268 560 _c
+301 560 332 557 362 552 _c
+391 547 418 540 443 531 _c
+}_e{_cl}_e}_d
+/t{392 0 27 0 368 702 _sc
+183 702 _m
+183 547 _l
+368 547 _l
+368 477 _l
+183 477 _l
+183 180 _l
+183 135 189 106 201 94 _c
+213 81 238 75 276 75 _c
+368 75 _l
+368 0 _l
+276 0 _l
+206 0 158 13 132 39 _c
+106 65 93 112 93 180 _c
+93 477 _l
+27 477 _l
+27 547 _l
+93 547 _l
+93 702 _l
+183 702 _l
+_cl}_d
+/u{634 0 85 -13 543 560 _sc
+85 216 _m
+85 547 _l
+175 547 _l
+175 219 _l
+175 167 185 129 205 103 _c
+225 77 255 64 296 64 _c
+344 64 383 79 411 110 _c
+439 141 453 183 453 237 _c
+453 547 _l
+543 547 _l
+543 0 _l
+453 0 _l
+453 84 _l
+431 50 405 26 377 10 _c
+348 -5 315 -13 277 -13 _c
+214 -13 166 6 134 45 _c
+101 83 85 140 85 216 _c
+311 560 _m
+311 560 _l
+_cl}_d
+/v{592 0 30 0 562 547 _sc
+30 547 _m
+125 547 _l
+296 88 _l
+467 547 _l
+562 547 _l
+357 0 _l
+235 0 _l
+30 547 _l
+_cl}_d
+/y{592 0 30 -207 562 547 _sc
+322 -50 _m
+296 -114 271 -157 247 -177 _c
+223 -197 191 -207 151 -207 _c
+79 -207 _l
+79 -132 _l
+132 -132 _l
+156 -132 175 -126 189 -114 _c
+203 -102 218 -75 235 -31 _c
+251 9 _l
+30 547 _l
+125 547 _l
+296 119 _l
+467 547 _l
+562 547 _l
+322 -50 _l
+_cl}_d
+/z{525 0 43 0 482 547 _sc
+55 547 _m
+482 547 _l
+482 465 _l
+144 72 _l
+482 72 _l
+482 0 _l
+43 0 _l
+43 82 _l
+381 475 _l
+55 475 _l
+55 547 _l
+_cl}_d
+end readonly def
+
+/BuildGlyph
+ {exch begin
+ CharStrings exch
+ 2 copy known not{pop /.notdef}if
+ true 3 1 roll get exec
+ end}_d
+
+/BuildChar {
+ 1 index /Encoding get exch get
+ 1 index /BuildGlyph get exec
+}_d
+
+FontName currentdict end definefont pop
+end
+%%EndProlog
+mpldict begin
+-54 36 translate
+720 720 0 0 clipbox
+gsave
+0 0 m
+720 0 l
+720 720 l
+0 720 l
+cl
+1.000 setgray
+fill
+grestore
+gsave
+54.05 496.791522 m
+351.1 496.791522 l
+351.1 693.2 l
+54.05 693.2 l
+cl
+1.000 setgray
+fill
+grestore
+gsave
+297.05 196.408 54.05 496.792 clipbox
+54.05 496.7915217391304 translate
+[298.0 0.0 0.0 197.0 0.0 0.0] concat
+1.0 1.0 scale
+/DataString 96 string def
+96 96 8 [ 96 0 0 -96 0 96 ]
+{
+currentfile DataString readhexstring pop
+} bind false 3 colorimage
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2bffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2bffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffff1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2bffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff1f1f2b1f1f2b1f1f2b
+1f1f2b1f1f2b1f1f2b1f1f2bffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff37374d
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff37374d37374d37374d37374d37374d37374d37374d37374d37374d37374d3737
+4d37374d37374d37374d37374dffffffffffff37374d37374d37374d37374dffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffff37374d37374d37374d37374dffffffffffff1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f
+1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f
+2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b1f1f2b
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff37374d
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff37374d37374d37374d37374d37374d37374d37374d37374d37374d37374d3737
+4d37374d37374d37374d37374dffffffffffff37374d37374d37374d37374dffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffff37374d37374d37374d37374d37374dffffff37374d37374d37374d37374d37374dffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffff37374d37374d37374d37374dffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffff37374d37374d37374d37374d37374dffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffff37374dffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+37374d37374d37374d37374d37374d37374d37374d37374d37374d37374d37374d37374d37374d37374d37374dffffffffffff37374d37374d37374d37374d37
+374dffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff37374d37374d37374d37374d37374dffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff37374d37374d37374d37374dffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff37374d37374d37374d37374d37374dffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff37374d
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff37374d37374d37374d37374d37374d37374d37374d37374d37374d37374d3737
+4d37374d37374d37374d37374dffffffffffff37374d37374d37374dffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffff37374d37374d37374d37374d37374d37374dffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff37374d37374d37374d3737
+4dffffffffffffffffffffffffffffffffffffffffffffffff37374d37374d37374d37374d37374dffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+grestore
+0.500 setlinewidth
+1 setlinejoin
+0 setlinecap
+[0.5 0.825] 0 setdash
+0.000 setgray
+gsave
+297 196.4 54.05 496.8 clipbox
+55.597135 496.791522 m
+55.597135 693.2 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+55.5971 496.792 o
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 196.4 54.05 496.8 clipbox
+129.859635 496.791522 m
+129.859635 693.2 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+129.86 496.792 o
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 196.4 54.05 496.8 clipbox
+204.122135 496.791522 m
+204.122135 693.2 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+204.122 496.792 o
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 196.4 54.05 496.8 clipbox
+278.384635 496.791522 m
+278.384635 693.2 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+278.385 496.792 o
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+92.7284 496.792 o
+grestore
+/DejaVuSans findfont
+10.000 scalefont
+setfont
+gsave
+89.548698 483.797772 translate
+0.000000 rotate
+0.000000 0.000000 m /one glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+166.991 496.792 o
+grestore
+gsave
+163.811198 483.797772 translate
+0.000000 rotate
+0.000000 0.000000 m /two glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+241.253 496.792 o
+grestore
+gsave
+238.073698 483.797772 translate
+0.000000 rotate
+0.000000 0.000000 m /three glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+315.516 496.792 o
+grestore
+gsave
+312.336198 483.797772 translate
+0.000000 rotate
+0.000000 0.000000 m /four glyphshow
+grestore
+gsave
+188.692187 470.125897 translate
+0.000000 rotate
+0.000000 0.000000 m /b glyphshow
+6.347656 0.000000 m /e glyphshow
+12.500000 0.000000 m /a glyphshow
+18.627930 0.000000 m /t glyphshow
+22.548828 0.000000 m /s glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 196.4 54.05 496.8 clipbox
+54.05 520.319621 m
+351.1 520.319621 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+54.05 520.32 o
+grestore
+gsave
+33.706250 516.522746 translate
+0.000000 rotate
+0.000000 0.000000 m /C glyphshow
+6.982422 0.000000 m /zero glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 196.4 54.05 496.8 clipbox
+54.05 544.87068 m
+351.1 544.87068 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+54.05 544.871 o
+grestore
+gsave
+33.706250 541.073805 translate
+0.000000 rotate
+0.000000 0.000000 m /C glyphshow
+6.982422 0.000000 m /one glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 196.4 54.05 496.8 clipbox
+54.05 569.42174 m
+351.1 569.42174 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+54.05 569.422 o
+grestore
+gsave
+33.706250 565.624865 translate
+0.000000 rotate
+0.000000 0.000000 m /C glyphshow
+6.982422 0.000000 m /two glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 196.4 54.05 496.8 clipbox
+54.05 593.9728 m
+351.1 593.9728 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+54.05 593.973 o
+grestore
+gsave
+33.706250 590.175925 translate
+0.000000 rotate
+0.000000 0.000000 m /C glyphshow
+6.982422 0.000000 m /three glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 196.4 54.05 496.8 clipbox
+54.05 618.52386 m
+351.1 618.52386 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+54.05 618.524 o
+grestore
+gsave
+33.706250 614.726985 translate
+0.000000 rotate
+0.000000 0.000000 m /C glyphshow
+6.982422 0.000000 m /four glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 196.4 54.05 496.8 clipbox
+54.05 643.07492 m
+351.1 643.07492 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+54.05 643.075 o
+grestore
+gsave
+33.706250 639.278045 translate
+0.000000 rotate
+0.000000 0.000000 m /C glyphshow
+6.982422 0.000000 m /five glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 196.4 54.05 496.8 clipbox
+54.05 667.625979 m
+351.1 667.625979 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+54.05 667.626 o
+grestore
+gsave
+33.706250 663.829104 translate
+0.000000 rotate
+0.000000 0.000000 m /C glyphshow
+6.982422 0.000000 m /six glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 196.4 54.05 496.8 clipbox
+54.05 692.177039 m
+351.1 692.177039 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+54.05 692.177 o
+grestore
+gsave
+33.706250 688.380164 translate
+0.000000 rotate
+0.000000 0.000000 m /C glyphshow
+6.982422 0.000000 m /seven glyphshow
+grestore
+gsave
+27.628125 582.550448 translate
+90.000000 rotate
+0.000000 0.000000 m /p glyphshow
+6.347656 0.000000 m /i glyphshow
+9.125977 0.000000 m /t glyphshow
+13.046875 0.000000 m /c glyphshow
+18.544922 0.000000 m /h glyphshow
+grestore
+0 setlinejoin
+2 setlinecap
+[] 0 setdash
+gsave
+54.05 496.791522 m
+54.05 693.2 l
+stroke
+grestore
+gsave
+351.1 496.791522 m
+351.1 693.2 l
+stroke
+grestore
+gsave
+54.05 496.791522 m
+351.1 496.791522 l
+stroke
+grestore
+gsave
+54.05 693.2 m
+351.1 693.2 l
+stroke
+grestore
+/DejaVuSans findfont
+12.000 scalefont
+setfont
+gsave
+187.028125 699.200000 translate
+0.000000 rotate
+0.000000 0.000000 m /I glyphshow
+3.539062 0.000000 m /n glyphshow
+11.144531 0.000000 m /p glyphshow
+18.761719 0.000000 m /u glyphshow
+26.367188 0.000000 m /t glyphshow
+grestore
+gsave
+408.65 496.791522 m
+705.7 496.791522 l
+705.7 693.2 l
+408.65 693.2 l
+cl
+1.000 setgray
+fill
+grestore
+gsave
+297.05 196.408 408.65 496.792 clipbox
+408.65000000000003 496.7915217391304 translate
+[298.0 0.0 0.0 197.0 0.0 0.0] concat
+1.0 1.0 scale
+/DataString 96 string def
+96 96 8 [ 96 0 0 -96 0 96 ]
+{
+currentfile DataString readhexstring pop
+} bind false 3 colorimage
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdfefefffffffdfefefdfefefffffffffffffffffffdfefeffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefcfdfdfdfefefdfe
+fefdfefefafcfcfcfdfdfcfdfdfcfdfdfcfdfdfdfefefcfdfdfdfefefdfefefdfefefdfefefdfefefdfefefffffffdfefefffffffdfefeffffffffffffffffff
+fdfefefffffffdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefcfdfdfdfefefdfefefdfefefdfefefffffffffffffffffffdfefeff
+fffffdfefefffffffdfefefffffffffffffffffffdfefefffffffdfefeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+fffffffffffffffffffffffffffffffffffffffffffffffffffffffffdfefefffffffffffffffffffdfefefffffffffffffffffffdfefefdfefefdfefefdfefe
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffcfdfdfcfdfdfcfdfdfcfdfdfdfefefdfefefdfefefcfdfdfcfdfdfcfdfdfcfd
+fdfcfdfdfafcfcfcfdfdfcfdfdfafcfcfcfdfdfcfdfdfcfdfdfcfdfdfdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefffffffffffffdfefe
+fdfefefffffffffffffdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefeffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdfefefffffffffffffdfefe
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff5f8f8f8fafaf6f9f9f4f8f7f4f8f7f6f9f9f5f8f8f5f8f8f1f6f6f2f7f7eff5
+f5f1f6f6eef4f4f1f6f6eef4f4edf3f3ebf2f2eff5f5eef4f4edf3f3f1f6f6f5f8f8f4f8f7f5f8f8f4f8f7f6f9f9f5f8f8f5f8f8f9fbfbfafcfcf9fbfbf9fbfb
+f8fafaf9fbfbf9fbfbf5f8f8f5f8f8f6f9f9f4f8f7eff5f5edf3f3eef4f4ebf2f2ebf2f2eaf1f1edf3f3ebf2f2ebf2f2f4f8f7f6f9f9f5f8f8f4f8f7f2f7f7f5
+f8f8f2f7f7f2f7f7f4f8f7f6f9f9f4f8f7f4f8f7f2f7f7f5f8f8f2f7f7f4f8f7f4f8f7f6f9f9f5f8f8f5f8f8f6f9f9f9fbfbf8fafaf6f9f9f9fbfbf9fbfbf8fa
+faf8fafafafcfcfcfdfdfafcfcfafcfcfafcfcfcfdfdfcfdfdfafcfcf8fafaf9fbfbf9fbfbf8fafaf6f9f9f8fafaf6f9f9f6f9f9f8fafaf9fbfbf9fbfbf6f9f9
+e3edede7f0f0e5eeeee3edede5eeeee9f1f0e6efefe5eeeee9f1f0e9f1f0e7f0f0e7f0f0e3edede9f1f0e6efefe3edededf3f3eef4f4edf3f3edf3f3eef4f4ef
+f5f5eff5f5eff5f5eff5f5f1f6f6f1f6f6f1f6f6f2f7f7f4f8f7f2f7f7f4f8f7f2f7f7f2f7f7f1f6f6eff5f5eef4f4eff5f5edf3f3eaf1f1ebf2f2eef4f4ebf2
+f2ebf2f2edf3f3f2f7f7f1f6f6eff5f5f1f6f6f4f8f7f1f6f6f2f7f7f2f7f7f5f8f8f4f8f7f2f7f7f5f8f8f6f9f9f6f9f9f8fafaf5f8f8f6f9f9f5f8f8f6f9f9
+f6f9f9f8fafaf8fafaf8fafaf8fafaf8fafaf8fafaf8fafaf9fbfbf9fbfbf9fbfbf9fbfbf9fbfbfafcfcfafcfcfafcfcfafcfcfafcfcfafcfcfafcfcf6f9f9f8
+fafaf8fafaf8fafaf6f9f9f8fafaf8fafaf8fafaf5f8f8f6f9f9f6f9f9f4f8f7f5f8f8f5f8f8f6f9f9f6f9f9f6f9f9f6f9f9f8fafaf8fafaf5f8f8f5f8f8f6f9
+f9f6f9f9f5f8f8f5f8f8f6f9f9f5f8f8f6f9f9f5f8f8f8fafaf8fafaf8fafaf6f9f9f9fbfbfafcfcfafcfcf9fbfbfafcfcfafcfcfafcfcfafcfcfcfdfdfcfdfd
+fcfdfdfafcfcfcfdfdfcfdfdfafcfcf9fbfbfcfdfdfcfdfdfafcfcfafcfcfcfdfdfcfdfdfcfdfdfafcfcfcfdfdfcfdfdfcfdfdfcfdfdfdfefefdfefefdfefefd
+fefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefffffffffffffffffffdfefeffffffffffffffffffffffffffff
+fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdfefefffffffffffffdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefe
+f6f9f9f8fafaf6f9f9f6f9f9f5f8f8f6f9f9f6f9f9f6f9f9f6f9f9f6f9f9f6f9f9f5f8f8f4f8f7f5f8f8f4f8f7f1f6f6f4f8f7f4f8f7f5f8f8f4f8f7f5f8f8f6
+f9f9f6f9f9f6f9f9f5f8f8f6f9f9f6f9f9f6f9f9f8fafaf9fbfbf9fbfbf8fafaf8fafaf8fafaf9fbfbf5f8f8f5f8f8f5f8f8f5f8f8f1f6f6f1f6f6f2f7f7f1f6
+f6f1f6f6eff5f5f1f6f6f1f6f6f1f6f6f2f7f7f5f8f8f4f8f7f2f7f7f4f8f7f5f8f8f4f8f7f4f8f7f4f8f7f5f8f8f5f8f8f4f8f7f2f7f7f5f8f8f4f8f7f4f8f7
+f4f8f7f5f8f8f4f8f7f4f8f7f4f8f7f5f8f8f5f8f8f2f7f7f5f8f8f5f8f8f5f8f8f5f8f8f6f9f9f8fafaf8fafaf8fafaf9fbfbf8fafafafcfcf8fafaf6f9f9f5
+f8f8f6f9f9f5f8f8f4f8f7f4f8f7f4f8f7f4f8f7f2f7f7f2f7f7f5f8f8eff5f5ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+fffffffffffffffffffffffffffffffffffffdfefefdfefefffffffffffffdfefefdfefefffffffffffffdfefefdfefeffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+8498a48497a38193a18498a47e8f9e8395a38395a38497a37f919f7e8f9e7f919f8193a17c8c9c7e8f9e8294a28294a2869aa68092a08599a5869aa6879ba783
+95a38da4ad8ea5ae8da4ad8599a58fa6af90a7b09cb8bc9ab5b9a5c4c5a1c0c19ab6ba95afb59ab5b98fa6af93acb38ca3ac94adb48da4ad8497a38599a58498
+a48498a4899ea98ba1ab92aab18fa6af90a7b08fa6af8fa6af93acb391a9b191a9b193acb391a9b190a7b093abb292aab193abb28fa6af96b0b693acb398b2b8
+95afb595afb595afb593acb3a1c0c19ebbbea2c1c29ab6baa7c6c6a8c7c7abc9c9accacab5cfcfb2cecdbed5d5b7d1d1c0d6d6b9d2d2c0d6d6b2cecdaecbcbaa
+c8c8b2cecda6c6c6a4c3c4a1bec0a5c4c5a1c0c1aac8c8a8c7c7b2cecda1bec0fdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfe
+fefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefffffffdfefefdfefefdfefefffffffdfefefffffffffffffdfefefdfefefdfefefdfefe
+fffffffdfefefffffffffffffffffffdfefefdfefefdfefefffffffffffffffffffffffffffffffffffffffffffdfefeffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdfefefdfefefdfefefdfefe
+e5eeeee0ebebe6efefe6efefe3ededdfeaeae7f0f0e9f1f0dce9e9dce9e9e0ebebe5eeeedce9e9d8e6e6dfeaeae0ebebc6dbdbc2d8d8cddfdfd1e2e2cfe0e0d0
+e1e1dbe8e8dfeaead4e3e3d1e2e2dbe8e8dce9e9e2ececdfeaeaeaf1f1e7f0f0dfeaeadae7e7e3edede0ebebd7e5e5cfe0e0dae7e7d8e6e6c9dcdcc4d9d9d0e1
+e1d0e1e1c8dbdbc2d8d8d0e1e1d5e4e4d5e4e4cfe0e0dae7e7dae7e7d7e5e5d3e3e2e0ebebe0ebebd8e6e6cfe0e0dbe8e8dce9e9dce9e9d8e6e6e3edede5eeee
+cfe0e0c8dbdbd4e3e3d7e5e5d5e4e4d1e2e2deeae9dbe8e8dce9e9d7e5e5dfeaeae0ebebe6efefe0ebebebf2f2eaf1f1e7f0f0e3ededebf2f2e7f0f0e6efefe2
+ececeaf1f1e9f1f0deeae9dae7e7e3edede2ecece9f1f0e3edededf3f3e7f0f05a5d79585a78585a78585a78515171585a78535372595c795b5f7b6168815e63
+7e5e637e515171585a785456745658764f4f6e5354735252725050704e4e6d585a78585a785759774545615050704f4f6e515171575977666e865b5f7b687087
+4e4e6d5456744e4e6d43435d37374d3e3e5633334735354a37374d3f3f5838384f36364b3d3d554c4c6b4545604949663131453939503130443434492f2f413d
+3d5533334738384f39395040405a38384f3d3d5537374d40405a3b3b5247476334344939395036364b37374c2d2d3f3a3a513232463232463030423c3c543030
+4237374c3b3b524a4a6743435d4d4d6c5354735557755353724c4c6b42425c4c4c6945456144445e4d4d6c585a785252725658766e798e7582957481946d778d
+fdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefd
+fefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefffffffffffffdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfe
+fefdfefefdfefefdfefefdfefefdfefefffffffffffffdfefefdfefeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+fffffffffffffffffffffffffffffffffffffffffffffffffffffdfefefdfefed1e2e2c8dbdbd4e3e3d4e3e3d7e5e5d1e2e2dfeaeadbe8e8dbe8e8d3e3e2deea
+e9dbe8e8d3e3e2cbddddd7e5e5d1e2e2ccdedec8dbdbd3e3e2d3e3e2d0e1e1cbddddd4e3e3d5e4e4d4e3e3cddfdfdae7e7d7e5e5deeae9dbe8e8e5eeeedeeae9
+dce9e9dae7e7e0ebebd8e6e6dbe8e8d4e3e3deeae9d5e4e4dae7e7d7e5e5e0ebebdeeae9dce9e9d8e6e6e3ededdeeae9dbe8e8d3e3e2deeae9deeae9e5eeeede
+eae9e7f0f0e3edede3ededdfeaeae6efefe3edede5eeeedfeaeae9f1f0e7f0f0d8e6e6d3e3e2dce9e9deeae9dce9e9d8e6e6dfeaeadae7e7e0ebebdeeae9e7f0
+f0e3edede6efefe0ebebeaf1f1e7f0f0eaf1f1e6efefedf3f3e6efefe6efefe2ecece7f0f0e5eeeee0ebebdce9e9e5eeeee3ededdfeaead8e6e6e5eeeed7e5e5
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+fffffffffffffffffffffffffffffffffffffffffdfefefffffffffffffffffffffffffffffffffffffffffffdfefeffffffffffffffffffffffffffffffffff
+fffffffffdfefeffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+fdfefefffffffffffffffffffdfefefffffffffffffffffffcfdfdfffffffdfefefdfefefdfefefffffffffffffffffffdfefefffffffffffffffffffdfefeff
+fffffffffffffffffdfefefffffffffffffffffffdfefefffffffffffffdfefed4e3e3d7e5e5d3e3e2d3e3e2d3e3e2d8e6e6d8e6e6d7e5e5d0e1e1cfe0e0cfe0
+e0d1e2e2c0d6d6c6dbdbc5dadabdd4d4b7d1d1bad3d3b6d0d0b5cfcfc0d6d6c2d8d8c5dadacbddddcddfdfcbddddcddfdfd1e2e2d8e6e6dce9e9dfeaeadfeaea
+dbe8e8deeae9dbe8e8d4e3e3bdd4d4c2d8d8c1d7d7c1d7d7b3ceceb5cfcfb5cfcfb6d0d0abc9c9aecbcbb7d1d1bad3d3a3c2c3a7c6c6a3c2c3a2c1c29ebbbea4
+c3c4a1c0c1a5c4c5a1c0c1a2c1c2a0bdbfa3c2c398b2b89ab6ba9ebbbe9ab6ba8ea5ae93abb291a9b18fa6af99b3b89bb7bb98b2b898b2b894adb498b2b896b0
+b699b3b8a5c4c5abc9c9afccccb2cecdb9d2d2c0d6d6bad3d3afcccca8c7c7afcccca8c7c7afccccb5cfcfb5cfcfb9d2d2b9d2d2c6dbdbccdedecddfdfc4d9d9
+dfeaeae0ebebdbe8e8dce9e9e6efefe6efefe3edede5eeeee5eeeee6efefe3edede5eeeee5eeeee5eeeee3edede2ecece6efefe5eeeedfeaeae2ecece7f0f0e6
+efefdfeaeae3edede6efefe6efefe3edede3edede9f1f0e9f1f0eaf1f1e7f0f0e9f1f0e6efefe6efefe0ebebe9f1f0e6efefe5eeeee0ebebebf2f2ebf2f2e9f1
+f0e9f1f0edf3f3ebf2f2ebf2f2eaf1f1f2f7f7f4f8f7f1f6f6eff5f5f4f8f7f4f8f7f4f8f7f4f8f7f6f9f9f8fafaf6f9f9f6f9f9f8fafaf8fafaf8fafaf6f9f9
+f5f8f8f5f8f8f2f7f7f2f7f7f5f8f8f5f8f8f5f8f8f4f8f7f8fafaf8fafaf8fafaf8fafaf6f9f9f8fafaf6f9f9f5f8f8f8fafaf8fafaf8fafaf6f9f9f5f8f8f5
+f8f8f5f8f8f4f8f7f5f8f8f6f9f9f5f8f8f6f9f9f5f8f8f6f9f9f5f8f8f5f8f8fdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfe
+fefdfefefcfdfdfdfefefcfdfdfcfdfdfcfdfdfcfdfdfcfdfdfcfdfdfdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefe
+fdfefefffffffdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefffffffdfefefdfefefdfefefdfefefdfefeffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+e5eeeee7f0f0e5eeeee6efefe2ecece6efefe6efefe3edede5eeeee9f1f0eaf1f1e9f1f0deeae9e3edede2ececd7e5e5dce9e9dbe8e8dae7e7d8e6e6d8e6e6d8
+e6e6dae7e7dae7e7ccdedeccdedecfe0e0d1e2e2dae7e7e0ebebdbe8e8dbe8e8dce9e9dfeaeadce9e9dae7e7cbddddc5dadac5dadac1d7d7c9dcdcc9dcdcd0e1
+e1cddfdfc5dadac8dbdbcbddddc6dbdbc1d7d7bdd4d4b5cfcfc1d7d7bcd4d4bdd4d4bed5d5bed5d5b7d1d1b7d1d1c0d6d6bed5d5b3ceceb9d2d2bed5d5b9d2d2
+afccccafccccabc9c9aac8c8a1bec09dbabda1bec098b2b88ba1ab8da4ad91a9b196b0b699b3b89fbcbf9fbcbfa2c1c2b5cfcfb9d2d2b7d1d1b3ceceabc9c9a5
+c4c5aac8c8a5c4c5accacaaccacab2cecdb3ceceb9d2d2bad3d3c1d7d7a6c6c6ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+fffffffffdfefefffffffffffffffffffdfefefffffffffffffffffffdfefefffffffffffffffffffdfefefffffffffffffffffffdfefeffffffffffffffffff
+fffffffffffffffffffffffffdfefefffffffffffffffffffdfefefffffffffffffffffffdfefefffffffffffffffffffdfefefffffffffffffffffffdfefeff
+fffffffffffffffffffffffffffffffffffffffffdfefefffffffffffffffffffdfefefffffffffffffffffffdfefefffffffffffffffffffdfefeffffffffff
+fffffffffdfefefffffffffffffffffffdfefefffffffffffffffffffdfefefffffffffffffffffffdfefeffffffffffffffffffffffffffffffffffffffffff
+d1e2e2d4e3e3d3e3e2d3e3e2dae7e7dbe8e8dbe8e8deeae9d8e6e6dbe8e8dbe8e8deeae9d4e3e3d8e6e6d4e3e3d3e3e2d8e6e6dbe8e8d7e5e5d7e5e5deeae9e0
+ebebdeeae9dfeaeae5eeeee7f0f0e6efefe7f0f0eef4f4eff5f5eef4f4edf3f3edf3f3eef4f4edf3f3e9f1f0ebf2f2edf3f3ebf2f2ebf2f2e9f1f0edf3f3ebf2
+f2ebf2f2eaf1f1edf3f3ebf2f2eaf1f1eaf1f1ebf2f2ebf2f2e9f1f0ebf2f2ebf2f2edf3f3ebf2f2ebf2f2eef4f4edf3f3eef4f4ebf2f2eef4f4ebf2f2ebf2f2
+e2ecece5eeeee3edede2ececeaf1f1ebf2f2ebf2f2e7f0f0edf3f3f1f6f6eff5f5eff5f5eff5f5f1f6f6f1f6f6eff5f5f1f6f6f2f7f7f2f7f7eff5f5ebf2f2eb
+f2f2edf3f3eaf1f1edf3f3eef4f4eef4f4eef4f4eaf1f1eef4f4ebf2f2e6efefffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+fdfefefcfdfdfdfefefcfdfdfdfefefcfdfdfdfefefcfdfdfcfdfdfcfdfdfcfdfdfcfdfdfcfdfdfafcfcfafcfcf9fbfbfafcfcf8fafaf9fbfbf8fafafafcfcf9
+fbfbfafcfcfafcfcfafcfcf9fbfbfcfdfdfafcfcfcfdfdfcfdfdfcfdfdfcfdfdfcfdfdfafcfcfcfdfdfafcfcf9fbfbf8fafaf9fbfbf9fbfbfafcfcf8fafafafc
+fcf9fbfbf8fafaf6f9f9f9fbfbf8fafaf9fbfbf6f9f9f8fafaf6f9f9f8fafaf6f9f9f8fafaf8fafaf8fafaf5f8f8f6f9f9f5f8f8f8fafaf8fafaf8fafaf6f9f9
+f6f9f9f4f8f7f5f8f8f4f8f7f5f8f8f2f7f7f4f8f7f4f8f7f2f7f7f1f6f6f2f7f7f1f6f6f6f9f9f5f8f8f5f8f8f5f8f8f6f9f9f4f8f7f4f8f7f4f8f7f6f9f9f4
+f8f7f4f8f7f5f8f8f5f8f8f2f7f7f5f8f8f5f8f8f8fafaf6f9f9f6f9f9f5f8f8eaf1f1edf3f3eaf1f1e9f1f0ebf2f2eaf1f1e9f1f0eaf1f1eef4f4f1f6f6eff5
+f5eef4f4eff5f5eff5f5ebf2f2e7f0f0eff5f5eff5f5eef4f4ebf2f2eef4f4edf3f3ebf2f2eaf1f1edf3f3eef4f4edf3f3eaf1f1eef4f4eef4f4edf3f3edf3f3
+eff5f5edf3f3ebf2f2e9f1f0eef4f4ebf2f2e9f1f0e7f0f0eff5f5eff5f5edf3f3eaf1f1eff5f5eef4f4e9f1f0e7f0f0edf3f3eef4f4ebf2f2e7f0f0eef4f4eb
+f2f2e9f1f0eaf1f1f1f6f6f2f7f7eef4f4eef4f4eff5f5eff5f5ebf2f2e9f1f0eef4f4eef4f4eaf1f1e9f1f0edf3f3eaf1f1e7f0f0e6efefedf3f3eef4f4e9f1
+f0e9f1f0edf3f3edf3f3e7f0f0e7f0f0eef4f4eef4f4ebf2f2e7f0f0e7f0f0e3ededdfeaeae0ebebeaf1f1eaf1f1e7f0f0e9f1f0eef4f4f1f6f6eff5f5ebf2f2
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffcfdfdfcfdfdfcfdfdfcfdfdfcfdfdfcfdfdfcfdfdfcfdfdfcfdfdfcfdfdfcfd
+fdfdfefefcfdfdfcfdfdfcfdfdfafcfcfcfdfdfcfdfdfcfdfdfcfdfdfdfefefcfdfdfcfdfdfcfdfdfdfefefcfdfdfdfefefdfefefdfefefdfefefdfefefdfefe
+fdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefd
+fefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefcfdfdfcfdfdfcfdfdfdfefefcfdfdfdfefefcfdfdfdfefefdfefefdfe
+fefdfefefdfefefcfdfdfdfefefcfdfdfdfefefdfefefdfefefdfefefdfefefcfdfdfcfdfdfcfdfdfcfdfdfcfdfdfcfdfdfcfdfdfafcfcfafcfcfafcfcf8fafa
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefcfdfdfdfefefdfe
+fefdfefefcfdfdfcfdfdfdfefefcfdfdfcfdfdfdfefefdfefefdfefefdfefefdfefefffffffdfefeffffffffffffffffffffffffffffffffffffffffffffffff
+fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffdfefefdfefefffffffdfefefdfefefcfdfdfdfefefdfefefdfefefd
+fefefdfefefdfefefdfefefdfefefdfefefdfefefafcfcfcfdfdfcfdfdfafcfcfcfdfdfcfdfdfcfdfdfcfdfdfcfdfdfcfdfdfdfefefcfdfdfdfefefdfefefdfe
+fefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefcfdfdfcfdfdfcfdfdfcfdfdfcfdfdfdfefefdfefefdfefefcfdfdfdfefefdfefefcfdfd
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+fffffffffffffffffffffffffffffffffffffffdfefefffffffdfefefffffffffffffffffffffffffdfefefdfefefffffffffffffdfefefdfefefdfefefdfefe
+fdfefefdfefefdfefefdfefefdfefefdfefefdfefefdfefefafcfcfafcfcfcfdfdfcfdfdf9fbfbf9fbfbfcfdfdfafcfcfafcfcfafcfcfcfdfdfcfdfdfafcfcfa
+fcfcfafcfcfafcfcfcfdfdfcfdfdfcfdfdfcfdfdfafcfcfcfdfdfdfefefcfdfdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff9fbfbf9fbfbfafcfcfafcfcfafcfcfafcfcfafcfcfafcfcfafcfcfafcfcfafc
+fcfcfdfdf9fbfbf9fbfbfafcfcfafcfcf9fbfbf9fbfbfafcfcf9fbfbf9fbfbf9fbfbfafcfcfafcfcf5f8f8f5f8f8f6f9f9f6f9f9f8fafaf8fafaf9fbfbf9fbfb
+f9fbfbf8fafaf9fbfbf9fbfbf9fbfbf8fafaf9fbfbf9fbfbf9fbfbf8fafafafcfcfafcfcf6f9f9f5f8f8f8fafaf8fafafafcfcf9fbfbfafcfcfafcfcfafcfcfa
+fcfcfcfdfdfafcfcf9fbfbf8fafaf9fbfbf8fafaf9fbfbf8fafafafcfcf9fbfbf9fbfbf9fbfbfafcfcf9fbfbfafcfcf9fbfbfafcfcf9fbfbf6f9f9f6f9f9f6f9
+f9f6f9f9f5f8f8f5f8f8f8fafaf6f9f9f5f8f8f4f8f7f6f9f9f4f8f7f4f8f7f4f8f7f5f8f8f2f7f7f5f8f8f5f8f8f6f9f9f6f9f9f8fafaf6f9f9f8fafaf8fafa
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+grestore
+0.500 setlinewidth
+1 setlinejoin
+0 setlinecap
+[0.5 0.825] 0 setdash
+gsave
+297.1 196.4 408.7 496.8 clipbox
+410.197135 496.791522 m
+410.197135 693.2 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+410.197 496.792 o
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 196.4 408.7 496.8 clipbox
+484.459635 496.791522 m
+484.459635 693.2 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+484.46 496.792 o
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 196.4 408.7 496.8 clipbox
+558.722135 496.791522 m
+558.722135 693.2 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+558.722 496.792 o
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 196.4 408.7 496.8 clipbox
+632.984635 496.791522 m
+632.984635 693.2 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+632.985 496.792 o
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+447.328 496.792 o
+grestore
+/DejaVuSans findfont
+10.000 scalefont
+setfont
+gsave
+444.148698 483.797772 translate
+0.000000 rotate
+0.000000 0.000000 m /one glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+521.591 496.792 o
+grestore
+gsave
+518.411198 483.797772 translate
+0.000000 rotate
+0.000000 0.000000 m /two glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+595.853 496.792 o
+grestore
+gsave
+592.673698 483.797772 translate
+0.000000 rotate
+0.000000 0.000000 m /three glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+670.116 496.792 o
+grestore
+gsave
+666.936198 483.797772 translate
+0.000000 rotate
+0.000000 0.000000 m /four glyphshow
+grestore
+gsave
+543.292188 470.125897 translate
+0.000000 rotate
+0.000000 0.000000 m /b glyphshow
+6.347656 0.000000 m /e glyphshow
+12.500000 0.000000 m /a glyphshow
+18.627930 0.000000 m /t glyphshow
+22.548828 0.000000 m /s glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 196.4 408.7 496.8 clipbox
+408.65 520.319621 m
+705.7 520.319621 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+408.65 520.32 o
+grestore
+gsave
+388.306250 516.522746 translate
+0.000000 rotate
+0.000000 0.000000 m /C glyphshow
+6.982422 0.000000 m /zero glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 196.4 408.7 496.8 clipbox
+408.65 544.87068 m
+705.7 544.87068 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+408.65 544.871 o
+grestore
+gsave
+388.306250 541.073805 translate
+0.000000 rotate
+0.000000 0.000000 m /C glyphshow
+6.982422 0.000000 m /one glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 196.4 408.7 496.8 clipbox
+408.65 569.42174 m
+705.7 569.42174 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+408.65 569.422 o
+grestore
+gsave
+388.306250 565.624865 translate
+0.000000 rotate
+0.000000 0.000000 m /C glyphshow
+6.982422 0.000000 m /two glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 196.4 408.7 496.8 clipbox
+408.65 593.9728 m
+705.7 593.9728 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+408.65 593.973 o
+grestore
+gsave
+388.306250 590.175925 translate
+0.000000 rotate
+0.000000 0.000000 m /C glyphshow
+6.982422 0.000000 m /three glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 196.4 408.7 496.8 clipbox
+408.65 618.52386 m
+705.7 618.52386 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+408.65 618.524 o
+grestore
+gsave
+388.306250 614.726985 translate
+0.000000 rotate
+0.000000 0.000000 m /C glyphshow
+6.982422 0.000000 m /four glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 196.4 408.7 496.8 clipbox
+408.65 643.07492 m
+705.7 643.07492 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+408.65 643.075 o
+grestore
+gsave
+388.306250 639.278045 translate
+0.000000 rotate
+0.000000 0.000000 m /C glyphshow
+6.982422 0.000000 m /five glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 196.4 408.7 496.8 clipbox
+408.65 667.625979 m
+705.7 667.625979 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+408.65 667.626 o
+grestore
+gsave
+388.306250 663.829104 translate
+0.000000 rotate
+0.000000 0.000000 m /C glyphshow
+6.982422 0.000000 m /six glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 196.4 408.7 496.8 clipbox
+408.65 692.177039 m
+705.7 692.177039 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+408.65 692.177 o
+grestore
+gsave
+388.306250 688.380164 translate
+0.000000 rotate
+0.000000 0.000000 m /C glyphshow
+6.982422 0.000000 m /seven glyphshow
+grestore
+gsave
+382.228125 582.550448 translate
+90.000000 rotate
+0.000000 0.000000 m /p glyphshow
+6.347656 0.000000 m /i glyphshow
+9.125977 0.000000 m /t glyphshow
+13.046875 0.000000 m /c glyphshow
+18.544922 0.000000 m /h glyphshow
+grestore
+0 setlinejoin
+2 setlinecap
+[] 0 setdash
+gsave
+408.65 496.791522 m
+408.65 693.2 l
+stroke
+grestore
+gsave
+705.7 496.791522 m
+705.7 693.2 l
+stroke
+grestore
+gsave
+408.65 496.791522 m
+705.7 496.791522 l
+stroke
+grestore
+gsave
+408.65 693.2 m
+705.7 693.2 l
+stroke
+grestore
+/DejaVuSans findfont
+12.000 scalefont
+setfont
+gsave
+536.323438 699.200000 translate
+0.000000 rotate
+0.000000 0.000000 m /O glyphshow
+9.445312 0.000000 m /u glyphshow
+17.050781 0.000000 m /t glyphshow
+21.755859 0.000000 m /p glyphshow
+29.373047 0.000000 m /u glyphshow
+36.978516 0.000000 m /t glyphshow
+grestore
+gsave
+54.05 344.594348 m
+351.1 344.594348 l
+351.1 442.798587 l
+54.05 442.798587 l
+cl
+1.000 setgray
+fill
+grestore
+gsave
+297 98.2 54.05 344.6 clipbox
+67.552273 344.594348 m
+85.860439 344.594348 l
+85.860439 359.437458 l
+67.552273 359.437458 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297 98.2 54.05 344.6 clipbox
+90.437481 344.594348 m
+108.745647 344.594348 l
+108.745647 344.594348 l
+90.437481 344.594348 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297 98.2 54.05 344.6 clipbox
+113.322689 344.594348 m
+131.630855 344.594348 l
+131.630855 382.624833 l
+113.322689 382.624833 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297 98.2 54.05 344.6 clipbox
+136.207897 344.594348 m
+154.516063 344.594348 l
+154.516063 344.594348 l
+136.207897 344.594348 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297 98.2 54.05 344.6 clipbox
+159.093105 344.594348 m
+177.401271 344.594348 l
+177.401271 348.537655 l
+159.093105 348.537655 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297 98.2 54.05 344.6 clipbox
+181.978313 344.594348 m
+200.286479 344.594348 l
+200.286479 362.944203 l
+181.978313 362.944203 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297 98.2 54.05 344.6 clipbox
+204.863521 344.594348 m
+223.171687 344.594348 l
+223.171687 344.594348 l
+204.863521 344.594348 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297 98.2 54.05 344.6 clipbox
+227.748729 344.594348 m
+246.056895 344.594348 l
+246.056895 348.036691 l
+227.748729 348.036691 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297 98.2 54.05 344.6 clipbox
+250.633937 344.594348 m
+268.942103 344.594348 l
+268.942103 344.594348 l
+250.633937 344.594348 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297 98.2 54.05 344.6 clipbox
+273.519145 344.594348 m
+291.827311 344.594348 l
+291.827311 347.600129 l
+273.519145 347.600129 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297 98.2 54.05 344.6 clipbox
+296.404353 344.594348 m
+314.712519 344.594348 l
+314.712519 361.183707 l
+296.404353 361.183707 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297 98.2 54.05 344.6 clipbox
+319.289561 344.594348 m
+337.597727 344.594348 l
+337.597727 344.594348 l
+319.289561 344.594348 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+1 setlinejoin
+0 setlinecap
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+76.7064 344.594 o
+grestore
+/DejaVuSans findfont
+10.000 scalefont
+setfont
+gsave
+73.526668 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /zero glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+99.5916 344.594 o
+grestore
+gsave
+96.411876 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /one glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+122.477 344.594 o
+grestore
+gsave
+119.297084 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /two glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+145.362 344.594 o
+grestore
+gsave
+142.182292 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /three glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+168.247 344.594 o
+grestore
+gsave
+165.067500 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /four glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+191.132 344.594 o
+grestore
+gsave
+187.952708 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /five glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+214.018 344.594 o
+grestore
+gsave
+210.837917 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /six glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+236.903 344.594 o
+grestore
+gsave
+233.723125 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /seven glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+259.788 344.594 o
+grestore
+gsave
+256.608333 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /eight glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+282.673 344.594 o
+grestore
+gsave
+279.493541 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /nine glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+305.558 344.594 o
+grestore
+gsave
+299.199061 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /one glyphshow
+6.362305 0.000000 m /zero glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+328.444 344.594 o
+grestore
+gsave
+322.084269 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /one glyphshow
+6.362305 0.000000 m /one glyphshow
+grestore
+gsave
+176.114062 316.328723 translate
+0.000000 rotate
+0.000000 0.000000 m /p glyphshow
+6.347656 0.000000 m /i glyphshow
+9.125977 0.000000 m /t glyphshow
+13.046875 0.000000 m /c glyphshow
+18.544922 0.000000 m /h glyphshow
+24.882812 0.000000 m /space glyphshow
+28.061523 0.000000 m /c glyphshow
+33.559570 0.000000 m /l glyphshow
+36.337891 0.000000 m /a glyphshow
+42.465820 0.000000 m /s glyphshow
+47.675781 0.000000 m /s glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+54.05 344.594 o
+grestore
+gsave
+24.784375 340.797473 translate
+0.000000 rotate
+0.000000 0.000000 m /zero glyphshow
+6.362305 0.000000 m /period glyphshow
+9.541016 0.000000 m /zero glyphshow
+15.903320 0.000000 m /zero glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+54.05 369.145 o
+grestore
+gsave
+24.784375 365.348533 translate
+0.000000 rotate
+0.000000 0.000000 m /zero glyphshow
+6.362305 0.000000 m /period glyphshow
+9.541016 0.000000 m /two glyphshow
+15.903320 0.000000 m /five glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+54.05 393.696 o
+grestore
+gsave
+24.784375 389.899592 translate
+0.000000 rotate
+0.000000 0.000000 m /zero glyphshow
+6.362305 0.000000 m /period glyphshow
+9.541016 0.000000 m /five glyphshow
+15.903320 0.000000 m /zero glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+54.05 418.248 o
+grestore
+gsave
+24.784375 414.450652 translate
+0.000000 rotate
+0.000000 0.000000 m /zero glyphshow
+6.362305 0.000000 m /period glyphshow
+9.541016 0.000000 m /seven glyphshow
+15.903320 0.000000 m /five glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+54.05 442.799 o
+grestore
+gsave
+24.784375 439.001712 translate
+0.000000 rotate
+0.000000 0.000000 m /one glyphshow
+6.362305 0.000000 m /period glyphshow
+9.541016 0.000000 m /zero glyphshow
+15.903320 0.000000 m /zero glyphshow
+grestore
+gsave
+18.706250 332.415217 translate
+90.000000 rotate
+0.000000 0.000000 m /n glyphshow
+6.337891 0.000000 m /o glyphshow
+12.456055 0.000000 m /r glyphshow
+16.567383 0.000000 m /m glyphshow
+26.308594 0.000000 m /a glyphshow
+32.436523 0.000000 m /l glyphshow
+35.214844 0.000000 m /i glyphshow
+37.993164 0.000000 m /z glyphshow
+43.242188 0.000000 m /e glyphshow
+49.394531 0.000000 m /d glyphshow
+55.742188 0.000000 m /space glyphshow
+58.920898 0.000000 m /v glyphshow
+64.838867 0.000000 m /e glyphshow
+70.991211 0.000000 m /l glyphshow
+73.769531 0.000000 m /o glyphshow
+79.887695 0.000000 m /c glyphshow
+85.385742 0.000000 m /i glyphshow
+88.164062 0.000000 m /t glyphshow
+92.084961 0.000000 m /y glyphshow
+98.002930 0.000000 m /space glyphshow
+101.181641 0.000000 m /s glyphshow
+106.391602 0.000000 m /u glyphshow
+112.729492 0.000000 m /m glyphshow
+grestore
+0 setlinejoin
+2 setlinecap
+[] 0 setdash
+gsave
+54.05 344.594348 m
+54.05 442.798587 l
+stroke
+grestore
+gsave
+351.1 344.594348 m
+351.1 442.798587 l
+stroke
+grestore
+gsave
+54.05 344.594348 m
+351.1 344.594348 l
+stroke
+grestore
+gsave
+54.05 442.798587 m
+351.1 442.798587 l
+stroke
+grestore
+gsave
+408.65 344.594348 m
+705.7 344.594348 l
+705.7 442.798587 l
+408.65 442.798587 l
+cl
+1.000 setgray
+fill
+grestore
+gsave
+297.1 98.2 408.7 344.6 clipbox
+422.152273 344.594348 m
+440.460439 344.594348 l
+440.460439 350.204926 l
+422.152273 350.204926 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297.1 98.2 408.7 344.6 clipbox
+445.037481 344.594348 m
+463.345647 344.594348 l
+463.345647 344.901073 l
+445.037481 344.901073 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297.1 98.2 408.7 344.6 clipbox
+467.922689 344.594348 m
+486.230855 344.594348 l
+486.230855 381.968678 l
+467.922689 381.968678 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297.1 98.2 408.7 344.6 clipbox
+490.807897 344.594348 m
+509.116063 344.594348 l
+509.116063 350.735952 l
+490.807897 350.735952 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297.1 98.2 408.7 344.6 clipbox
+513.693105 344.594348 m
+532.001271 344.594348 l
+532.001271 344.805106 l
+513.693105 344.805106 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297.1 98.2 408.7 344.6 clipbox
+536.578313 344.594348 m
+554.886479 344.594348 l
+554.886479 364.683481 l
+536.578313 364.683481 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297.1 98.2 408.7 344.6 clipbox
+559.463521 344.594348 m
+577.771687 344.594348 l
+577.771687 344.845912 l
+559.463521 344.845912 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297.1 98.2 408.7 344.6 clipbox
+582.348729 344.594348 m
+600.656895 344.594348 l
+600.656895 355.043327 l
+582.348729 355.043327 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297.1 98.2 408.7 344.6 clipbox
+605.233937 344.594348 m
+623.542103 344.594348 l
+623.542103 345.372887 l
+605.233937 345.372887 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297.1 98.2 408.7 344.6 clipbox
+628.119145 344.594348 m
+646.427311 344.594348 l
+646.427311 349.133098 l
+628.119145 349.133098 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297.1 98.2 408.7 344.6 clipbox
+651.004353 344.594348 m
+669.312519 344.594348 l
+669.312519 356.851145 l
+651.004353 356.851145 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+gsave
+297.1 98.2 408.7 344.6 clipbox
+673.889561 344.594348 m
+692.197727 344.594348 l
+692.197727 344.790822 l
+673.889561 344.790822 l
+cl
+0.122 0.467 0.706 setrgbcolor
+fill
+grestore
+1 setlinejoin
+0 setlinecap
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+431.306 344.594 o
+grestore
+gsave
+428.126668 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /zero glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+454.192 344.594 o
+grestore
+gsave
+451.011876 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /one glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+477.077 344.594 o
+grestore
+gsave
+473.897084 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /two glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+499.962 344.594 o
+grestore
+gsave
+496.782292 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /three glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+522.847 344.594 o
+grestore
+gsave
+519.667500 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /four glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+545.732 344.594 o
+grestore
+gsave
+542.552708 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /five glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+568.618 344.594 o
+grestore
+gsave
+565.437917 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /six glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+591.503 344.594 o
+grestore
+gsave
+588.323125 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /seven glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+614.388 344.594 o
+grestore
+gsave
+611.208333 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /eight glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+637.273 344.594 o
+grestore
+gsave
+634.093541 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /nine glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+660.158 344.594 o
+grestore
+gsave
+653.799061 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /one glyphshow
+6.362305 0.000000 m /zero glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+683.044 344.594 o
+grestore
+gsave
+676.684269 330.000598 translate
+0.000000 rotate
+0.000000 0.000000 m /one glyphshow
+6.362305 0.000000 m /one glyphshow
+grestore
+gsave
+530.714063 316.328723 translate
+0.000000 rotate
+0.000000 0.000000 m /p glyphshow
+6.347656 0.000000 m /i glyphshow
+9.125977 0.000000 m /t glyphshow
+13.046875 0.000000 m /c glyphshow
+18.544922 0.000000 m /h glyphshow
+24.882812 0.000000 m /space glyphshow
+28.061523 0.000000 m /c glyphshow
+33.559570 0.000000 m /l glyphshow
+36.337891 0.000000 m /a glyphshow
+42.465820 0.000000 m /s glyphshow
+47.675781 0.000000 m /s glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+408.65 344.594 o
+grestore
+gsave
+379.384375 340.797473 translate
+0.000000 rotate
+0.000000 0.000000 m /zero glyphshow
+6.362305 0.000000 m /period glyphshow
+9.541016 0.000000 m /zero glyphshow
+15.903320 0.000000 m /zero glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+408.65 369.145 o
+grestore
+gsave
+379.384375 365.348533 translate
+0.000000 rotate
+0.000000 0.000000 m /zero glyphshow
+6.362305 0.000000 m /period glyphshow
+9.541016 0.000000 m /two glyphshow
+15.903320 0.000000 m /five glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+408.65 393.696 o
+grestore
+gsave
+379.384375 389.899592 translate
+0.000000 rotate
+0.000000 0.000000 m /zero glyphshow
+6.362305 0.000000 m /period glyphshow
+9.541016 0.000000 m /five glyphshow
+15.903320 0.000000 m /zero glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+408.65 418.248 o
+grestore
+gsave
+379.384375 414.450652 translate
+0.000000 rotate
+0.000000 0.000000 m /zero glyphshow
+6.362305 0.000000 m /period glyphshow
+9.541016 0.000000 m /seven glyphshow
+15.903320 0.000000 m /five glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+408.65 442.799 o
+grestore
+gsave
+379.384375 439.001712 translate
+0.000000 rotate
+0.000000 0.000000 m /one glyphshow
+6.362305 0.000000 m /period glyphshow
+9.541016 0.000000 m /zero glyphshow
+15.903320 0.000000 m /zero glyphshow
+grestore
+gsave
+373.306250 332.415217 translate
+90.000000 rotate
+0.000000 0.000000 m /n glyphshow
+6.337891 0.000000 m /o glyphshow
+12.456055 0.000000 m /r glyphshow
+16.567383 0.000000 m /m glyphshow
+26.308594 0.000000 m /a glyphshow
+32.436523 0.000000 m /l glyphshow
+35.214844 0.000000 m /i glyphshow
+37.993164 0.000000 m /z glyphshow
+43.242188 0.000000 m /e glyphshow
+49.394531 0.000000 m /d glyphshow
+55.742188 0.000000 m /space glyphshow
+58.920898 0.000000 m /v glyphshow
+64.838867 0.000000 m /e glyphshow
+70.991211 0.000000 m /l glyphshow
+73.769531 0.000000 m /o glyphshow
+79.887695 0.000000 m /c glyphshow
+85.385742 0.000000 m /i glyphshow
+88.164062 0.000000 m /t glyphshow
+92.084961 0.000000 m /y glyphshow
+98.002930 0.000000 m /space glyphshow
+101.181641 0.000000 m /s glyphshow
+106.391602 0.000000 m /u glyphshow
+112.729492 0.000000 m /m glyphshow
+grestore
+0 setlinejoin
+2 setlinecap
+[] 0 setdash
+gsave
+408.65 344.594348 m
+408.65 442.798587 l
+stroke
+grestore
+gsave
+705.7 344.594348 m
+705.7 442.798587 l
+stroke
+grestore
+gsave
+408.65 344.594348 m
+705.7 344.594348 l
+stroke
+grestore
+gsave
+408.65 442.798587 m
+705.7 442.798587 l
+stroke
+grestore
+gsave
+54.05 192.397174 m
+351.1 192.397174 l
+351.1 290.601413 l
+54.05 290.601413 l
+cl
+1.000 setgray
+fill
+grestore
+0.500 setlinewidth
+1 setlinejoin
+0 setlinecap
+[0.5 0.825] 0 setdash
+gsave
+297 98.2 54.05 192.4 clipbox
+54.05 192.397174 m
+54.05 290.601413 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+54.05 192.397 o
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 98.2 54.05 192.4 clipbox
+129.094211 192.397174 m
+129.094211 290.601413 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+129.094 192.397 o
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 98.2 54.05 192.4 clipbox
+204.138421 192.397174 m
+204.138421 290.601413 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+204.138 192.397 o
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 98.2 54.05 192.4 clipbox
+279.182632 192.397174 m
+279.182632 290.601413 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+279.183 192.397 o
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+91.5721 192.397 o
+grestore
+gsave
+88.392418 179.403424 translate
+0.000000 rotate
+0.000000 0.000000 m /one glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+166.616 192.397 o
+grestore
+gsave
+163.436628 179.403424 translate
+0.000000 rotate
+0.000000 0.000000 m /two glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+241.661 192.397 o
+grestore
+gsave
+238.480839 179.403424 translate
+0.000000 rotate
+0.000000 0.000000 m /three glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+316.705 192.397 o
+grestore
+gsave
+313.525049 179.403424 translate
+0.000000 rotate
+0.000000 0.000000 m /four glyphshow
+grestore
+gsave
+188.692187 165.731549 translate
+0.000000 rotate
+0.000000 0.000000 m /b glyphshow
+6.347656 0.000000 m /e glyphshow
+12.500000 0.000000 m /a glyphshow
+18.627930 0.000000 m /t glyphshow
+22.548828 0.000000 m /s glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 98.2 54.05 192.4 clipbox
+54.05 192.397174 m
+351.1 192.397174 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+54.05 192.397 o
+grestore
+gsave
+40.690625 188.600299 translate
+0.000000 rotate
+0.000000 0.000000 m /zero glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 98.2 54.05 192.4 clipbox
+54.05 231.67887 m
+351.1 231.67887 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+54.05 231.679 o
+grestore
+gsave
+40.690625 227.881995 translate
+0.000000 rotate
+0.000000 0.000000 m /two glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 98.2 54.05 192.4 clipbox
+54.05 270.960565 m
+351.1 270.960565 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+54.05 270.961 o
+grestore
+gsave
+40.690625 267.163690 translate
+0.000000 rotate
+0.000000 0.000000 m /four glyphshow
+grestore
+gsave
+34.612500 190.827418 translate
+90.000000 rotate
+0.000000 0.000000 m /t glyphshow
+3.920898 0.000000 m /o glyphshow
+10.039062 0.000000 m /t glyphshow
+13.959961 0.000000 m /a glyphshow
+20.087891 0.000000 m /l glyphshow
+22.866211 0.000000 m /space glyphshow
+26.044922 0.000000 m /o glyphshow
+32.163086 0.000000 m /n glyphshow
+38.500977 0.000000 m /s glyphshow
+43.710938 0.000000 m /e glyphshow
+49.863281 0.000000 m /t glyphshow
+53.784180 0.000000 m /s glyphshow
+58.994141 0.000000 m /space glyphshow
+62.172852 0.000000 m /v glyphshow
+68.090820 0.000000 m /e glyphshow
+74.243164 0.000000 m /l glyphshow
+77.021484 0.000000 m /o glyphshow
+83.139648 0.000000 m /c glyphshow
+88.637695 0.000000 m /i glyphshow
+91.416016 0.000000 m /t glyphshow
+95.336914 0.000000 m /y glyphshow
+grestore
+1.500 setlinewidth
+2 setlinecap
+0.122 0.467 0.706 setrgbcolor
+gsave
+297 98.2 54.05 192.4 clipbox
+54.05 268.025946 m
+54.05 192.397174 l
+85.318421 192.397174 l
+85.318421 209.256847 l
+88.445263 209.256847 l
+88.445263 192.397174 l
+104.079474 192.397174 l
+104.079474 251.166273 l
+107.206316 251.166273 l
+107.206316 192.397174 l
+122.840526 192.397174 l
+122.840526 209.256847 l
+125.967368 209.256847 l
+125.967368 192.397174 l
+141.601579 192.397174 l
+141.601579 209.256847 l
+144.728421 209.256847 l
+144.728421 192.397174 l
+160.362632 192.397174 l
+160.362632 251.166273 l
+163.489474 251.166273 l
+163.489474 192.397174 l
+179.123684 192.397174 l
+179.123684 223.949122 l
+182.250526 223.949122 l
+182.250526 192.397174 l
+235.406842 192.397174 l
+235.406842 221.781724 l
+238.533684 221.781724 l
+238.533684 192.397174 l
+272.928947 192.397174 l
+272.928947 207.089449 l
+276.055789 207.089449 l
+276.055789 192.397174 l
+291.69 192.397174 l
+291.69 221.781724 l
+294.816842 221.781724 l
+294.816842 192.397174 l
+310.451053 192.397174 l
+310.451053 207.089449 l
+313.577895 207.089449 l
+313.577895 192.397174 l
+347.973158 192.397174 l
+347.973158 251.166273 l
+351.1 251.166273 l
+351.1 251.166273 l
+stroke
+grestore
+0.800 setlinewidth
+0 setlinejoin
+[] 0 setdash
+0.000 setgray
+gsave
+54.05 192.397174 m
+54.05 290.601413 l
+stroke
+grestore
+gsave
+351.1 192.397174 m
+351.1 290.601413 l
+stroke
+grestore
+gsave
+54.05 192.397174 m
+351.1 192.397174 l
+stroke
+grestore
+gsave
+54.05 290.601413 m
+351.1 290.601413 l
+stroke
+grestore
+gsave
+408.65 192.397174 m
+705.7 192.397174 l
+705.7 290.601413 l
+408.65 290.601413 l
+cl
+1.000 setgray
+fill
+grestore
+0.500 setlinewidth
+1 setlinejoin
+0 setlinecap
+[0.5 0.825] 0 setdash
+gsave
+297.1 98.2 408.7 192.4 clipbox
+408.65 192.397174 m
+408.65 290.601413 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+408.65 192.397 o
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 98.2 408.7 192.4 clipbox
+483.694211 192.397174 m
+483.694211 290.601413 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+483.694 192.397 o
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 98.2 408.7 192.4 clipbox
+558.738421 192.397174 m
+558.738421 290.601413 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+558.738 192.397 o
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 98.2 408.7 192.4 clipbox
+633.782632 192.397174 m
+633.782632 290.601413 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+633.783 192.397 o
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+446.172 192.397 o
+grestore
+gsave
+442.992418 179.403424 translate
+0.000000 rotate
+0.000000 0.000000 m /one glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+521.216 192.397 o
+grestore
+gsave
+518.036628 179.403424 translate
+0.000000 rotate
+0.000000 0.000000 m /two glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+596.261 192.397 o
+grestore
+gsave
+593.080839 179.403424 translate
+0.000000 rotate
+0.000000 0.000000 m /three glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+671.305 192.397 o
+grestore
+gsave
+668.125049 179.403424 translate
+0.000000 rotate
+0.000000 0.000000 m /four glyphshow
+grestore
+gsave
+543.292188 165.731549 translate
+0.000000 rotate
+0.000000 0.000000 m /b glyphshow
+6.347656 0.000000 m /e glyphshow
+12.500000 0.000000 m /a glyphshow
+18.627930 0.000000 m /t glyphshow
+22.548828 0.000000 m /s glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 98.2 408.7 192.4 clipbox
+408.65 192.397174 m
+705.7 192.397174 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+408.65 192.397 o
+grestore
+gsave
+395.290625 188.600299 translate
+0.000000 rotate
+0.000000 0.000000 m /zero glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 98.2 408.7 192.4 clipbox
+408.65 231.67887 m
+705.7 231.67887 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+408.65 231.679 o
+grestore
+gsave
+395.290625 227.881995 translate
+0.000000 rotate
+0.000000 0.000000 m /two glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 98.2 408.7 192.4 clipbox
+408.65 270.960565 m
+705.7 270.960565 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+408.65 270.961 o
+grestore
+gsave
+395.290625 267.163690 translate
+0.000000 rotate
+0.000000 0.000000 m /four glyphshow
+grestore
+gsave
+389.212500 190.827418 translate
+90.000000 rotate
+0.000000 0.000000 m /t glyphshow
+3.920898 0.000000 m /o glyphshow
+10.039062 0.000000 m /t glyphshow
+13.959961 0.000000 m /a glyphshow
+20.087891 0.000000 m /l glyphshow
+22.866211 0.000000 m /space glyphshow
+26.044922 0.000000 m /o glyphshow
+32.163086 0.000000 m /n glyphshow
+38.500977 0.000000 m /s glyphshow
+43.710938 0.000000 m /e glyphshow
+49.863281 0.000000 m /t glyphshow
+53.784180 0.000000 m /s glyphshow
+58.994141 0.000000 m /space glyphshow
+62.172852 0.000000 m /v glyphshow
+68.090820 0.000000 m /e glyphshow
+74.243164 0.000000 m /l glyphshow
+77.021484 0.000000 m /o glyphshow
+83.139648 0.000000 m /c glyphshow
+88.637695 0.000000 m /i glyphshow
+91.416016 0.000000 m /t glyphshow
+95.336914 0.000000 m /y glyphshow
+grestore
+1.500 setlinewidth
+2 setlinecap
+0.122 0.467 0.706 setrgbcolor
+gsave
+297.1 98.2 408.7 192.4 clipbox
+408.65 230.633108 m
+408.65 193.461267 l
+411.776842 193.461267 l
+411.776842 193.828968 l
+414.903684 193.828968 l
+414.903684 192.826989 l
+418.030526 192.826989 l
+418.030526 194.30548 l
+421.157368 194.30548 l
+421.157368 193.040805 l
+424.284211 193.040805 l
+424.284211 193.393113 l
+427.411053 193.393113 l
+427.411053 193.148078 l
+430.537895 193.148078 l
+430.537895 195.003626 l
+433.664737 195.003626 l
+433.664737 193.078143 l
+439.918421 193.133059 l
+439.918421 192.942046 l
+443.045263 192.942046 l
+443.045263 198.312425 l
+446.172105 198.312425 l
+446.172105 193.251073 l
+449.298947 193.251073 l
+449.298947 193.772874 l
+452.425789 193.772874 l
+452.425789 195.062426 l
+455.552632 195.062426 l
+455.552632 195.281773 l
+458.679474 195.281773 l
+458.679474 193.865555 l
+461.806316 193.865555 l
+461.806316 193.686634 l
+464.933158 193.686634 l
+464.933158 193.396628 l
+468.06 193.396628 l
+468.06 192.955635 l
+471.186842 192.955635 l
+471.186842 193.234035 l
+477.440526 193.25178 l
+477.440526 192.719976 l
+480.567368 192.719976 l
+480.567368 196.056104 l
+483.694211 196.056104 l
+483.694211 193.974922 l
+486.821053 193.974922 l
+486.821053 192.965215 l
+489.947895 192.965215 l
+489.947895 192.744103 l
+493.074737 192.744103 l
+493.074737 192.566739 l
+496.201579 192.566739 l
+496.201579 193.043239 l
+499.328421 193.043239 l
+499.328421 193.963806 l
+502.455263 193.963806 l
+502.455263 193.722038 l
+505.582105 193.722038 l
+505.582105 196.349964 l
+508.708947 196.349964 l
+508.708947 193.778735 l
+511.835789 193.778735 l
+511.835789 193.65209 l
+514.962632 193.65209 l
+514.962632 196.89323 l
+518.089474 196.89323 l
+518.089474 196.669461 l
+521.216316 196.669461 l
+521.216316 194.743611 l
+524.343158 194.743611 l
+524.343158 193.994908 l
+527.47 193.994908 l
+527.47 194.868294 l
+530.596842 194.868294 l
+530.596842 195.347781 l
+533.723684 195.347781 l
+533.723684 193.19843 l
+536.850526 193.19843 l
+536.850526 194.082392 l
+539.977368 194.082392 l
+539.977368 193.297822 l
+543.104211 193.297822 l
+543.104211 194.882716 l
+546.231053 194.882716 l
+546.231053 193.36323 l
+549.357895 193.36323 l
+549.357895 193.644103 l
+552.484737 193.644103 l
+552.484737 193.800625 l
+555.611579 193.800625 l
+555.611579 196.499355 l
+558.738421 196.499355 l
+558.738421 193.687022 l
+561.865263 193.687022 l
+561.865263 194.511523 l
+564.992105 194.511523 l
+564.992105 193.231677 l
+568.118947 193.231677 l
+568.118947 194.192463 l
+571.245789 194.192463 l
+571.245789 193.266167 l
+574.372632 193.266167 l
+574.372632 193.99723 l
+577.499474 193.99723 l
+577.499474 193.11635 l
+580.626316 193.11635 l
+580.626316 193.801203 l
+583.753158 193.801203 l
+583.753158 193.496049 l
+586.88 193.496049 l
+586.88 194.084584 l
+590.006842 194.084584 l
+590.006842 192.892164 l
+593.133684 192.892164 l
+593.133684 195.656002 l
+596.260526 195.656002 l
+596.260526 192.981247 l
+599.387368 192.981247 l
+599.387368 193.833112 l
+602.514211 193.833112 l
+602.514211 193.541017 l
+605.641053 193.541017 l
+605.641053 198.988455 l
+608.767895 198.988455 l
+608.767895 193.335589 l
+611.894737 193.335589 l
+611.894737 193.717481 l
+615.021579 193.717481 l
+615.021579 193.352002 l
+618.148421 193.352002 l
+618.148421 194.221859 l
+621.275263 194.221859 l
+621.275263 193.950626 l
+624.402105 193.950626 l
+624.402105 193.824391 l
+627.528947 193.824391 l
+627.528947 195.040649 l
+630.655789 195.040649 l
+630.655789 194.519476 l
+633.782632 194.519476 l
+633.782632 193.040565 l
+636.909474 193.040565 l
+636.909474 194.229248 l
+640.036316 194.229248 l
+640.036316 192.758281 l
+646.29 192.858592 l
+646.29 193.272866 l
+649.416842 193.272866 l
+649.416842 193.508617 l
+652.543684 193.508617 l
+652.543684 193.347702 l
+655.670526 193.347702 l
+655.670526 192.785404 l
+658.797368 192.785404 l
+658.797368 193.450066 l
+661.924211 193.450066 l
+661.924211 193.337379 l
+665.051053 193.337379 l
+665.051053 196.125666 l
+668.177895 196.125666 l
+668.177895 195.599616 l
+671.304737 195.599616 l
+671.304737 193.964018 l
+674.431579 193.964018 l
+674.431579 193.696659 l
+677.558421 193.696659 l
+677.558421 194.591138 l
+680.685263 194.591138 l
+680.685263 193.733783 l
+683.812105 193.733783 l
+683.812105 193.46015 l
+686.938947 193.46015 l
+686.938947 193.211371 l
+690.065789 193.211371 l
+690.065789 193.045877 l
+693.192632 193.045877 l
+693.192632 193.787268 l
+696.319474 193.787268 l
+696.319474 193.211211 l
+699.446316 193.211211 l
+699.446316 192.919823 l
+702.573158 192.919823 l
+702.573158 198.898976 l
+705.7 198.898976 l
+705.7 198.898976 l
+stroke
+grestore
+0.800 setlinewidth
+0 setlinejoin
+[] 0 setdash
+0.000 setgray
+gsave
+408.65 192.397174 m
+408.65 290.601413 l
+stroke
+grestore
+gsave
+705.7 192.397174 m
+705.7 290.601413 l
+stroke
+grestore
+gsave
+408.65 192.397174 m
+705.7 192.397174 l
+stroke
+grestore
+gsave
+408.65 290.601413 m
+705.7 290.601413 l
+stroke
+grestore
+gsave
+54.05 40.2 m
+351.1 40.2 l
+351.1 138.404239 l
+54.05 138.404239 l
+cl
+1.000 setgray
+fill
+grestore
+0.500 setlinewidth
+1 setlinejoin
+0 setlinecap
+[0.5 0.825] 0 setdash
+gsave
+297 98.2 54.05 40.2 clipbox
+54.05 40.2 m
+54.05 138.404239 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+54.05 40.2 o
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 98.2 54.05 40.2 clipbox
+129.094211 40.2 m
+129.094211 138.404239 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+129.094 40.2 o
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 98.2 54.05 40.2 clipbox
+204.138421 40.2 m
+204.138421 138.404239 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+204.138 40.2 o
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 98.2 54.05 40.2 clipbox
+279.182632 40.2 m
+279.182632 138.404239 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+279.183 40.2 o
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+91.5721 40.2 o
+grestore
+gsave
+88.392418 27.206250 translate
+0.000000 rotate
+0.000000 0.000000 m /one glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+166.616 40.2 o
+grestore
+gsave
+163.436628 27.206250 translate
+0.000000 rotate
+0.000000 0.000000 m /two glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+241.661 40.2 o
+grestore
+gsave
+238.480839 27.206250 translate
+0.000000 rotate
+0.000000 0.000000 m /three glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+316.705 40.2 o
+grestore
+gsave
+313.525049 27.206250 translate
+0.000000 rotate
+0.000000 0.000000 m /four glyphshow
+grestore
+gsave
+188.692187 13.534375 translate
+0.000000 rotate
+0.000000 0.000000 m /b glyphshow
+6.347656 0.000000 m /e glyphshow
+12.500000 0.000000 m /a glyphshow
+18.627930 0.000000 m /t glyphshow
+22.548828 0.000000 m /s glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 98.2 54.05 40.2 clipbox
+54.05 40.2 m
+351.1 40.2 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+54.05 40.2 o
+grestore
+gsave
+40.690625 36.403125 translate
+0.000000 rotate
+0.000000 0.000000 m /zero glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 98.2 54.05 40.2 clipbox
+54.05 79.481696 m
+351.1 79.481696 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+54.05 79.4817 o
+grestore
+gsave
+40.690625 75.684821 translate
+0.000000 rotate
+0.000000 0.000000 m /two glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297 98.2 54.05 40.2 clipbox
+54.05 118.763391 m
+351.1 118.763391 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+54.05 118.763 o
+grestore
+gsave
+40.690625 114.966516 translate
+0.000000 rotate
+0.000000 0.000000 m /four glyphshow
+grestore
+gsave
+34.612500 56.716182 translate
+90.000000 rotate
+0.000000 0.000000 m /t glyphshow
+3.920898 0.000000 m /o glyphshow
+10.039062 0.000000 m /t glyphshow
+13.959961 0.000000 m /a glyphshow
+20.087891 0.000000 m /l glyphshow
+22.866211 0.000000 m /space glyphshow
+26.044922 0.000000 m /v glyphshow
+31.962891 0.000000 m /e glyphshow
+38.115234 0.000000 m /l glyphshow
+40.893555 0.000000 m /o glyphshow
+47.011719 0.000000 m /c glyphshow
+52.509766 0.000000 m /i glyphshow
+55.288086 0.000000 m /t glyphshow
+59.208984 0.000000 m /y glyphshow
+grestore
+1.500 setlinewidth
+2 setlinecap
+0.122 0.467 0.706 setrgbcolor
+gsave
+297 98.2 54.05 40.2 clipbox
+54.05 115.847953 m
+69.684211 115.847953 l
+69.684211 98.969099 l
+85.318421 98.969099 l
+85.318421 115.847953 l
+97.825789 115.847953 l
+97.825789 57.059673 l
+104.079474 57.059673 l
+104.079474 98.969099 l
+113.46 98.969099 l
+113.46 84.276825 l
+116.586842 84.276825 l
+116.586842 54.892275 l
+119.713684 54.892275 l
+119.713684 40.2 l
+122.840526 40.2 l
+122.840526 57.059673 l
+141.601579 57.059673 l
+141.601579 73.919346 l
+144.728421 73.919346 l
+144.728421 57.059673 l
+160.362632 57.059673 l
+160.362632 115.847953 l
+163.489474 115.847953 l
+163.489474 98.969099 l
+172.87 98.969099 l
+172.87 84.276825 l
+175.996842 84.276825 l
+175.996842 54.892275 l
+179.123684 54.892275 l
+179.123684 71.751948 l
+194.757895 71.751948 l
+194.757895 57.059673 l
+235.406842 57.059673 l
+235.406842 86.463403 l
+247.914211 86.463403 l
+247.914211 57.059673 l
+272.928947 57.059673 l
+272.928947 71.751948 l
+285.436316 71.751948 l
+285.436316 57.059673 l
+291.69 57.059673 l
+291.69 86.463403 l
+307.324211 86.463403 l
+307.324211 57.059673 l
+310.451053 57.059673 l
+310.451053 71.751948 l
+326.085263 71.751948 l
+326.085263 57.059673 l
+347.973158 57.059673 l
+347.973158 115.809592 l
+351.1 115.809592 l
+351.1 115.809592 l
+stroke
+grestore
+0.800 setlinewidth
+0 setlinejoin
+[] 0 setdash
+0.000 setgray
+gsave
+54.05 40.2 m
+54.05 138.404239 l
+stroke
+grestore
+gsave
+351.1 40.2 m
+351.1 138.404239 l
+stroke
+grestore
+gsave
+54.05 40.2 m
+351.1 40.2 l
+stroke
+grestore
+gsave
+54.05 138.404239 m
+351.1 138.404239 l
+stroke
+grestore
+gsave
+408.65 40.2 m
+705.7 40.2 l
+705.7 138.404239 l
+408.65 138.404239 l
+cl
+1.000 setgray
+fill
+grestore
+0.500 setlinewidth
+1 setlinejoin
+0 setlinecap
+[0.5 0.825] 0 setdash
+gsave
+297.1 98.2 408.7 40.2 clipbox
+408.65 40.2 m
+408.65 138.404239 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+408.65 40.2 o
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 98.2 408.7 40.2 clipbox
+483.694211 40.2 m
+483.694211 138.404239 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+483.694 40.2 o
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 98.2 408.7 40.2 clipbox
+558.738421 40.2 m
+558.738421 138.404239 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+558.738 40.2 o
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 98.2 408.7 40.2 clipbox
+633.782632 40.2 m
+633.782632 138.404239 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+0 -3.5 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+633.783 40.2 o
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+446.172 40.2 o
+grestore
+gsave
+442.992418 27.206250 translate
+0.000000 rotate
+0.000000 0.000000 m /one glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+521.216 40.2 o
+grestore
+gsave
+518.036628 27.206250 translate
+0.000000 rotate
+0.000000 0.000000 m /two glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+596.261 40.2 o
+grestore
+gsave
+593.080839 27.206250 translate
+0.000000 rotate
+0.000000 0.000000 m /three glyphshow
+grestore
+gsave
+/o {
+gsave
+newpath
+translate
+0 0 m
+0 -2 l
+
+0.000 setgray
+fill
+grestore
+} bind def
+671.305 40.2 o
+grestore
+gsave
+668.125049 27.206250 translate
+0.000000 rotate
+0.000000 0.000000 m /four glyphshow
+grestore
+gsave
+543.292188 13.534375 translate
+0.000000 rotate
+0.000000 0.000000 m /b glyphshow
+6.347656 0.000000 m /e glyphshow
+12.500000 0.000000 m /a glyphshow
+18.627930 0.000000 m /t glyphshow
+22.548828 0.000000 m /s glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 98.2 408.7 40.2 clipbox
+408.65 40.2 m
+705.7 40.2 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+408.65 40.2 o
+grestore
+gsave
+395.290625 36.403125 translate
+0.000000 rotate
+0.000000 0.000000 m /zero glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 98.2 408.7 40.2 clipbox
+408.65 79.481696 m
+705.7 79.481696 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+408.65 79.4817 o
+grestore
+gsave
+395.290625 75.684821 translate
+0.000000 rotate
+0.000000 0.000000 m /two glyphshow
+grestore
+0.500 setlinewidth
+[0.5 0.825] 0 setdash
+gsave
+297.1 98.2 408.7 40.2 clipbox
+408.65 118.763391 m
+705.7 118.763391 l
+stroke
+grestore
+0.800 setlinewidth
+[] 0 setdash
+gsave
+/o {
+gsave
+newpath
+translate
+0.8 setlinewidth
+1 setlinejoin
+0 setlinecap
+0 0 m
+-3.5 0 l
+
+gsave
+0.000 setgray
+fill
+grestore
+stroke
+grestore
+} bind def
+408.65 118.763 o
+grestore
+gsave
+395.290625 114.966516 translate
+0.000000 rotate
+0.000000 0.000000 m /four glyphshow
+grestore
+gsave
+389.212500 56.716182 translate
+90.000000 rotate
+0.000000 0.000000 m /t glyphshow
+3.920898 0.000000 m /o glyphshow
+10.039062 0.000000 m /t glyphshow
+13.959961 0.000000 m /a glyphshow
+20.087891 0.000000 m /l glyphshow
+22.866211 0.000000 m /space glyphshow
+26.044922 0.000000 m /v glyphshow
+31.962891 0.000000 m /e glyphshow
+38.115234 0.000000 m /l glyphshow
+40.893555 0.000000 m /o glyphshow
+47.011719 0.000000 m /c glyphshow
+52.509766 0.000000 m /i glyphshow
+55.288086 0.000000 m /t glyphshow
+59.208984 0.000000 m /y glyphshow
+grestore
+1.500 setlinewidth
+2 setlinecap
+0.122 0.467 0.706 setrgbcolor
+gsave
+297.1 98.2 408.7 40.2 clipbox
+408.65 78.435934 m
+408.65 78.306699 l
+411.776842 78.306699 l
+411.776842 78.456025 l
+418.030526 78.410204 l
+418.030526 78.663794 l
+421.157368 78.663794 l
+421.157368 77.072052 l
+424.284211 77.072052 l
+424.284211 76.622193 l
+427.411053 76.622193 l
+427.411053 76.269095 l
+430.537895 76.269095 l
+430.537895 78.043101 l
+433.664737 78.043101 l
+433.664737 77.085054 l
+436.791579 77.085054 l
+436.791579 76.646445 l
+439.918421 76.646445 l
+439.918421 76.368898 l
+443.045263 76.368898 l
+443.045263 82.192049 l
+446.172105 82.192049 l
+446.172105 80.341297 l
+449.298947 80.341297 l
+449.298947 80.125774 l
+452.425789 80.125774 l
+452.425789 82.547717 l
+455.552632 82.547717 l
+455.552632 82.674933 l
+458.679474 82.674933 l
+458.679474 82.826242 l
+461.806316 82.826242 l
+461.806316 82.014521 l
+464.933158 82.014521 l
+464.933158 82.546167 l
+468.06 82.546167 l
+468.06 80.599073 l
+471.186842 80.599073 l
+471.186842 79.632002 l
+474.313684 79.632002 l
+474.313684 77.902384 l
+477.440526 77.902384 l
+477.440526 77.012677 l
+480.567368 77.012677 l
+480.567368 79.71115 l
+483.694211 79.71115 l
+483.694211 79.587498 l
+486.821053 79.587498 l
+486.821053 77.343368 l
+489.947895 77.343368 l
+489.947895 76.721139 l
+493.074737 76.721139 l
+493.074737 72.486563 l
+496.201579 72.486563 l
+496.201579 70.625884 l
+499.328421 70.625884 l
+499.328421 69.610335 l
+505.582105 69.689907 l
+505.582105 73.084109 l
+508.708947 73.084109 l
+508.708947 73.226731 l
+511.835789 73.226731 l
+511.835789 72.911838 l
+514.962632 72.911838 l
+514.962632 77.396981 l
+518.089474 77.396981 l
+518.089474 80.183199 l
+521.216316 80.183199 l
+521.216316 81.077884 l
+524.343158 81.077884 l
+524.343158 80.487923 l
+527.47 80.487923 l
+527.47 82.809229 l
+530.596842 82.809229 l
+530.596842 83.364233 l
+533.723684 83.364233 l
+533.723684 82.343507 l
+536.850526 82.343507 l
+536.850526 82.148588 l
+539.977368 82.148588 l
+539.977368 82.841423 l
+543.104211 82.841423 l
+543.104211 83.681559 l
+546.231053 83.681559 l
+546.231053 81.680876 l
+549.357895 81.680876 l
+549.357895 79.904393 l
+552.484737 79.904393 l
+552.484737 80.488687 l
+555.611579 80.488687 l
+555.611579 82.457443 l
+558.738421 82.457443 l
+558.738421 81.979438 l
+561.865263 81.979438 l
+561.865263 82.540037 l
+564.992105 82.540037 l
+564.992105 81.974062 l
+568.118947 81.974062 l
+568.118947 82.452362 l
+571.245789 82.452362 l
+571.245789 80.766537 l
+574.372632 80.766537 l
+574.372632 80.565573 l
+577.499474 80.565573 l
+577.499474 80.440801 l
+580.626316 80.440801 l
+580.626316 80.785563 l
+583.753158 80.785563 l
+583.753158 80.183171 l
+590.006842 80.095753 l
+590.006842 79.585175 l
+593.133684 79.585175 l
+593.133684 82.430204 l
+596.260526 82.430204 l
+596.260526 80.160698 l
+599.387368 80.160698 l
+599.387368 79.585732 l
+602.514211 79.585732 l
+602.514211 78.989436 l
+605.641053 78.989436 l
+605.641053 85.094179 l
+608.767895 85.094179 l
+608.767895 84.553757 l
+611.894737 84.553757 l
+611.894737 84.371065 l
+615.021579 84.371065 l
+615.021579 84.990667 l
+618.148421 84.990667 l
+618.148421 83.497433 l
+621.275263 83.497433 l
+621.275263 83.022767 l
+624.402105 83.022767 l
+624.402105 82.463311 l
+627.528947 82.463311 l
+627.528947 85.097199 l
+630.655789 85.097199 l
+630.655789 84.285394 l
+633.782632 84.285394 l
+633.782632 82.72464 l
+636.909474 82.72464 l
+636.909474 82.863966 l
+640.036316 82.863966 l
+640.036316 81.695729 l
+643.163158 81.695729 l
+643.163158 78.707456 l
+646.29 78.707456 l
+646.29 76.694937 l
+649.416842 76.694937 l
+649.416842 75.373865 l
+652.543684 75.373865 l
+652.543684 74.984347 l
+655.670526 74.984347 l
+655.670526 71.853282 l
+661.924211 71.767312 l
+661.924211 71.102271 l
+665.051053 71.102271 l
+665.051053 74.813294 l
+668.177895 74.813294 l
+668.177895 77.861476 l
+674.431579 77.855353 l
+674.431579 77.245487 l
+677.558421 77.245487 l
+677.558421 78.875962 l
+680.685263 78.875962 l
+680.685263 77.412783 l
+683.812105 77.412783 l
+683.812105 77.107163 l
+686.938947 77.107163 l
+686.938947 75.60711 l
+693.192632 75.594871 l
+693.192632 72.377288 l
+696.319474 72.377288 l
+696.319474 71.229696 l
+699.446316 71.229696 l
+699.446316 69.161984 l
+702.573158 69.161984 l
+702.573158 75.66228 l
+705.7 75.66228 l
+705.7 75.66228 l
+stroke
+grestore
+0.800 setlinewidth
+0 setlinejoin
+[] 0 setdash
+0.000 setgray
+gsave
+408.65 40.2 m
+408.65 138.404239 l
+stroke
+grestore
+gsave
+705.7 40.2 m
+705.7 138.404239 l
+stroke
+grestore
+gsave
+408.65 40.2 m
+705.7 40.2 l
+stroke
+grestore
+gsave
+408.65 138.404239 m
+705.7 138.404239 l
+stroke
+grestore
+
+end
+showpage
