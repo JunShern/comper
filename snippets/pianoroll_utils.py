@@ -265,14 +265,14 @@ def plot_pianoroll(ax, pianoroll, min_pitch=0, max_pitch=127, beat_resolution=No
 #     return_code = subprocess.call("timidity " + FILEPATH, shell=True)
 #     return return_code
 
-def play_pianoroll(pianoroll, min_pitch=0, max_pitch=127, filelabel='0', process=True):
+def play_pianoroll(pianoroll, min_pitch=0, max_pitch=127, filelabel='0', process=True, is_onsets_matrix=False, program_number=0):
     if process:
         pianoroll = pianoroll_preprocess(pianoroll, min_pitch, max_pitch) # Get proper notes from probability matrix
-    filepath = play_midi_events(pianoroll_2_events(pianoroll, min_pitch, max_pitch), filelabel)
+    filepath = play_midi_events(pianoroll_2_events(pianoroll, min_pitch, max_pitch, is_onsets_matrix=is_onsets_matrix), filelabel, program_number)
     IPython.display.display(IPython.display.Audio(filepath))
     return
 
-def play_midi_events(events, filelabel=0):
+def play_midi_events(events, filelabel=0, program_number=0):
     COMP_CHANNEL = 5
     beats_per_bar = 4
     ticks_per_beat = 24
@@ -280,6 +280,7 @@ def play_midi_events(events, filelabel=0):
     mid = MidiFile()
     track = MidiTrack()
     mid.tracks.append(track)
+    track.append(Message('program_change', channel=COMP_CHANNEL, program=program_number))
     for tick_event in events:
         for msg in tick_event:
             track.append(msg.copy(channel=COMP_CHANNEL, time=0))
@@ -289,7 +290,7 @@ def play_midi_events(events, filelabel=0):
     MIDIPATH = FILEPATH + '.mid'
     WAVPATH = FILEPATH + '.wav'
     mid.save(MIDIPATH)
-    return_code = subprocess.call("timidity {} -Ow -o {}".format(MIDIPATH, WAVPATH), shell=True)
+    return_code = subprocess.call("timidity --adjust-tempo=80 {} -Ow -o {}".format(MIDIPATH, WAVPATH), shell=True)
     if return_code == 0:
         return WAVPATH
     else:
@@ -346,7 +347,7 @@ def get_note_onsets(pianoroll, min_pitch=0, max_pitch=127):
     assert note_ons.shape == pianoroll.shape
     return note_ons
 
-def pianoroll_2_events(pianoroll, min_pitch=0, max_pitch=127):
+def pianoroll_2_events(pianoroll, min_pitch=0, max_pitch=127, is_onsets_matrix=False):
     """
     Takes an input pianoroll of shape (NUM_PITCHES, NUM_TICKS) 
     and returns a list of quantized events
@@ -376,7 +377,7 @@ def pianoroll_2_events(pianoroll, min_pitch=0, max_pitch=127):
             # Create message events
             on_msg = mido.Message('note_on', note=pitch, velocity=int(velocity), time=0)
             events[note_ons[idx]].append(on_msg)
-            if note_offs[idx] < num_ticks:
+            if note_offs[idx] < num_ticks and not is_onsets_matrix:
                 off_msg = mido.Message('note_on', note=pitch, velocity=0, time=0)
                 events[note_offs[idx]].append(off_msg)
     return events
@@ -503,6 +504,35 @@ def create_units(pianoroll, num_pitches, ticks_per_unit, partition_note,
         return [input_units, comp_units, full_units]
     else:
         return [input_units, comp_units]
+    
+def create_onsets_units(pianoroll, num_pitches, ticks_per_unit, min_pitch=0, filter_threshold=0):
+    """
+    Given an input pianoroll matrix of shape [NUM_PITCHES, ticks_per_unit], 
+    return input_units and comp_units of shape [M, NUM_PITCHES, ticks_per_unit]
+    """
+    assert(pianoroll.shape[0] == num_pitches)
+    
+    # Get onsets
+    # don't care about padding extra tick since we're truncating later anyway
+    onsets_pianoroll = pianoroll[:,1:] - pianoroll[:,:-1]
+    # binarized (1 or 0) 
+    onsets_pianoroll = (onsets_pianoroll > 0.1).astype('float16')
+    
+    # Truncate pianoroll so it can be evenly divided into units
+    [M, onsets_pianoroll] = chop_to_unit_multiple(onsets_pianoroll, ticks_per_unit)
+    
+    # Get the units by reshaping
+    onsets_units = onsets_pianoroll.T.reshape(M, ticks_per_unit, num_pitches).swapaxes(1,2)
+    
+    # Filter out near-empty units
+    units_means = np.mean(onsets_units, axis=(1,2)).squeeze()
+    filter_array = units_means >= filter_threshold
+    onsets_units = onsets_units[filter_array, ...]
+    M = np.sum(filter_array) # Recount M after filtering
+    
+    # Debug assertions
+    assert(onsets_units.shape == (M, num_pitches, ticks_per_unit))    
+    return onsets_units
 
 def one_hot_to_pianoroll(one_hot_matrix):
     """

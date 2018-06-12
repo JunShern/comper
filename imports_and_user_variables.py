@@ -45,6 +45,8 @@ PICKLE_FILE = './pickle_jar/units_{}_songs_clipped96.pkl'.format(NUM_FILES)
 NORM_PICKLE_FILE = './pickle_jar/norm_units_{}_songs_clipped96.pkl'.format(NUM_FILES)
 SEQ_PICKLE_FILE = './pickle_jar/seq_units_{}_songs_clipped96.pkl'.format(NUM_FILES)
 SEQ_EMBED_PICKLE_FILE = './pickle_jar/seq_embed_units_{}_songs_clipped96_vaev5.pkl'.format(NUM_FILES)
+# Onsets dataset
+ONSETS_FILE = './pickle_jar/onsets_{}_songs_clipped96.h5'.format(NUM_FILES)
 
 # Music shape
 MIN_PITCH = 13 # 21 # A-1 (MIDI 21)
