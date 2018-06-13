@@ -112,9 +112,9 @@ def pad_pianoroll(pianoroll, min_pitch, max_pitch):
     """
     assert pianoroll.shape[0] == max_pitch - min_pitch + 1
     ticks = pianoroll.shape[1]
-    front = np.zeros((min_pitch-1, ticks))
-    back = np.zeros((128-max_pitch, ticks))
-    output = np.vstack((front, pianoroll, back))
+    top = min_pitch
+    bottom = 127 - max_pitch
+    output = np.pad(pianoroll, ((top, bottom), (0,0)), 'constant') # Pad zeros
     assert output.shape[0] == 128
     return output
 
@@ -147,7 +147,6 @@ def plot_velocities(ax, pianoroll, beat_resolution=24):
         ax.set_xlabel('beats')
     ax.grid(axis='both', color='k', linestyle=':', linewidth=.5)
     return
-
     
 def plot_onsets(ax, onsets, beat_resolution=24):
     """
@@ -311,7 +310,7 @@ def pianoroll_preprocess(pianoroll, min_pitch=0, max_pitch=127, empty_threshold=
     
     # When we use onsets matrix, simply binarize
     if is_onsets_matrix:
-        return (pianoroll > 0.4).astype('float32')
+        return (pianoroll > 0.1).astype('float16')
     
     pianoroll_ = pianoroll.copy() * 127
     if np.max(pianoroll_) < 127 * empty_threshold:

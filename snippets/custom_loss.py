@@ -16,7 +16,7 @@ def get_pitch_class_histogram(pianorolls_batch):
     pitch_class_velocities = K.sum(K.reshape(pitch_velocities, (-1, 8, 12)), axis=1) # Separated into octaves
     # Normalize against total note velocities in this pianoroll
     total_velocities = K.sum(pitch_class_velocities, axis=1, keepdims=True)
-    norm_pitch_class_velocities = pitch_class_velocities / total_velocities
+    norm_pitch_class_velocities = pitch_class_velocities / K.clip(total_velocities, K.epsilon(), None) # Protect against 0-division
     return norm_pitch_class_velocities
 
 def pitch_histogram_distance(pianorolls_batch_1, pianorolls_batch_2, distance_metric='cosine'):
