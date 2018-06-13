@@ -267,7 +267,8 @@ def plot_pianoroll(ax, pianoroll, min_pitch=0, max_pitch=127, beat_resolution=No
 
 def play_pianoroll(pianoroll, min_pitch=0, max_pitch=127, filelabel='0', process=True, is_onsets_matrix=False, program_number=0):
     if process:
-        pianoroll = pianoroll_preprocess(pianoroll, min_pitch, max_pitch) # Get proper notes from probability matrix
+        # Get proper notes from probability matrix
+        pianoroll = pianoroll_preprocess(pianoroll, min_pitch, max_pitch, is_onsets_matrix=is_onsets_matrix)
     filepath = play_midi_events(pianoroll_2_events(pianoroll, min_pitch, max_pitch, is_onsets_matrix=is_onsets_matrix), filelabel, program_number)
     IPython.display.display(IPython.display.Audio(filepath))
     return
@@ -296,7 +297,7 @@ def play_midi_events(events, filelabel=0, program_number=0):
     else:
         return return_code
 
-def pianoroll_preprocess(pianoroll, min_pitch=0, max_pitch=127, empty_threshold=0.1, max_threshold=0.20):
+def pianoroll_preprocess(pianoroll, min_pitch=0, max_pitch=127, empty_threshold=0.1, max_threshold=0.20, is_onsets_matrix=False):
     """
     Takes an input matrix of pianoroll note probabilities and
     extracts a clean pianoroll from the probabilities.
@@ -307,8 +308,12 @@ def pianoroll_preprocess(pianoroll, min_pitch=0, max_pitch=127, empty_threshold=
     num_ticks = pianoroll.shape[1]
     
     assert np.max(pianoroll) <= 1 # Pianorolls must be normalized between 0 and 1
+    
+    # When we use onsets matrix, simply binarize
+    if is_onsets_matrix:
+        return (pianoroll > 0.4).astype('float32')
+    
     pianoroll_ = pianoroll.copy() * 127
-
     if np.max(pianoroll_) < 127 * empty_threshold:
     # If all notes are ghost notes
         pianoroll_[:] = 0
