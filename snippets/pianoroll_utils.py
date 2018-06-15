@@ -462,12 +462,19 @@ def shuffle_left_right(left_units, right_units):
 
 
 def create_units(pianoroll, num_pitches, ticks_per_unit, partition_note,
-    min_pitch=0, filter_threshold=0, shuffle=True, return_full_units=False):
+    min_pitch=0, filter_threshold=0, shuffle=True, return_full_units=False, binarized_onsets=False):
     """
     Given an input pianoroll matrix of shape [NUM_PITCHES, ticks_per_unit], 
     return input_units and comp_units of shape [M, NUM_PITCHES, ticks_per_unit]
     """
     assert(pianoroll.shape[0] == num_pitches)
+    
+    # (Optional) Get onsets
+    if binarized_onsets:
+        # don't care about padding extra tick since we're truncating later anyway
+        pianoroll = pianoroll[:,1:] - pianoroll[:,:-1]
+        # binarized (1 or 0) 
+        pianoroll = (pianoroll > 0.1).astype('float16')
     
     # Truncate pianoroll so it can be evenly divided into units
     [M, pianoroll] = chop_to_unit_multiple(pianoroll, ticks_per_unit)
@@ -509,34 +516,34 @@ def create_units(pianoroll, num_pitches, ticks_per_unit, partition_note,
     else:
         return [input_units, comp_units]
     
-def create_onsets_units(pianoroll, num_pitches, ticks_per_unit, min_pitch=0, filter_threshold=0):
-    """
-    Given an input pianoroll matrix of shape [NUM_PITCHES, ticks_per_unit], 
-    return input_units and comp_units of shape [M, NUM_PITCHES, ticks_per_unit]
-    """
-    assert(pianoroll.shape[0] == num_pitches)
+# def create_onsets_units(pianoroll, num_pitches, ticks_per_unit, min_pitch=0, filter_threshold=0):
+#     """
+#     Given an input pianoroll matrix of shape [NUM_PITCHES, ticks_per_unit], 
+#     return input_units and comp_units of shape [M, NUM_PITCHES, ticks_per_unit]
+#     """
+#     assert(pianoroll.shape[0] == num_pitches)
     
-    # Get onsets
-    # don't care about padding extra tick since we're truncating later anyway
-    onsets_pianoroll = pianoroll[:,1:] - pianoroll[:,:-1]
-    # binarized (1 or 0) 
-    onsets_pianoroll = (onsets_pianoroll > 0.1).astype('float16')
+#     # Get onsets
+#     # don't care about padding extra tick since we're truncating later anyway
+#     onsets_pianoroll = pianoroll[:,1:] - pianoroll[:,:-1]
+#     # binarized (1 or 0) 
+#     onsets_pianoroll = (onsets_pianoroll > 0.1).astype('float16')
     
-    # Truncate pianoroll so it can be evenly divided into units
-    [M, onsets_pianoroll] = chop_to_unit_multiple(onsets_pianoroll, ticks_per_unit)
+#     # Truncate pianoroll so it can be evenly divided into units
+#     [M, onsets_pianoroll] = chop_to_unit_multiple(onsets_pianoroll, ticks_per_unit)
     
-    # Get the units by reshaping
-    onsets_units = onsets_pianoroll.T.reshape(M, ticks_per_unit, num_pitches).swapaxes(1,2)
+#     # Get the units by reshaping
+#     onsets_units = onsets_pianoroll.T.reshape(M, ticks_per_unit, num_pitches).swapaxes(1,2)
     
-    # Filter out near-empty units
-    units_means = np.mean(onsets_units, axis=(1,2)).squeeze()
-    filter_array = units_means >= filter_threshold
-    onsets_units = onsets_units[filter_array, ...]
-    M = np.sum(filter_array) # Recount M after filtering
+#     # Filter out near-empty units
+#     units_means = np.mean(onsets_units, axis=(1,2)).squeeze()
+#     filter_array = units_means >= filter_threshold
+#     onsets_units = onsets_units[filter_array, ...]
+#     M = np.sum(filter_array) # Recount M after filtering
     
-    # Debug assertions
-    assert(onsets_units.shape == (M, num_pitches, ticks_per_unit))    
-    return onsets_units
+#     # Debug assertions
+#     assert(onsets_units.shape == (M, num_pitches, ticks_per_unit))    
+#     return onsets_units
 
 def one_hot_to_pianoroll(one_hot_matrix):
     """

@@ -25,6 +25,9 @@ from keras import metrics
 from keras import losses
 from keras import optimizers
 
+from keras.preprocessing.sequence import TimeseriesGenerator
+from keras.layers import Activation, LSTM, RNN, Concatenate, concatenate, Dropout
+
 sys.path.append('./snippets')
 import pianoroll_utils
 import custom_loss
@@ -48,6 +51,10 @@ SEQ_EMBED_PICKLE_FILE = './pickle_jar/seq_embed_units_{}_songs_clipped96_vaev5.p
 # Onsets dataset
 ONSETS_FILE = './pickle_jar/onsets_{}_songs_clipped96.h5'.format(NUM_FILES)
 ONSETS_PICKLE_FILE = './pickle_jar/onsets_{}_songs_clipped96.pkl'.format(NUM_FILES)
+ONSETS_SEQ_FILE = './pickle_jar/onsets_seq_{}_songs_clipped96.h5'.format(NUM_FILES)
+
+# Sequence dataset
+WINDOW_LENGTH = 4
 
 # Music shape
 MIN_PITCH = 13 # 21 # A-1 (MIDI 21)
