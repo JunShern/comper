@@ -192,7 +192,7 @@ def plot_pitch_class_histogram(ax, hist):
     ax.set_ylim([0,1])
     return 
 
-def plot_pianoroll(ax, pianoroll, min_pitch=0, max_pitch=127, beat_resolution=None, cmap='Blues'):
+def plot_pianoroll(ax, pianoroll, min_pitch=0, max_pitch=127, beat_resolution=24, cmap='Blues'):
     """
     Plots a pianoroll matrix of shape (NUM_PITCHES, NUM_TICKS)
     Code adapted from 
