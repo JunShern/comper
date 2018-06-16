@@ -158,7 +158,7 @@ def plot_onsets(ax, onsets, beat_resolution=24):
     num_beat = 4
     
     ax.step(range(num_ticks), onsets)
-    ax.set_ylabel('total onsets velocity')
+    ax.set_ylabel('onsets velocity')
     ax.set_xlabel('ticks')
     ax.set_xlim([0, num_ticks-1])
     ax.set_ylim([0, 5]) # May exceed but it's okay
@@ -187,7 +187,7 @@ def plot_pitch_class_histogram(ax, hist):
     x_pos = np.arange(len(hist))
     ax.bar(x_pos, hist, align='center', alpha=0.5)
     ax.set_xticks(x_pos, minor=False)
-    ax.set_ylabel('normalized velocity sum')
+    ax.set_ylabel('normalized velocity')
     ax.set_xlabel('pitch class')
     ax.set_ylim([0,1])
     return 
