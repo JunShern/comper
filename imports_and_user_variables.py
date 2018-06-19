@@ -30,6 +30,7 @@ from keras.preprocessing.sequence import TimeseriesGenerator
 from keras.layers import Activation, LSTM, RNN, Concatenate, concatenate, Dropout
 from keras.layers import TimeDistributed
 from keras.layers import merge
+from keras.layers import GaussianNoise
 
 sys.path.append('./snippets')
 import pianoroll_utils
