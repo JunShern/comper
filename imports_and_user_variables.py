@@ -2,6 +2,7 @@ from __future__ import print_function
 import os, shutil
 import random
 import sys
+import time
 import numpy as np
 import pypianoroll
 from matplotlib import pyplot as plt
