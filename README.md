@@ -1,8 +1,9 @@
-# comp
+# Comper: A Collaborative Musical Accompaniment System using Deep Latent Vector Models
 
 _Final Year Project for MEng Electrical and Electronic Engineering at Imperial College London_
 
-AI music accompaniment/improvisation (work-in-progress)
-
 ## Details
-- More information available in Jupyter notebooks for [data preparation](data_prep.ipynb) and [model training](model_training.ipynb).
+
+- Code and narration for training models in the Jupyter notebooks (.ipynb files)
+- Also see [comper-ui](https://github.com/JunShern/comper-ui) (companion repo containing code for a live demo system based on these models)
+- See `comper_fyp_report.pdf` for the full write-up
